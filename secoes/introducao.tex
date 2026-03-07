@@ -1,15 +1,21 @@
 \chapter{\MakeUppercase{Introdução}}
 
-O objetivo deste documento é apresentar o uso básico da classe \texttt{templufla} para a elaboração de trabalhos acadêmicos da \glsxtrfull{ufla}, utilizando a linguagem de marcação \LaTeX\ \cite[ p.17]{Lamport1994}. A maioria dos comandos (macros) e ambientes das classes básicas da linguagem é válida também nessa classe, que é estendida com comandos para confecção da capa, páginas de rosto, dedicatórias, etc. A classe atual foi baseada na classe \texttt{uflamon}, disponível em CC-BY 4.0, no site Overleaf.
+Neste capítulo introdutório, serão apresentados o contexto do projeto desenvolvido durante o estágio supervisionado, a empresa cliente e o cenário do agronegócio que motivou a construção da plataforma de protocolos. Serão também delineados os objetivos do estágio e deste relatório, que visa documentar as atividades realizadas, as tecnologias adotadas e os resultados alcançados.
 
-Inicialmente, a classe \texttt{uflamon} foi criada de acordo com as normas da PRPG/UFLA para produção de TCC \cite{PRPG2006}. Essas normas foram posteriormente atualizadas, de maneira geral pela UFLA, para a produção de monografias, dissertações e teses \cite{BIB2010}. A classe \texttt{uflamon} foi mantida até a 2ª edição da normalização da \gls{ufla} \cite{UFLA:2015}.
+\section{Contextualização}
+O agronegócio é um dos setores mais importantes e dinâmicos da economia, exigindo constante inovação para maximizar a produtividade e a sustentabilidade no campo. Dentro desse cenário, a pesquisa agrícola focada na análise de solos e sementes desempenha um papel fundamental. Com o avanço da chamada Agricultura 4.0, a coleta, o armazenamento e a análise de dados tornaram-se indispensáveis para a tomada de decisões precisas.
 
-Então, em 2025, com a publicação da 6ª edição da normalização \cite{UFLA:2025}, os atuais mantenedores criaram a classe \texttt{templufla} e o atual template, adaptando o antigo código para a nova norma, corrigindo inadequações, atualizando pacotes e ampliando o formato.
+Apesar da crescente digitalização, muitas instituições de pesquisa ainda enfrentam o desafio da fragmentação de dados, dependendo de ferramentas manuais e planilhas eletrônicas para registrar suas descobertas. Esse cenário dificulta a rastreabilidade das informações, a aplicação de regras de negócio complexas e, principalmente, a geração de análises visuais rápidas que poderiam acelerar os resultados das pesquisas. É nesse contexto de modernização e centralização de dados que se insere o projeto desenvolvido durante o estágio.
 
-Este texto, com o objetivo de familiarizar o usuário da linguagem \LaTeX\ e demonstrar o uso da classe \texttt{templufla}, encontra-se organizado da seguinte maneira: 
+\section{A Empresa Cliente e o Cenário do Projeto}
+As atividades de estágio supervisionado foram realizadas na empresa Zeeway, uma empresa lavrense de tecnologia fundada no ecossistema de inovação da Universidade Federal de Lavras (UFLA). A Zeeway atua no desenvolvimento de software e na entrega de soluções tecnológicas personalizadas, destacando-se pelo compromisso com a qualidade dos projetos e com os resultados dos seus clientes. Atualmente, a empresa conta com um quadro de 15 a 30 colaboradores diretos e mantém uma base de aproximadamente 40 clientes diretos e 500 clientes indiretos. O trabalho principal desenvolvido durante o período de estágio foi a construção de uma plataforma web encomendada pela Terra Gerais, uma empresa do setor do agronegócio especializada em pesquisa agrícola de solos e sementes.
 
-A \autoref{sec:latex} apresenta conceitos básicos da linguagem \LaTeX, servindo como um ponto de início para novos usuários. 
-A \autoref{sec:template} demonstra como utilizar os elementos da classe para a criação de trabalhos no formato da \gls{ufla}.
-A \autoref{sec:listasEGlossario} é um tutorial básico de como usar os pacotes \texttt{glossaries} e \texttt{imakeidx} para criar listas, glossário e índice. 
-A \autoref{sec:conclusao} apresenta comentários e observações finais.
-Por fim, os Anexos \ref{anex:lorem1} e \ref{anex:lorem2} demonstram o uso dos anexos e o \autoref{apen:apendice} mostra como elaborar um apêndice simples.
+A necessidade da Terra Gerais consistia em abandonar o uso descentralizado de planilhas e adotar uma plataforma própria para registrar os seus "protocolos" — registros detalhados com todas as informações de uma safra, componentes do solo e produtividade de grãos. O acesso ao sistema seria distribuído aos colaboradores, exigindo uma arquitetura robusta para lidar com diferentes perfis de usuário e permissões de acesso.
+
+A participação no projeto concentrou-se no desenvolvimento da interface visual e da experiência do usuário (front-end). A aplicação foi construída utilizando a biblioteca React com TypeScript, empregando componentes da interface Material UI (MUI) e integrando a biblioteca ApexCharts para o grande diferencial do sistema: a geração automatizada de gráficos de análise agronômica. Todo o ciclo de desenvolvimento foi pautado pela metodologia ágil Scrum, permitindo organização e entregas incrementais.
+
+\section{Objetivos do Estágio e do TCC}
+
+O objetivo principal do estágio foi aplicar, em um ambiente corporativo real, os conhecimentos adquiridos ao longo da graduação, vivenciando a rotina de desenvolvimento de software em equipe e os desafios da engenharia de requisitos.
+
+Este relatório tem como objetivo apresentar de forma estruturada as atividades desempenhadas na Zeeway, detalhando a arquitetura front-end construída, as tecnologias adotadas e a metodologia de trabalho. Busca-se demonstrar também os desafios técnicos enfrentados na tradução de regras de negócio complexas para a interface da plataforma e o impacto da experiência na formação profissional e acadêmica.
