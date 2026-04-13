@@ -1,0 +1,82 @@
+bom o professor me mandou assim:
+
+Lucas, vou lhe passar alguns modelos de relatório de estágio que já orientei (dar prioridade para o do Paulo Rafael): https://drive.google.com/drive/folders/17vO5dD7EWXn5in0xX-nO9s_7eUzQQBwS?usp=sharing.
+Peço que dê uma lida e traga uma proposta, na semana que vem, de sumário para o seu relatório, pode ser?
+
+agora vou te passar aqui o meu projeto que foi feito:
+
+Foi tipo assim, ó, o projeto foi da Terra Gerais, mas é uma empresa, é uma empresa do agro de pesquisa aí, eh, pesquisa agrícola de solo, semente, aí eles queriam montar uma plataforma para conseguir registrar as pesquisas, né, que chamavam lá de protocolos, que tinha todas as informações daquela daquela safra. Então, eles analisava componente no solo, parte de resultado de quantos grãos, enfim. Aí essa plataforma que a gente montou lá era davam acesso pros colaboradores colocarem ali. Era mais para centralizar as informações, porque antes eles faziam tudo com planilha. Aí a plataforma veio para me agrupar. e gerar alguns gráficos de análise, que era o a o grande diferencial dessa aplicação. Aí a minha participação lá foi de montar a parte visual, né, que é o front end, fazer o código a gente fez em React, eu acho, na época. E aí a gente montou a parte de login, de planilha para preencher os dados, de visualização dos Aí tinha muitas regras de negócio que é tipo as regras que o tipo assim cada usuário tem uma permissão, enfim. Então a gente teve que configurar todas essa essas partes em questão de como é que refletiria na análise dos dados. E aí o projeto baseou basicamente nisso. Eh, só que eles não chegaram a utilizar muito. Daí a gente A gente fez um outro projeto que pegava por meio do Power BI, analisando outros parâmetros ali da Terras Gerais, como um todo, tipo financeiro, parte de consumo, por exemplo, quantas quantos litros de gasolina eles gastavam em cada carro? Aí assim, essa análise e queria analisar todo todos os dados que a empresa gerava, eles queriam montar o BI. A gente fez fez isso e montou meio que uma parte profissional deles gerenciarem uns arquivos dele, que é com base no SharePoint, que é o gerenciador do OneDrive, onde ele conseguiria colocar os arquivos e anexar. Então, o projeto contemplou desde o início com essa criação da plataforma até a outra parte que foi com o Powerby, né, fazendo esses relatórios. Mas girou muito entorno do dessa parte dos dados mesmo.
+
+acredito que meu projeto vai se centralizar mais ali na parte da plataforma que montamos, vou te mandar aqui algumas telas que fizemos, para entender amis sobre o processo
+
+usamos a metodologia de Scrum para desenvolver e como linguagem o React, vou passar aqui as tecnologias:
+
+{
+  "name": "front",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/pickers": "^3.3.10",
+    "@mui/icons-material": "^5.14.3",
+    "@mui/lab": "^5.0.0-alpha.140",
+    "@mui/material": "^5.14.5",
+    "@mui/x-date-pickers": "^6.11.1",
+    "@tanstack/react-query": "^4.32.6",
+    "@tanstack/react-table": "^8.9.3",
+    "@types/node": "^20.4.6",
+    "apexcharts": "^3.42.0",
+    "axios": "^1.4.0",
+    "date-fns": "^2.30.0",
+    "dayjs": "^1.11.9",
+    "dotenv": "^16.3.1",
+    "formik": "^2.4.3",
+    "html2canvas": "^1.4.1",
+    "immer": "^10.0.2",
+    "jszip": "^3.10.1",
+    "jwt-decode": "^3.1.2",
+    "mathjs": "^11.11.0",
+    "moment": "^2.29.4",
+    "qrcode": "^1.5.3",
+    "react": "^18.2.0",
+    "react-apexcharts": "^1.4.1",
+    "react-beforeunload": "^2.6.0",
+    "react-div-100vh": "^0.7.0",
+    "react-dom": "^18.2.0",
+    "react-drag-drop-files": "^2.3.10",
+    "react-hot-toast": "^2.4.1",
+    "react-input-mask": "^2.0.4",
+    "react-router-dom": "^6.14.2",
+    "react-spring": "^9.7.2",
+    "react-swipeable-views": "^0.14.0",
+    "react-swipeable-views-native": "^0.13.2",
+    "react-swipeable-views-utils": "^0.14.0",
+    "use-react-screenshot": "^3.0.0",
+    "vite-tsconfig-paths": "^4.2.0",
+    "yup": "^1.2.0",
+    "zustand": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-beforeunload": "^2.1.1",
+    "@types/react-dom": "^18.2.7",
+    "@types/react-input-mask": "^3.0.2",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  }
+}
