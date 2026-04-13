@@ -1,10 +1,57 @@
 \chapter{\MakeUppercase{Resultados: A Plataforma de Protocolos}}
 
+Neste capítulo são descritas as principais funcionalidades desenvolvidas durante o estágio para a plataforma de protocolos da Terra Gerais. A apresentação está organizada por módulo, detalhando as decisões técnicas tomadas e os desafios enfrentados em cada etapa. A seleção das atividades se deu por meio da sua relevância no escopo do projeto e pela complexidade técnica envolvida.
+
 \section{Módulo de Autenticação e Controle de Acesso}
 
+O primeiro módulo desenvolvido foi o de autenticação, responsável por controlar o acesso dos colaboradores da Terra Gerais à plataforma. A tela de login foi construída seguindo a identidade visual da empresa cliente, com campos para e-mail e senha e a opção de recuperação de senha.
+
+A autenticação foi implementada com o uso da biblioteca \textit{jwt-decode} para decodificação de tokens JWT (\textit{JSON Web Token}) recebidos da API. Após o login bem-sucedido, o token era armazenado e utilizado para validar as requisições subsequentes por meio do \textit{Axios}, configurado com interceptadores que adicionavam o cabeçalho de autorização automaticamente.
+
+Um dos desafios deste módulo foi a implementação do controle de permissões por perfil de usuário. A plataforma previa dois perfis principais, Administrador e Técnico, com diferentes níveis de acesso às funcionalidades. O perfil Administrador possuía acesso completo ao sistema, incluindo a gestão de usuários, enquanto o perfil Técnico tinha acesso restrito apenas ao registro e consulta de protocolos. Essa lógica foi implementada no front-end por meio de verificações condicionais nos componentes React, utilizando o estado global gerenciado pela biblioteca \textit{Zustand}.
+
+\subsection{Gestão de Usuários}
+
+A tela de gestão de usuários permitia ao administrador visualizar, adicionar, editar e excluir os colaboradores cadastrados. A listagem exibia nome, tipo de perfil, e-mail e contato de cada usuário, com suporte a busca textual e filtros por tipo de perfil.
+
+As operações de criação e exclusão de usuários eram realizadas por meio de modais, componentes sobrepostos à tela principal que permitem ao usuário executar uma ação sem perder o contexto da página atual. Foram implementados modais para o formulário de adição de usuário, para a confirmação de exclusão e para o \textit{feedback} de sucesso e erro. Todos os formulários utilizavam a biblioteca \textit{Formik} para gerenciamento de estado dos campos e \textit{Yup} para validação dos dados antes do envio à API.
 
 \section{Módulo de Registros Agrícolas}
 
+O módulo de registros agrícolas constituiu o núcleo da plataforma, sendo responsável pelo cadastro, edição e consulta dos protocolos de pesquisa. Cada protocolo representava um registro completo de uma pesquisa agrícola, contendo informações sobre a safra analisada, os tratamentos aplicados, as características do solo e os resultados de produtividade.
+
+\subsection{Listagem de Protocolos}
+
+A tela de listagem de protocolos foi construída utilizando a biblioteca \textit{TanStack React Table}, que oferece recursos avançados de tabela como ordenação, paginação e filtragem. Cada protocolo era exibido com seu código, tipo, cliente, classe, cultura e status atual. As ações disponíveis incluíam edição, exclusão, geração de QR Code e exportação para planilha.
+
+A funcionalidade de geração de QR Code foi implementada com a biblioteca \textit{qrcode} e tinha como objetivo facilitar a identificação dos protocolos em campo. Cada QR Code gerado continha um identificador único que, ao ser escaneado, direcionava o colaborador diretamente para a página do protocolo correspondente na plataforma.
+
+\subsection{Formulário de Cadastro e Edição de Protocolos}
+
+O formulário de cadastro de protocolos representou um dos maiores desafios técnicos do projeto, dado o grande volume de campos e a complexidade das regras de negócio envolvidas. O formulário foi organizado em abas para melhorar a usabilidade: Informações, Avaliações, Tratamentos, Local, Solo, Aplicações, Manejo e Dashboard.
+
+A aba de Informações continha os dados gerais do protocolo, como código, tipo (Rede, Comercial ou Vitrine), cliente, cultura utilizada, datas de plantio e colheita, número de tratamentos e repetições, entre outros campos. Muitos desses campos eram interdependentes: a seleção do tipo de protocolo, por exemplo, determinava quais campos subsequentes seriam obrigatórios ou opcionais.
+
+A aba de Avaliações permitia o registro dos dados coletados em cada momento de avaliação. A estrutura desta aba era dinâmica: o número de colunas da tabela variava de acordo com o número de repetições configurado na aba de Informações, e novas linhas podiam ser adicionadas conforme a necessidade. Além dos dados numéricos, a aba suportava o \textit{upload} de fotografias de campo, permitindo que os técnicos anexassem registros visuais diretamente vinculados a cada momento de avaliação.
+
+O gerenciamento do estado do formulário como um todo foi implementado com as bibliotecas \textit{Formik} e \textit{Immer}. O \textit{Formik} era responsável pelo controle dos valores dos campos e pela orquestração das validações, enquanto o \textit{Immer} facilitava a atualização imutável de estruturas de dados profundamente aninhadas. Essa necessidade era recorrente, dado que um protocolo podia conter dezenas de tratamentos, cada um com múltiplas repetições e avaliações.
+
+Uma das principais dificuldades encontradas neste módulo foi a tradução das regras de negócio da Terra Gerais para a lógica do formulário. As regras variavam conforme o tipo de protocolo, a cultura selecionada e a classe do experimento, exigindo uma comunicação constante com a equipe do cliente para validar o comportamento esperado. O uso da biblioteca \textit{Yup} para validação condicional dos campos mostrou-se essencial para garantir a integridade dos dados antes do envio ao servidor.
 
 \section{Módulo de Análise e Dashboards}
 
+O módulo de análise e dashboards representou o principal diferencial da plataforma em relação ao uso de planilhas. A proposta era transformar os dados brutos registrados nos protocolos em visualizações gráficas que auxiliassem os pesquisadores na tomada de decisões.
+
+\subsection{Geração Automatizada de Gráficos}
+
+A geração de gráficos foi implementada utilizando a biblioteca \textit{ApexCharts}, integrada ao React por meio do pacote \textit{react-apexcharts}. Os gráficos eram gerados automaticamente a partir dos dados registrados nas avaliações de cada protocolo, sem a necessidade de configuração manual por parte do usuário. Foram utilizados principalmente gráficos de barras verticais e horizontais para comparar os resultados entre diferentes tratamentos e momentos de avaliação. Cada gráfico era renderizado individualmente em um \textit{card}, com a opção de download individual.
+
+Uma funcionalidade importante foi a exportação dos gráficos em formato PNG com a identidade visual da Terra Gerais, contendo o logotipo da empresa e a legenda dos dados. Essa funcionalidade foi implementada com a biblioteca \textit{html2canvas}, que realiza a captura de elementos HTML como imagem, combinada com a biblioteca \textit{JSZip} para permitir o download de múltiplos gráficos em um único arquivo compactado.
+
+\subsection{Dashboard Geral}
+
+Além dos gráficos individuais por protocolo, a plataforma contava com um dashboard geral que apresentava uma visão consolidada de todos os protocolos cadastrados, incluindo a distribuição de protocolos por classe, por cultura e por status.
+
+A construção dos dashboards exigiu o uso da biblioteca \textit{mathjs} para a realização de cálculos estatísticos sobre os dados dos protocolos, como médias, desvios e percentuais de distribuição. Os dados eram buscados via API utilizando o \textit{React Query} (\textit{TanStack Query}), que gerenciava o cache das requisições e garantia que as visualizações estivessem sempre atualizadas sem a necessidade de recarregamentos manuais da página.
+
+Uma das dificuldades técnicas enfrentadas na construção dos dashboards foi a performance de renderização quando o volume de dados era elevado. A renderização simultânea de múltiplos gráficos com grandes conjuntos de dados causava lentidão perceptível na interface. Para mitigar esse problema, foi adotada uma estratégia de carregamento sob demanda (\textit{lazy loading}), em que os gráficos eram renderizados apenas quando o usuário navegava até a seção correspondente.
