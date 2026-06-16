@@ -32,15 +32,48 @@ O \textit{React} é uma biblioteca \textit{JavaScript} de código aberto, criada
 
 Uma das vantagens do \textit{React} é o uso do \textit{Virtual DOM} (\textit{Document Object Model}), uma representação virtual da árvore de elementos da página. Quando o estado de um componente é alterado, o \textit{React} compara a versão atual do \textit{Virtual DOM} com a anterior e atualiza apenas os elementos que de fato mudaram, otimizando a performance de renderização.
 
-O \textit{TypeScript} é um superconjunto do \textit{JavaScript} desenvolvido pela \textit{Microsoft} que adiciona tipagem estática à linguagem. Em projetos \textit{React}, o \textit{TypeScript} permite definir tipos para as \textit{props} dos componentes, para os dados recebidos de APIs e para o estado da aplicação, reduzindo erros em tempo de desenvolvimento e facilitando a manutenção do código \cite{TypeScript2024}.
+O \textit{TypeScript} é um superconjunto do \textit{JavaScript} desenvolvido pela \textit{Microsoft} que adiciona tipagem estática à linguagem. Em projetos \textit{React}, o \textit{TypeScript} permite definir tipos para as \textit{props} dos componentes, para os dados recebidos de APIs e para o estado da aplicação, reduzindo erros em tempo de desenvolvimento e facilitando a manutenção do código \cite{TypeScript2024}. O \autoref{cod:reactts} apresenta um exemplo didático de um componente React escrito em TypeScript.
+
+\begin{lstlisting}[caption={Exemplo didático de um componente \textit{React} com \textit{TypeScript}.}, label={cod:reactts}]
+import { useState } from "react";
+
+interface ContadorProps {
+  inicial: number;
+  passo?: number;
+}
+
+export function Contador({ inicial, passo = 1 }: ContadorProps) {
+  const [valor, setValor] = useState<number>(inicial);
+
+  return (
+    <button onClick={() => setValor(valor + passo)}>
+      Cliques: {valor}
+    </button>
+  );
+}
+\end{lstlisting}
+
+No exemplo, a interface \texttt{ContadorProps} declara as propriedades aceitas pelo componente, indicando que \texttt{inicial} é obrigatória e que \texttt{passo} é opcional (sinalizada pela interrogação) com valor padrão igual a um. O componente \texttt{Contador} recebe essas propriedades já tipadas, mantém um estado interno por meio do \textit{hook} \texttt{useState} (cuja tipagem também é explícita) e retorna um elemento de interface (botão) cujo clique incrementa o valor do estado, fazendo com que o \textit{React} reexecute a função e atualize a tela com o novo valor.
 
 No projeto da plataforma de protocolos, a combinação de \textit{React} com \textit{TypeScript} foi utilizada para construir todos os componentes da interface. A ferramenta de \textit{build} adotada foi o \textit{Vite}, que oferece um servidor de desenvolvimento com \textit{Hot Module Replacement} (HMR), permitindo que as alterações no código fossem refletidas instantaneamente no navegador durante o desenvolvimento.
 
 \subsection{Gerenciamento de Estado e Formulários}
 
-Em aplicações \textit{React} de maior porte, o gerenciamento do estado da aplicação torna-se um desafio. Para solucionar esse problema, foi utilizada a biblioteca \textit{Zustand}, uma solução leve de gerenciamento de estado global que permite compartilhar dados entre componentes sem a necessidade de passar \textit{props} por múltiplos níveis da árvore de componentes \cite{Zustand2024}.
+Em aplicações \textit{React} de maior porte, o gerenciamento do estado da aplicação torna-se um desafio. Para solucionar esse problema, foi utilizada a biblioteca \textit{Zustand}, uma solução leve de gerenciamento de estado global que permite compartilhar dados entre componentes sem a necessidade de passar \textit{props} por múltiplos níveis da árvore de componentes \cite{Zustand2024}. Em conjunto com o \textit{Zustand}, foram empregados o seu \textit{middleware} de persistência, para manter a sessão do usuário entre acessos, e a biblioteca \textit{Immer}, que permite atualizar o estado de forma imutável por meio de uma sintaxe direta. A biblioteca \textit{jwt-decode} foi utilizada para decodificar o \textit{token} JWT recebido no login e extrair as informações do usuário.
 
-Para o gerenciamento dos formulários, que constituíam uma parte central da plataforma dado o grande número de campos nos protocolos, foram utilizadas as bibliotecas \textit{Formik} e \textit{Yup}. O \textit{Formik} é uma biblioteca que simplifica a criação de formulários em \textit{React}, cuidando do estado dos campos, da validação e do envio dos dados. O \textit{Yup} é uma biblioteca de validação de esquemas que permite definir regras de validação de forma declarativa, como campos obrigatórios, tipos de dados esperados e validações condicionais \cite{Formik2024}.
+Para o gerenciamento dos formulários, que constituíam uma parte central da plataforma dado o grande número de campos nos protocolos, foram utilizadas as bibliotecas \textit{Formik} e \textit{Yup}. O \textit{Formik} é uma biblioteca que simplifica a criação de formulários em \textit{React}, cuidando do estado dos campos, da validação e do envio dos dados. O \textit{Yup} é uma biblioteca de validação de esquemas que permite definir regras de validação de forma declarativa, como campos obrigatórios, tipos de dados esperados e validações condicionais \cite{Formik2024}. O \autoref{cod:yupex} apresenta um exemplo didático de um esquema de validação com \textit{Yup}.
+
+\begin{lstlisting}[caption={Exemplo didático de um esquema de validação com \textit{Yup}.}, label={cod:yupex}]
+import * as Yup from "yup";
+
+const esquemaUsuario = Yup.object().shape({
+  nome: Yup.string().required("Nome obrigatorio"),
+  email: Yup.string().email("E-mail invalido").required("E-mail obrigatorio"),
+  idade: Yup.number().min(18, "Idade minima 18").nullable(),
+});
+\end{lstlisting}
+
+No exemplo, \texttt{Yup.object().shape} declara o formato esperado de um objeto. Cada chave do objeto encadeia validações específicas: \texttt{nome} deve ser uma \textit{string} obrigatória; \texttt{email} deve ter formato válido e ser obrigatório, combinando duas regras na mesma cadeia; \texttt{idade} deve ser um número de pelo menos dezoito, mas pode receber valor nulo. A mensagem passada a cada validação é o texto exibido ao usuário quando a regra é violada.
 
 A comunicação com a API do servidor foi implementada por meio da biblioteca \textit{Axios}, um cliente HTTP que permite realizar requisições de forma simplificada. Para o gerenciamento de cache e sincronização dos dados do servidor, foi utilizada a biblioteca \textit{React Query} (\textit{TanStack Query}), que automatiza o processo de busca, cache, atualização e invalidação de dados, evitando requisições desnecessárias e mantendo a interface atualizada \cite{TanStackQuery2024}.
 
@@ -56,6 +89,22 @@ Além dos componentes básicos do \textit{MUI}, o projeto utilizou a biblioteca 
 
 A geração de gráficos e visualizações de dados constituiu o principal diferencial da plataforma em relação ao uso de planilhas. Para essa funcionalidade, foi utilizada a biblioteca \textit{ApexCharts}, uma biblioteca \textit{JavaScript} de código aberto para a criação de gráficos interativos. A integração com o \textit{React} foi realizada por meio do pacote \textit{react-apexcharts} \cite{ApexCharts2024}.
 
-O \textit{ApexCharts} oferece diversos tipos de gráficos, como barras, linhas, pizza, radar e área, além de funcionalidades como \textit{zoom}, \textit{tooltip} e exportação em formato de imagem. Na plataforma de protocolos, foram utilizados principalmente gráficos de barras verticais e horizontais para comparar os resultados entre diferentes tratamentos e momentos de avaliação.
+O \textit{ApexCharts} oferece diversos tipos de gráficos, como barras, linhas, pizza, radar e área, além de funcionalidades como \textit{zoom}, \textit{tooltip} e exportação em formato de imagem. Na plataforma de protocolos, foram utilizados principalmente gráficos de barras verticais e horizontais para comparar os resultados entre diferentes tratamentos e momentos de avaliação. O \autoref{cod:apexex} apresenta um exemplo didático da configuração mínima de um gráfico de barras com o pacote \textit{react-apexcharts}.
 
-Para complementar a geração dos gráficos, a biblioteca \textit{mathjs} foi utilizada na realização de cálculos estatísticos sobre os dados dos protocolos, como médias e distribuições percentuais. A exportação dos gráficos em formato de imagem, com a identidade visual da Terra Gerais, foi implementada com as bibliotecas \textit{html2canvas} --- que realiza a captura de elementos HTML como imagem --- e \textit{JSZip}, que permite o empacotamento de múltiplos arquivos em um único arquivo compactado para \textit{download}.
+\begin{lstlisting}[caption={Exemplo didático de gráfico de barras com \textit{react-apexcharts}.}, label={cod:apexex}]
+import ApexCharts from "react-apexcharts";
+
+const series = [{ name: "Vendas", data: [10, 20, 30] }];
+const options = {
+  chart: { type: "bar" },
+  xaxis: { categories: ["Jan", "Fev", "Mar"] },
+};
+
+export function GraficoVendas() {
+  return <ApexCharts options={options} series={series} type="bar" />;
+}
+\end{lstlisting}
+
+No exemplo, \texttt{series} é a lista de séries do gráfico, cada uma contendo um nome e um vetor de valores numéricos correspondentes a cada categoria. O objeto \texttt{options} concentra a configuração visual, definindo o tipo de gráfico (\texttt{chart.type}) e os rótulos do eixo horizontal (\texttt{xaxis.categories}). O componente \texttt{ApexCharts} recebe esses dois objetos e cuida da renderização do gráfico na tela.
+
+Para a avaliação de campos definidos como fórmulas nos protocolos, isto é, expressões matemáticas calculadas a partir dos valores de outros campos, foi utilizada a biblioteca \textit{mathjs}, que interpreta e avalia expressões em tempo de execução. A exportação dos gráficos em formato de imagem, com a identidade visual da Terra Gerais, foi implementada com a biblioteca \textit{use-react-screenshot}, que captura um elemento da interface como imagem. Já a biblioteca \textit{JSZip} foi empregada para empacotar as fotografias de campo de uma avaliação em um único arquivo compactado para \textit{download}.

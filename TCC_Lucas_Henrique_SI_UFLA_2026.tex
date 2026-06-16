@@ -104,6 +104,23 @@ citecolor=rltgreen,%
 	{à}{{\`{a}}}1{À}{{\`{A}}}1}
 }
 
+% Ajustes adicionais do listings: numeração de linhas, moldura e palavras-chave
+\renewcommand{\lstlistingname}{Código}
+\lstset{
+	numbers=left,
+	numberstyle=\tiny,
+	numbersep=8pt,
+	frame=single,
+	framesep=4pt,
+	keywordstyle=\bfseries,
+	morekeywords={const,let,var,function,return,if,else,async,await,import,
+		export,from,interface,type,for,of,new,true,false,null,this,class}
+}
+
+% Pacote para diagramas (arquitetura e fluxos)
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, calc}
+
 % Carregamento do glossário, listas de siglas, símbolos e etc
 \loadglsentries{glossarios/abreviaturas}
 \loadglsentries{glossarios/glossario}

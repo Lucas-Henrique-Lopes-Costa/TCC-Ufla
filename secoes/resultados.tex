@@ -6,9 +6,52 @@ Neste capítulo são descritas as principais funcionalidades desenvolvidas duran
 
 O primeiro módulo desenvolvido foi o de autenticação, responsável por controlar o acesso dos colaboradores da Terra Gerais à plataforma. A tela de login foi construída seguindo a identidade visual da empresa cliente, com campos para e-mail e senha e a opção de recuperação de senha.
 
-A autenticação foi implementada com o uso da biblioteca \textit{jwt-decode} para decodificação de tokens JWT (\textit{JSON Web Token}) recebidos da API. Após o login bem-sucedido, o token era armazenado e utilizado para validar as requisições subsequentes por meio do \textit{Axios}, configurado com interceptadores que adicionavam o cabeçalho de autorização automaticamente.
+A autenticação foi implementada com o uso da biblioteca \textit{jwt-decode} para decodificação de tokens JWT (\textit{JSON Web Token}) recebidos da API. Após o login bem-sucedido, os dados da sessão (\textit{access token} e \textit{refresh token}) e as informações do usuário extraídas do \textit{token} eram armazenados no estado global da aplicação, gerenciado pela biblioteca \textit{Zustand} com o \textit{middleware} de persistência. A atualização imutável desse estado foi feita com o auxílio da biblioteca \textit{Immer}. O \autoref{cod:store} apresenta um trecho simplificado da função que processa o login, decodificando o \textit{token} e populando o \textit{store}.
 
-Um dos desafios deste módulo foi a implementação do controle de permissões por perfil de usuário. A plataforma previa dois perfis principais, Administrador e Técnico, com diferentes níveis de acesso às funcionalidades. O perfil Administrador possuía acesso completo ao sistema, incluindo a gestão de usuários, enquanto o perfil Técnico tinha acesso restrito apenas ao registro e consulta de protocolos. Essa lógica foi implementada no front-end por meio de verificações condicionais nos componentes React, utilizando o estado global gerenciado pela biblioteca \textit{Zustand}.
+\begin{lstlisting}[caption={Trecho do \textit{store} de autenticação (\textit{Zustand}) com \textit{Immer} e \textit{jwt-decode}.}, label={cod:store}]
+export const loginStorePersist = create(
+  persist((set, get) => ({
+    // ...estado inicial omitido
+    setLoginInfo: ({ data }) =>
+      set(produce((draft) => {
+        draft.isAuthenticated = true;
+        draft.session = {
+          accessToken: data.data.accessToken,
+          refreshToken: data.data.refreshToken,
+        };
+        const decoded = jwtDecode(data.data.accessToken);
+        draft.userData = {
+          name: decoded.unique_name,
+          id: decoded.nameid,
+          email: decoded.email,
+          roleId: decoded.role,
+        };
+      })),
+  }), { name: "UserData" })
+);
+\end{lstlisting}
+
+O \textit{store} é criado com a função \texttt{create} do \textit{Zustand} combinada ao \textit{middleware} \texttt{persist}, que salva o conteúdo em armazenamento local sob o nome \texttt{UserData}, mantendo a sessão entre acessos. A função \texttt{setLoginInfo} é a operação central: ela é executada após o sucesso do login e recebe os dados retornados pela API. A chamada \texttt{produce}, do \textit{Immer}, expõe um \textit{draft} mutável do estado e permite escrever as alterações de forma direta. No bloco interno, o usuário é marcado como autenticado, os \textit{tokens} são gravados na sessão, o \textit{access token} é decodificado por \texttt{jwtDecode} e os campos relevantes (nome, identificador, e-mail e perfil) são extraídos das suas \textit{claims} e atribuídos a \texttt{userData}.
+
+Um dos desafios deste módulo foi a implementação do controle de permissões por perfil de usuário. A plataforma previa dois perfis principais, Administrador e Técnico, com diferentes níveis de acesso às funcionalidades. O perfil Administrador possuía acesso completo ao sistema, incluindo a gestão de usuários, enquanto o perfil Técnico tinha acesso restrito apenas ao registro e consulta de protocolos. O controle foi implementado no nível das rotas, por meio de um componente guardião (\texttt{ProtectedRouteGuard}) que verificava, a partir do perfil armazenado no \textit{store}, se o usuário estava autenticado e se possuía permissão de administrador, redirecionando-o quando necessário. O \autoref{cod:permissao} apresenta um trecho desse componente.
+
+\begin{lstlisting}[caption={Trecho do componente de guarda de rotas por perfil de usuário.}, label={cod:permissao}]
+const ProtectedRouteGuard = ({ children, adminRoute }) => {
+  const { isAuthenticated, userData: { roleId } } =
+    loginStorePersist((state) => state);
+  const { isUserRole } = useRoles();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  if (adminRoute && !isUserRole("administrador", roleId)) {
+    return <Navigate to="/" replace />;
+  }
+  return children;
+};
+\end{lstlisting}
+
+O componente recebe como propriedades os elementos filhos (\texttt{children}) que ele encapsula e a marcação \texttt{adminRoute}, usada para indicar rotas restritas ao administrador. As primeiras linhas leem do \textit{store} o estado de autenticação e o identificador do perfil do usuário, e obtêm do \textit{hook} \texttt{useRoles} a função utilitária \texttt{isUserRole}. Em seguida, duas verificações são feitas: a primeira garante que o usuário esteja autenticado, redirecionando-o para \texttt{/login} quando não estiver; a segunda só se aplica às rotas marcadas como \texttt{adminRoute} e redireciona para a raiz quando o perfil do usuário não é administrador. Quando nenhuma das condições dispara redirecionamento, os filhos são renderizados normalmente.
 
 \subsection{Gestão de Usuários}
 
@@ -30,13 +73,51 @@ A funcionalidade de geração de QR Code foi implementada com a biblioteca \text
 
 O formulário de cadastro de protocolos representou um dos maiores desafios técnicos do projeto, dado o grande volume de campos e a complexidade das regras de negócio envolvidas. O formulário foi organizado em abas para melhorar a usabilidade: Informações, Avaliações, Tratamentos, Local, Solo, Aplicações, Manejo e Dashboard.
 
-A aba de Informações continha os dados gerais do protocolo, como código, tipo (Rede, Comercial ou Vitrine), cliente, cultura utilizada, datas de plantio e colheita, número de tratamentos e repetições, entre outros campos. Muitos desses campos eram interdependentes: a seleção do tipo de protocolo, por exemplo, determinava quais campos subsequentes seriam obrigatórios ou opcionais.
+A aba de Informações continha os dados gerais do protocolo. Entre os campos obrigatórios estavam o tipo do protocolo (Ret ou Comercial), o código, o cliente, as classes do experimento, o status, o número de tratamentos e o número de repetições. Os demais campos eram opcionais, como cultura utilizada, variedade, cultura anterior, tipo de plantio, datas de plantio, colheita e emergência, adubação, espaçamento entre linhas, delineamento experimental, tamanho da parcela e parcela útil. Essa distinção entre campos obrigatórios e opcionais era expressa no esquema de validação apresentado adiante, e o campo de classes permitia a seleção de múltiplos valores, com a possibilidade de cadastrar novas classes diretamente no formulário.
 
-A aba de Avaliações permitia o registro dos dados coletados em cada momento de avaliação. A estrutura desta aba era dinâmica: o número de colunas da tabela variava de acordo com o número de repetições configurado na aba de Informações, e novas linhas podiam ser adicionadas conforme a necessidade. Além dos dados numéricos, a aba suportava o \textit{upload} de fotografias de campo, permitindo que os técnicos anexassem registros visuais diretamente vinculados a cada momento de avaliação.
+A aba de Avaliações permitia o registro dos dados coletados em cada momento de avaliação. A estrutura desta aba era dinâmica: o número de colunas da tabela variava de acordo com o número de repetições configurado na aba de Informações, e novas linhas podiam ser adicionadas conforme a necessidade. Alguns campos podiam ser definidos como fórmulas, isto é, expressões matemáticas calculadas a partir dos valores de outros campos; para avaliar essas expressões em tempo de execução, foi utilizada a função \texttt{evaluate} da biblioteca \textit{mathjs}.
 
-O gerenciamento do estado do formulário como um todo foi implementado com as bibliotecas \textit{Formik} e \textit{Immer}. O \textit{Formik} era responsável pelo controle dos valores dos campos e pela orquestração das validações, enquanto o \textit{Immer} facilitava a atualização imutável de estruturas de dados profundamente aninhadas. Essa necessidade era recorrente, dado que um protocolo podia conter dezenas de tratamentos, cada um com múltiplas repetições e avaliações.
+Além dos dados numéricos, a aba suportava o \textit{upload} de fotografias de campo, permitindo que os técnicos anexassem registros visuais diretamente vinculados a cada momento de avaliação. Para facilitar o trabalho posterior, foi implementada a funcionalidade de \textit{download} de todas as fotografias de uma avaliação em um único arquivo compactado, utilizando a biblioteca \textit{JSZip}. As imagens eram obtidas da API por meio de uma requisição gerenciada pelo \textit{React Query}, convertidas em \textit{blobs}, agrupadas em um arquivo \textit{.zip} e salvas no dispositivo do usuário, conforme o \autoref{cod:jszip}.
 
-Uma das principais dificuldades encontradas neste módulo foi a tradução das regras de negócio da Terra Gerais para a lógica do formulário. As regras variavam conforme o tipo de protocolo, a cultura selecionada e a classe do experimento, exigindo uma comunicação constante com a equipe do cliente para validar o comportamento esperado. O uso da biblioteca \textit{Yup} para validação condicional dos campos mostrou-se essencial para garantir a integridade dos dados antes do envio ao servidor.
+\begin{lstlisting}[caption={Trecho do \textit{download} das fotografias de uma avaliação em arquivo \textit{.zip} com \textit{JSZip}.}, label={cod:jszip}]
+const handleDownloadImages = async (evaluation) => {
+  getImages(evaluation.id, {
+    onSuccess: async ({ data }) => {
+      const images = data.data;
+      const blobs = await Promise.all(
+        images.map((img) => fetch(img.url).then((res) => res.blob()))
+      );
+      const zip = new JSZip();
+      blobs.forEach((blob, i) => zip.file(`${images[i].title}.jpg`, blob));
+      const zipFile = await zip.generateAsync({ type: "blob" });
+      saveFile(zipFile, evaluation.name);
+    },
+  });
+};
+\end{lstlisting}
+
+A função recebe a avaliação selecionada e dispara a busca das imagens pela API por meio do \textit{mutation} \texttt{getImages}, fornecido pelo \textit{React Query}. No \textit{callback} de sucesso, a lista de imagens retornada é percorrida e cada item é mapeado para uma promessa que baixa o arquivo como \textit{blob}, utilizando o \texttt{fetch} nativo do navegador; as promessas são aguardadas em paralelo com \texttt{Promise.all}. Em seguida, uma instância de \texttt{JSZip} é criada e cada \textit{blob} é adicionado ao arquivo com o nome correspondente. Por fim, o método \texttt{generateAsync} produz o arquivo \texttt{.zip} final em memória, que é entregue ao usuário pela função utilitária \texttt{saveFile}.
+
+O gerenciamento do estado do formulário foi implementado com a biblioteca \textit{Formik}, encapsulada em um \textit{hook} customizado (\texttt{useForm}) que padronizava o controle dos valores dos campos e a orquestração das validações em todas as telas. Essa padronização era importante, dado que um protocolo podia conter dezenas de tratamentos, cada um com múltiplas repetições e avaliações, resultando em estruturas de dados profundamente aninhadas.
+
+Uma das principais dificuldades encontradas neste módulo foi a tradução das regras de negócio da Terra Gerais para a lógica do formulário. As regras variavam conforme o tipo de protocolo, a cultura selecionada e a classe do experimento, exigindo uma comunicação constante com a equipe do cliente para validar o comportamento esperado. O uso da biblioteca \textit{Yup} para a definição de esquemas de validação mostrou-se essencial para garantir a integridade dos dados antes do envio ao servidor, distinguindo os campos obrigatórios dos opcionais e validando tipos, listas e formatos. O \autoref{cod:yup} apresenta um trecho do esquema de validação da aba de Informações do protocolo.
+
+\begin{lstlisting}[caption={Trecho do esquema de validação (\textit{Yup}) da aba de Informações do protocolo.}, label={cod:yup}]
+const validationSchema = Yup.object().shape({
+  isRET: Yup.bool().required("O campo e obrigatorio"),
+  code: Yup.string().required("O campo e obrigatorio"),
+  culture: Yup.string(),
+  experimentalDesign: Yup.string().nullable(),
+  numberOfTreatments: Yup.number().required("O campo e obrigatorio").nullable(),
+  numberOfRepeats: Yup.number().required("O campo e obrigatorio").nullable(),
+  plantingDate: Yup.string().nullable(),
+  harvestDate: Yup.string().nullable(),
+  classes: Yup.array().min(1, "O campo e obrigatorio"),
+  clientId: Yup.string().required("O campo e obrigatorio"),
+});
+\end{lstlisting}
+
+O esquema é declarado com \texttt{Yup.object().shape}, recebendo um objeto cujas chaves correspondem aos campos do formulário. Cada chave aciona uma cadeia de validações específica do seu tipo: os campos do tipo \textit{string} ou \textit{bool} usam \texttt{.required} quando são obrigatórios; os campos numéricos combinam \texttt{.required} com \texttt{.nullable}, o que permite manter o campo nulo durante o preenchimento parcial, mas exige o seu preenchimento no envio; o campo \texttt{classes} utiliza \texttt{array().min(1)} para garantir ao menos uma classe selecionada; e os campos puramente opcionais (como \texttt{culture}) aparecem sem \texttt{.required}. A mensagem passada a cada validação é o texto exibido ao usuário quando a regra é violada.
 
 \section{Módulo de Análise e Dashboards}
 
@@ -44,14 +125,75 @@ O módulo de análise e dashboards representou o principal diferencial da plataf
 
 \subsection{Geração Automatizada de Gráficos}
 
-A geração de gráficos foi implementada utilizando a biblioteca \textit{ApexCharts}, integrada ao React por meio do pacote \textit{react-apexcharts}. Os gráficos eram gerados automaticamente a partir dos dados registrados nas avaliações de cada protocolo, sem a necessidade de configuração manual por parte do usuário. Foram utilizados principalmente gráficos de barras verticais e horizontais para comparar os resultados entre diferentes tratamentos e momentos de avaliação. Cada gráfico era renderizado individualmente em um \textit{card}, com a opção de download individual.
+A geração de gráficos foi implementada utilizando a biblioteca \textit{ApexCharts}, integrada ao React por meio do pacote \textit{react-apexcharts}. Os componentes de gráfico recebiam os dados já consolidados (rótulos do eixo horizontal e valores correspondentes) e montavam, de forma automática, as séries e as opções de configuração do \textit{ApexCharts}, sem a necessidade de ajuste manual por parte do usuário. Foram utilizados principalmente gráficos de barras verticais e horizontais para comparar os resultados entre diferentes tratamentos e categorias. Cada gráfico era renderizado individualmente em um \textit{card}, com a opção de \textit{download} individual.
 
-Uma funcionalidade importante foi a exportação dos gráficos em formato PNG com a identidade visual da Terra Gerais, contendo o logotipo da empresa e a legenda dos dados. Essa funcionalidade foi implementada com a biblioteca \textit{html2canvas}, que realiza a captura de elementos HTML como imagem, combinada com a biblioteca \textit{JSZip} para permitir o download de múltiplos gráficos em um único arquivo compactado.
+O processo de transformação dos dados em visualizações seguia um fluxo bem definido, desde a obtenção dos dados até a exportação da imagem final, conforme apresentado na \autoref{fig:pipeline}.
+
+\begin{figure}[ht]
+\centering
+\caption{Fluxo de geração de gráficos a partir dos dados de avaliação.}
+\label{fig:pipeline}
+\vspace{0.3cm}
+
+\begin{tikzpicture}[
+  node distance=0.45cm,
+  etapa/.style={rectangle, draw, rounded corners, align=center,
+                text width=2.3cm, minimum height=1.6cm, font=\footnotesize, fill=gray!8},
+  seta/.style={-{Latex}, thick}
+]
+\node[etapa] (dados) {Dados do \textit{back-end} (Dashboard)};
+\node[etapa, right=of dados] (calc) {Mapeamento para séries (\textit{xAxis} / \textit{yAxis})};
+\node[etapa, right=of calc] (serie) {Opções do \textit{ApexCharts}};
+\node[etapa, right=of serie] (render) {Renderização (\textit{react-apexcharts})};
+\node[etapa, right=of render] (export) {Exportação PNG (\textit{use-react-screenshot})};
+\draw[seta] (dados) -- (calc);
+\draw[seta] (calc) -- (serie);
+\draw[seta] (serie) -- (render);
+\draw[seta] (render) -- (export);
+\end{tikzpicture}
+
+\vspace{0.2cm}
+{\footnotesize Fonte: do autor (2026).}
+\end{figure}
+
+O ponto central desse fluxo era a montagem das séries e das opções do gráfico a partir dos vetores de rótulos (\texttt{xAxis}) e valores (\texttt{yAxis}) recebidos pelo componente. O \autoref{cod:serie} apresenta um trecho dessa configuração para um gráfico de colunas.
+
+\begin{lstlisting}[caption={Trecho da configuração de séries e opções de um gráfico com \textit{react-apexcharts}.}, label={cod:serie}]
+const series = [{ name: xAxisTitle, data: yAxis }];
+
+const options: ApexOptions = {
+  chart: { type: "bar", toolbar: { show: false } },
+  plotOptions: { bar: { distributed: true } },
+  dataLabels: { enabled: true },
+  xaxis: { categories: xAxis },
+  yaxis: { max: maxValue + 1 },
+};
+
+return <ApexCharts options={options} series={series} type="bar" />;
+\end{lstlisting}
+
+O vetor \texttt{series} contém uma única série de dados, com o rótulo informado pela propriedade \texttt{xAxisTitle} e o conjunto de valores em \texttt{yAxis}. O objeto \texttt{options}, tipado por \texttt{ApexOptions}, agrupa as configurações visuais do gráfico: \texttt{chart} define o tipo \texttt{bar} e oculta a barra de ferramentas padrão; \texttt{plotOptions} ativa a coloração distribuída por categoria; \texttt{dataLabels} habilita a exibição dos valores numéricos sobre as colunas; \texttt{xaxis} informa as categorias do eixo horizontal a partir do vetor \texttt{xAxis}; e \texttt{yaxis} ajusta o valor máximo do eixo vertical com base no valor máximo dos dados. A última linha entrega esses dois objetos ao componente \texttt{ApexCharts}, que cuida da renderização propriamente dita.
+
+Uma funcionalidade importante foi a exportação dos gráficos em formato PNG com a identidade visual da Terra Gerais, contendo o logotipo da empresa e o título dos dados. Para isso, foi mantido um elemento oculto na tela contendo o gráfico acompanhado do logotipo, e a sua captura como imagem foi realizada com a biblioteca \textit{use-react-screenshot}. A imagem resultante era então disponibilizada para \textit{download} por meio da criação dinâmica de um \textit{link}, conforme o \autoref{cod:export}.
+
+\begin{lstlisting}[caption={Trecho da exportação de um gráfico em PNG com \textit{use-react-screenshot}.}, label={cod:export}]
+const [_, takeScreenshot] = useScreenshot();
+
+const downloadChart = async (format) => {
+  const imageBase64 = await takeScreenshot(imageRef.current);
+  const link = document.createElement("a");
+  link.href = imageBase64;
+  link.download = `${imageTitle} - ${chartTitle}.${format}`;
+  link.click();
+};
+\end{lstlisting}
+
+A primeira linha obtém, do \textit{hook} \texttt{useScreenshot}, a função \texttt{takeScreenshot}, usada para gerar uma imagem a partir de um elemento do DOM. A função \texttt{downloadChart} é assíncrona e recebe como argumento o formato de imagem desejado. No seu corpo, \texttt{takeScreenshot} captura o elemento referenciado por \texttt{imageRef}, que contém o gráfico acompanhado do logotipo, devolvendo a imagem em \textit{base64}. Em seguida, um elemento de \textit{link} é criado dinamicamente, o atributo \texttt{href} recebe a imagem capturada, o atributo \texttt{download} define o nome do arquivo final (combinando o título da imagem, o título do gráfico e o formato) e o clique programático no \textit{link} força o navegador a salvar a imagem no dispositivo do usuário.
 
 \subsection{Dashboard Geral}
 
 Além dos gráficos individuais por protocolo, a plataforma contava com um dashboard geral que apresentava uma visão consolidada de todos os protocolos cadastrados, incluindo a distribuição de protocolos por classe, por cultura e por status.
 
-A construção dos dashboards exigiu o uso da biblioteca \textit{mathjs} para a realização de cálculos estatísticos sobre os dados dos protocolos, como médias, desvios e percentuais de distribuição. Os dados eram buscados via API utilizando o \textit{React Query} (\textit{TanStack Query}), que gerenciava o cache das requisições e garantia que as visualizações estivessem sempre atualizadas sem a necessidade de recarregamentos manuais da página.
+Os dados consolidados desse dashboard, como a contagem e o percentual de protocolos por cultura, por classe e por cliente, eram fornecidos por um \textit{endpoint} específico do \textit{back-end} e buscados via API utilizando o \textit{React Query} (\textit{TanStack Query}), que gerenciava o cache das requisições e garantia que as visualizações estivessem sempre atualizadas sem a necessidade de recarregamentos manuais da página. No \textit{front-end}, esses dados eram mapeados para os vetores de rótulos e valores consumidos pelos componentes de gráfico.
 
 Uma das dificuldades técnicas enfrentadas na construção dos dashboards foi a performance de renderização quando o volume de dados era elevado. A renderização simultânea de múltiplos gráficos com grandes conjuntos de dados causava lentidão perceptível na interface. Para mitigar esse problema, foi adotada uma estratégia de carregamento sob demanda (\textit{lazy loading}), em que os gráficos eram renderizados apenas quando o usuário navegava até a seção correspondente.
