@@ -6,6 +6,16 @@ Neste capítulo é descrito o processo de desenvolvimento adotado ao longo do es
 
 O desenvolvimento da plataforma seguiu a metodologia \textit{Scrum}, organizada em \textit{Sprints} de duração fixa de duas semanas. No início de cada \textit{Sprint}, era realizada a reunião de \textit{planning}, na qual as tarefas priorizadas do \textit{Product Backlog} eram selecionadas e detalhadas no \textit{Sprint Backlog}. As tarefas eram acompanhadas em um quadro de tarefas dividido nas colunas de afazeres, em andamento, em revisão e concluído.
 
+Para o gerenciamento do \textit{Product Backlog} e do \textit{Sprint Backlog} foi utilizado o \textit{Azure DevOps Boards}, ferramenta da \textit{Microsoft} voltada à gestão ágil de trabalho e ao acompanhamento de \textit{itens de trabalho} (\textit{Work Items}) ao longo do ciclo de desenvolvimento. Cada tarefa do \textit{backlog} possuía identificador, estado (por exemplo, \textit{New}, \textit{Approved} ou \textit{Committed}), título, área de produto e marcadores associados, o que facilitava a priorização e a distribuição das atividades entre os membros da equipe. A \autoref{fig:azure} apresenta um exemplo de tela do \textit{Azure DevOps Boards} com a listagem de \textit{Work Items} de um \textit{backlog}.
+
+\begin{figure}[ht]
+\centering
+\caption{Tela de \textit{backlog} do \textit{Azure DevOps Boards}.}
+\label{fig:azure}
+\includegraphics[width=0.95\textwidth]{imgs/azure_devops_backlog.png}
+\fonte{Microsoft Learn. Disponível em: https://learn.microsoft.com/pt-br/azure/devops/boards/backlogs/create-your-backlog. Acesso em: maio 2026.}
+\end{figure}
+
 O acompanhamento diário ocorria por meio das \textit{daily meetings}, reuniões breves em que cada membro relatava o progresso, os planos do dia e eventuais impedimentos. Ao final de cada \textit{Sprint}, a \textit{Sprint Review} apresentava o incremento desenvolvido ao cliente, e a \textit{Sprint Retrospective} permitia à equipe refletir sobre o processo. A adoção desse fluxo possibilitou entregas incrementais à Terra Gerais e a validação contínua das funcionalidades, reduzindo o risco de retrabalho.
 
 \section{Levantamento de Requisitos e Regras de Negócio}
