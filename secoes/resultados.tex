@@ -1,12 +1,12 @@
 \chapter{\MakeUppercase{Resultados: A Plataforma de Protocolos}}
 
-Neste capítulo são descritas as principais funcionalidades desenvolvidas durante o estágio para a plataforma de protocolos da Terra Gerais. A apresentação está organizada por módulo, detalhando as decisões técnicas tomadas e os desafios enfrentados em cada etapa. A seleção das atividades se deu por meio da sua relevância no escopo do projeto e pela complexidade técnica envolvida.
+Neste capítulo são descritas as principais funcionalidades desenvolvidas durante o estágio para a plataforma de protocolos da \novo{empresa cliente}. A apresentação está organizada por módulo, detalhando as decisões técnicas tomadas e os desafios enfrentados em cada etapa. A seleção das atividades se deu por meio da sua relevância no escopo do projeto e pela complexidade técnica envolvida.
 
 \section{Módulo de Autenticação e Controle de Acesso}
 
-O primeiro módulo desenvolvido foi o de autenticação, responsável por controlar o acesso dos colaboradores da Terra Gerais à plataforma. A tela de login foi construída seguindo a identidade visual da empresa cliente, com campos para e-mail e senha e a opção de recuperação de senha.
+O primeiro módulo desenvolvido foi o de autenticação, responsável por controlar o acesso dos colaboradores da \novo{empresa cliente} à plataforma. A tela de login foi construída seguindo a identidade visual da empresa cliente, com campos para e-mail e senha e a opção de recuperação de senha.
 
-A autenticação foi implementada com o uso da biblioteca \textit{jwt-decode} para decodificação de tokens JWT (\textit{JSON Web Token}) recebidos da API. Após o login bem-sucedido, os dados da sessão (\textit{access token} e \textit{refresh token}) e as informações do usuário extraídas do \textit{token} eram armazenados no estado global da aplicação, gerenciado pela biblioteca \textit{Zustand} com o \textit{middleware} de persistência. A atualização imutável desse estado foi feita com o auxílio da biblioteca \textit{Immer}. O \autoref{cod:store} apresenta um trecho simplificado da função que processa o login, decodificando o \textit{token} e populando o \textit{store}.
+A autenticação foi implementada com o uso da biblioteca \textit{jwt-decode} para decodificação de \novo{\textit{tokens}} JWT (\textit{JSON Web Token}) recebidos da API. Após o login bem-sucedido, os dados da sessão (\textit{access token} e \textit{refresh token}) e as informações do usuário extraídas do \textit{token} eram armazenados no estado global da aplicação, gerenciado pela biblioteca \textit{Zustand} com o \textit{middleware} de persistência. A atualização imutável desse estado foi feita com o auxílio da biblioteca \textit{Immer}. O \autoref{cod:store} apresenta um trecho simplificado da função que processa o login, decodificando o \textit{token} e populando o \textit{store}.
 
 \begin{lstlisting}[caption={Trecho do \textit{store} de autenticação (\textit{Zustand}) com \textit{Immer} e \textit{jwt-decode}.}, label={cod:store}]
 export const loginStorePersist = create(
@@ -53,11 +53,17 @@ const ProtectedRouteGuard = ({ children, adminRoute }) => {
 
 O componente recebe como propriedades os elementos filhos (\texttt{children}) que ele encapsula e a marcação \texttt{adminRoute}, usada para indicar rotas restritas ao administrador. As primeiras linhas leem do \textit{store} o estado de autenticação e o identificador do perfil do usuário, e obtêm do \textit{hook} \texttt{useRoles} a função utilitária \texttt{isUserRole}. Em seguida, duas verificações são feitas: a primeira garante que o usuário esteja autenticado, redirecionando-o para \texttt{/login} quando não estiver; a segunda só se aplica às rotas marcadas como \texttt{adminRoute} e redireciona para a raiz quando o perfil do usuário não é administrador. Quando nenhuma das condições dispara redirecionamento, os filhos são renderizados normalmente.
 
-\subsection{Gestão de Usuários}
+\novop{A \autoref{fig:tela-login} apresenta a tela de \textit{login} da plataforma, que era o ponto de entrada de todos os usuários.}
 
-A tela de gestão de usuários permitia ao administrador visualizar, adicionar, editar e excluir os colaboradores cadastrados. A listagem exibia nome, tipo de perfil, e-mail e contato de cada usuário, com suporte a busca textual e filtros por tipo de perfil.
+\begin{figure}[ht]
+\centering
+\caption{\novo{Tela de \textit{login} da plataforma.}}
+\label{fig:tela-login}
+\includegraphics[width=0.8\textwidth]{imgs/tela-login.png}
+\fonte{\novo{do autor (2026).}}
+\end{figure}
 
-As operações de criação e exclusão de usuários eram realizadas por meio de modais, componentes sobrepostos à tela principal que permitem ao usuário executar uma ação sem perder o contexto da página atual. Foram implementados modais para o formulário de adição de usuário, para a confirmação de exclusão e para o \textit{feedback} de sucesso e erro. Todos os formulários utilizavam a biblioteca \textit{Formik} para gerenciamento de estado dos campos e \textit{Yup} para validação dos dados antes do envio à API.
+\novop{Já a gestão de usuários, acessível apenas pelo perfil Administrador, permitia visualizar, adicionar, editar e excluir os colaboradores cadastrados. A listagem exibia nome, tipo de perfil, e-mail e contato de cada usuário, com suporte a busca textual e filtros por tipo de perfil. As operações de criação e exclusão de usuários eram realizadas por meio de modais, componentes sobrepostos à tela principal que permitem ao usuário executar uma ação sem perder o contexto da página atual. Foram implementados modais para o formulário de adição de usuário, para a confirmação de exclusão e para o \textit{feedback} de sucesso e erro. Todos os formulários utilizavam a biblioteca \textit{Formik} para gerenciamento de estado dos campos e \textit{Yup} para validação dos dados antes do envio à API.}
 
 \section{Módulo de Registros Agrícolas}
 
@@ -67,17 +73,41 @@ O módulo de registros agrícolas constituiu o núcleo da plataforma, sendo resp
 
 A tela de listagem de protocolos foi construída utilizando a biblioteca \textit{TanStack React Table}, que oferece recursos avançados de tabela como ordenação, paginação e filtragem. Cada protocolo era exibido com seu código, tipo, cliente, classe, cultura e status atual. As ações disponíveis incluíam edição, exclusão, geração de QR Code e exportação para planilha.
 
-A funcionalidade de geração de QR Code foi implementada com a biblioteca \textit{qrcode} e tinha como objetivo facilitar a identificação dos protocolos em campo. Cada QR Code gerado continha um identificador único que, ao ser escaneado, direcionava o colaborador diretamente para a página do protocolo correspondente na plataforma.
+A funcionalidade de geração de QR Code foi implementada com a biblioteca \textit{qrcode} e tinha como objetivo facilitar a identificação dos protocolos em campo. Cada QR Code gerado continha um identificador único que, ao ser escaneado, direcionava o colaborador diretamente para a página do protocolo correspondente na plataforma. \novo{A \autoref{fig:tela-protocolos} apresenta a tela de listagem.}
+
+\begin{figure}[ht]
+\centering
+\caption{\novo{Tela de listagem de protocolos.}}
+\label{fig:tela-protocolos}
+\includegraphics[width=0.95\textwidth]{imgs/tela-listagem-protocolos.png}
+\fonte{\novo{do autor (2026).}}
+\end{figure}
 
 \subsection{Formulário de Cadastro e Edição de Protocolos}
 
 O formulário de cadastro de protocolos representou um dos maiores desafios técnicos do projeto, dado o grande volume de campos e a complexidade das regras de negócio envolvidas. O formulário foi organizado em abas para melhorar a usabilidade: Informações, Avaliações, Tratamentos, Local, Solo, Aplicações, Manejo e Dashboard.
 
-A aba de Informações continha os dados gerais do protocolo. Entre os campos obrigatórios estavam o tipo do protocolo (Ret ou Comercial), o código, o cliente, as classes do experimento, o status, o número de tratamentos e o número de repetições. Os demais campos eram opcionais, como cultura utilizada, variedade, cultura anterior, tipo de plantio, datas de plantio, colheita e emergência, adubação, espaçamento entre linhas, delineamento experimental, tamanho da parcela e parcela útil. Essa distinção entre campos obrigatórios e opcionais era expressa no esquema de validação apresentado adiante, e o campo de classes permitia a seleção de múltiplos valores, com a possibilidade de cadastrar novas classes diretamente no formulário.
+A aba de Informações continha os dados gerais do protocolo. Entre os campos obrigatórios estavam o tipo do protocolo (Ret ou Comercial), o código, o cliente, as classes do experimento, o status, o número de tratamentos e o número de repetições. Os demais campos eram opcionais, como cultura utilizada, variedade, cultura anterior, tipo de plantio, datas de plantio, colheita e emergência, adubação, espaçamento entre linhas, delineamento experimental, tamanho da parcela e parcela útil. Essa distinção entre campos obrigatórios e opcionais era expressa no esquema de validação apresentado adiante, e o campo de classes permitia a seleção de múltiplos valores, com a possibilidade de cadastrar novas classes diretamente no formulário. \novo{A \autoref{fig:tela-informacoes} ilustra essa aba.}
+
+\begin{figure}[ht]
+\centering
+\caption{\novo{Aba de Informações do formulário de protocolo.}}
+\label{fig:tela-informacoes}
+\includegraphics[width=0.95\textwidth]{imgs/tela-protocolo-informacoes.png}
+\fonte{\novo{do autor (2026).}}
+\end{figure}
 
 A aba de Avaliações permitia o registro dos dados coletados em cada momento de avaliação. A estrutura desta aba era dinâmica: o número de colunas da tabela variava de acordo com o número de repetições configurado na aba de Informações, e novas linhas podiam ser adicionadas conforme a necessidade. Alguns campos podiam ser definidos como fórmulas, isto é, expressões matemáticas calculadas a partir dos valores de outros campos; para avaliar essas expressões em tempo de execução, foi utilizada a função \texttt{evaluate} da biblioteca \textit{mathjs}.
 
-Além dos dados numéricos, a aba suportava o \textit{upload} de fotografias de campo, permitindo que os técnicos anexassem registros visuais diretamente vinculados a cada momento de avaliação. Para facilitar o trabalho posterior, foi implementada a funcionalidade de \textit{download} de todas as fotografias de uma avaliação em um único arquivo compactado, utilizando a biblioteca \textit{JSZip}. As imagens eram obtidas da API por meio de uma requisição gerenciada pelo \textit{React Query}, convertidas em \textit{blobs}, agrupadas em um arquivo \textit{.zip} e salvas no dispositivo do usuário, conforme o \autoref{cod:jszip}.
+Além dos dados numéricos, a aba suportava o \textit{upload} de fotografias de campo, permitindo que os técnicos anexassem registros visuais diretamente vinculados a cada momento de avaliação. Para facilitar o trabalho posterior, foi implementada a funcionalidade de \textit{download} de todas as fotografias de uma avaliação em um único arquivo compactado, utilizando a biblioteca \textit{JSZip}. As imagens eram obtidas da API por meio de uma requisição gerenciada pelo \textit{React Query}, convertidas em \textit{blobs}, agrupadas em um arquivo \textit{.zip} e salvas no dispositivo do usuário, conforme o \autoref{cod:jszip}. \novo{A \autoref{fig:tela-avaliacoes} apresenta a aba de Avaliações da plataforma.}
+
+\begin{figure}[ht]
+\centering
+\caption{\novo{Aba de Avaliações do formulário de protocolo.}}
+\label{fig:tela-avaliacoes}
+\includegraphics[width=0.95\textwidth]{imgs/tela-protocolo-avaliacoes.png}
+\fonte{\novo{do autor (2026).}}
+\end{figure}
 
 \begin{lstlisting}[caption={Trecho do \textit{download} das fotografias de uma avaliação em arquivo \textit{.zip} com \textit{JSZip}.}, label={cod:jszip}]
 const handleDownloadImages = async (evaluation) => {
@@ -100,7 +130,17 @@ A função recebe a avaliação selecionada e dispara a busca das imagens pela A
 
 O gerenciamento do estado do formulário foi implementado com a biblioteca \textit{Formik}, encapsulada em um \textit{hook} customizado (\texttt{useForm}) que padronizava o controle dos valores dos campos e a orquestração das validações em todas as telas. Essa padronização era importante, dado que um protocolo podia conter dezenas de tratamentos, cada um com múltiplas repetições e avaliações, resultando em estruturas de dados profundamente aninhadas.
 
-Uma das principais dificuldades encontradas neste módulo foi a tradução das regras de negócio da Terra Gerais para a lógica do formulário. As regras variavam conforme o tipo de protocolo, a cultura selecionada e a classe do experimento, exigindo uma comunicação constante com a equipe do cliente para validar o comportamento esperado. O uso da biblioteca \textit{Yup} para a definição de esquemas de validação mostrou-se essencial para garantir a integridade dos dados antes do envio ao servidor, distinguindo os campos obrigatórios dos opcionais e validando tipos, listas e formatos. O \autoref{cod:yup} apresenta um trecho do esquema de validação da aba de Informações do protocolo.
+\novop{O mesmo padrão de organização de formulários (estrutura em abas, agrupamento de campos por área e separação visual entre seções obrigatórias e opcionais) foi reutilizado em outros módulos da plataforma, como o de orçamentos. A \autoref{fig:tela-orcamento} apresenta variações da tela de Informações desse módulo, incluindo o estado padrão e estados com mensagens de validação, além de uma amostra dos componentes de seleção (\textit{selects}) reaproveitados em diferentes contextos.}
+
+\begin{figure}[ht]
+\centering
+\caption{\novo{Tela de Informações do módulo de orçamentos e componentes reutilizados.}}
+\label{fig:tela-orcamento}
+\includegraphics[width=0.95\textwidth]{imgs/tela-orcamento-formulario.png}
+\fonte{\novo{do autor (2026).}}
+\end{figure}
+
+Uma das principais dificuldades encontradas neste módulo foi a tradução das regras de negócio da \novo{empresa cliente} para a lógica do formulário. As regras variavam conforme o tipo de protocolo, a cultura selecionada e a classe do experimento, exigindo uma comunicação constante com a equipe do cliente para validar o comportamento esperado. O uso da biblioteca \textit{Yup} para a definição de esquemas de validação mostrou-se essencial para garantir a integridade dos dados antes do envio ao servidor, distinguindo os campos obrigatórios dos opcionais e validando tipos, listas e formatos. O \autoref{cod:yup} apresenta um trecho do esquema de validação da aba de Informações do protocolo.
 
 \begin{lstlisting}[caption={Trecho do esquema de validação (\textit{Yup}) da aba de Informações do protocolo.}, label={cod:yup}]
 const validationSchema = Yup.object().shape({
@@ -121,7 +161,7 @@ O esquema é declarado com \texttt{Yup.object().shape}, recebendo um objeto cuja
 
 \section{Módulo de Análise e Dashboards}
 
-O módulo de análise e dashboards representou o principal diferencial da plataforma em relação ao uso de planilhas. A proposta era transformar os dados brutos registrados nos protocolos em visualizações gráficas que auxiliassem os pesquisadores na tomada de decisões.
+O módulo de análise e \novo{\textit{dashboards}} representou o principal diferencial da plataforma em relação ao uso de planilhas. A proposta era transformar os dados brutos registrados nos protocolos em visualizações gráficas que auxiliassem os pesquisadores na tomada de decisões.
 
 \subsection{Geração Automatizada de Gráficos}
 
@@ -174,7 +214,7 @@ return <ApexCharts options={options} series={series} type="bar" />;
 
 O vetor \texttt{series} contém uma única série de dados, com o rótulo informado pela propriedade \texttt{xAxisTitle} e o conjunto de valores em \texttt{yAxis}. O objeto \texttt{options}, tipado por \texttt{ApexOptions}, agrupa as configurações visuais do gráfico: \texttt{chart} define o tipo \texttt{bar} e oculta a barra de ferramentas padrão; \texttt{plotOptions} ativa a coloração distribuída por categoria; \texttt{dataLabels} habilita a exibição dos valores numéricos sobre as colunas; \texttt{xaxis} informa as categorias do eixo horizontal a partir do vetor \texttt{xAxis}; e \texttt{yaxis} ajusta o valor máximo do eixo vertical com base no valor máximo dos dados. A última linha entrega esses dois objetos ao componente \texttt{ApexCharts}, que cuida da renderização propriamente dita.
 
-Uma funcionalidade importante foi a exportação dos gráficos em formato PNG com a identidade visual da Terra Gerais, contendo o logotipo da empresa e o título dos dados. Para isso, foi mantido um elemento oculto na tela contendo o gráfico acompanhado do logotipo, e a sua captura como imagem foi realizada com a biblioteca \textit{use-react-screenshot}. A imagem resultante era então disponibilizada para \textit{download} por meio da criação dinâmica de um \textit{link}, conforme o \autoref{cod:export}.
+Uma funcionalidade importante foi a exportação dos gráficos em formato PNG com a identidade visual da \novo{empresa cliente}, contendo o logotipo da empresa e o título dos dados. Para isso, foi mantido um elemento oculto na tela contendo o gráfico acompanhado do logotipo, e a sua captura como imagem foi realizada com a biblioteca \textit{use-react-screenshot}. A imagem resultante era então disponibilizada para \textit{download} por meio da criação dinâmica de um \textit{link}, conforme o \autoref{cod:export}.
 
 \begin{lstlisting}[caption={Trecho da exportação de um gráfico em PNG com \textit{use-react-screenshot}.}, label={cod:export}]
 const [_, takeScreenshot] = useScreenshot();
@@ -190,10 +230,28 @@ const downloadChart = async (format) => {
 
 A primeira linha obtém, do \textit{hook} \texttt{useScreenshot}, a função \texttt{takeScreenshot}, usada para gerar uma imagem a partir de um elemento do DOM. A função \texttt{downloadChart} é assíncrona e recebe como argumento o formato de imagem desejado. No seu corpo, \texttt{takeScreenshot} captura o elemento referenciado por \texttt{imageRef}, que contém o gráfico acompanhado do logotipo, devolvendo a imagem em \textit{base64}. Em seguida, um elemento de \textit{link} é criado dinamicamente, o atributo \texttt{href} recebe a imagem capturada, o atributo \texttt{download} define o nome do arquivo final (combinando o título da imagem, o título do gráfico e o formato) e o clique programático no \textit{link} força o navegador a salvar a imagem no dispositivo do usuário.
 
+\novop{A \autoref{fig:tela-graficos} apresenta o resultado da geração automatizada dos gráficos de barras a partir dos dados de uma avaliação, e a \autoref{fig:tela-exportacao} ilustra a imagem exportada em PNG já com o logotipo da empresa cliente.}
+
+\begin{figure}[ht]
+\centering
+\caption{\novo{Gráficos de barras gerados automaticamente para uma avaliação.}}
+\label{fig:tela-graficos}
+\includegraphics[width=0.95\textwidth]{imgs/tela-graficos-barras.png}
+\fonte{\novo{do autor (2026).}}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\caption{\novo{Imagem PNG exportada de um gráfico, com a identidade visual da empresa.}}
+\label{fig:tela-exportacao}
+\includegraphics[width=0.7\textwidth]{imgs/tela-graficos-exportacao.png}
+\fonte{\novo{do autor (2026).}}
+\end{figure}
+
 \subsection{Dashboard Geral}
 
-Além dos gráficos individuais por protocolo, a plataforma contava com um dashboard geral que apresentava uma visão consolidada de todos os protocolos cadastrados, incluindo a distribuição de protocolos por classe, por cultura e por status.
+Além dos gráficos individuais por protocolo, a plataforma contava com um \novo{\textit{dashboard}} geral que apresentava uma visão consolidada de todos os protocolos cadastrados, incluindo a distribuição de protocolos por classe, por cultura e por status.
 
 Os dados consolidados desse dashboard, como a contagem e o percentual de protocolos por cultura, por classe e por cliente, eram fornecidos por um \textit{endpoint} específico do \textit{back-end} e buscados via API utilizando o \textit{React Query} (\textit{TanStack Query}), que gerenciava o cache das requisições e garantia que as visualizações estivessem sempre atualizadas sem a necessidade de recarregamentos manuais da página. No \textit{front-end}, esses dados eram mapeados para os vetores de rótulos e valores consumidos pelos componentes de gráfico.
 
-Uma das dificuldades técnicas enfrentadas na construção dos dashboards foi a performance de renderização quando o volume de dados era elevado. A renderização simultânea de múltiplos gráficos com grandes conjuntos de dados causava lentidão perceptível na interface. Para mitigar esse problema, foi adotada uma estratégia de carregamento sob demanda (\textit{lazy loading}), em que os gráficos eram renderizados apenas quando o usuário navegava até a seção correspondente.
+Uma das dificuldades técnicas enfrentadas na construção dos \novo{\textit{dashboards}} foi a performance de renderização quando o volume de dados era elevado. A renderização simultânea de múltiplos gráficos com grandes conjuntos de dados causava lentidão perceptível na interface. Para mitigar esse problema, foi adotada uma estratégia de carregamento sob demanda (\textit{lazy loading}), em que os gráficos eram renderizados apenas quando o usuário navegava até a seção correspondente.

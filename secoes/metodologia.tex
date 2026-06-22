@@ -16,17 +16,21 @@ Para o gerenciamento do \textit{Product Backlog} e do \textit{Sprint Backlog} fo
 \fonte{Microsoft Learn. Disponível em: https://learn.microsoft.com/pt-br/azure/devops/boards/backlogs/create-your-backlog. Acesso em: maio 2026.}
 \end{figure}
 
-O acompanhamento diário ocorria por meio das \textit{daily meetings}, reuniões breves em que cada membro relatava o progresso, os planos do dia e eventuais impedimentos. Ao final de cada \textit{Sprint}, a \textit{Sprint Review} apresentava o incremento desenvolvido ao cliente, e a \textit{Sprint Retrospective} permitia à equipe refletir sobre o processo. A adoção desse fluxo possibilitou entregas incrementais à Terra Gerais e a validação contínua das funcionalidades, reduzindo o risco de retrabalho.
+O acompanhamento diário ocorria por meio das \textit{daily meetings}, reuniões breves em que cada membro relatava o progresso, os planos do dia e eventuais impedimentos. Ao final de cada \textit{Sprint}, a \textit{Sprint Review} apresentava o incremento desenvolvido ao cliente, e a \textit{Sprint Retrospective} permitia à equipe refletir sobre o processo. A adoção desse fluxo possibilitou entregas incrementais à \novo{empresa cliente} e a validação contínua das funcionalidades, reduzindo o risco de retrabalho.
 
 \section{Levantamento de Requisitos e Regras de Negócio}
 
-O levantamento de requisitos foi conduzido de forma iterativa, em conjunto com a equipe da Terra Gerais. Como a empresa atua na pesquisa agrícola, muitas das regras de negócio eram específicas do domínio e não estavam formalmente documentadas, o que exigiu reuniões frequentes para esclarecer o comportamento esperado da plataforma.
+O levantamento de requisitos foi conduzido de forma iterativa, em conjunto com a equipe da \novo{empresa cliente}. Como a empresa atua na pesquisa agrícola, muitas das regras de negócio eram específicas do domínio e não estavam formalmente documentadas, o que exigiu reuniões frequentes para esclarecer o comportamento esperado da plataforma.
 
 Dois conjuntos de regras concentraram a maior complexidade. O primeiro dizia respeito ao controle de acesso: a plataforma previa os perfis de Administrador e de Técnico, com diferentes níveis de permissão sobre as funcionalidades. O segundo conjunto envolvia as regras de preenchimento dos protocolos, em que a obrigatoriedade e o formato de diversos campos dependiam do tipo de protocolo, da cultura selecionada e da classe do experimento. Esses requisitos foram refinados a cada \textit{Sprint}, à medida que as telas eram apresentadas e validadas pelo cliente.
 
 \section{Arquitetura do \textit{Front-end} e Estrutura do Projeto}
 
 A aplicação foi construída como uma \textit{Single Page Application} (SPA) em \textit{React} com \textit{TypeScript}, empacotada pelo \textit{Vite}. A organização do código seguiu uma separação por responsabilidades, distribuída em três camadas lógicas: a camada de apresentação, responsável pela renderização da interface; a camada de estado, responsável por manter os dados em memória durante a navegação; e a camada de acesso a dados, responsável pela comunicação com a API do servidor. A \autoref{fig:arquitetura} apresenta uma visão de alto nível dessa organização.
+
+\novop{É importante destacar que o \textit{back-end} da plataforma, incluindo a API REST representada na \autoref{fig:arquitetura}, não foi desenvolvido pelo autor deste trabalho. Sua construção ficou a cargo de outra equipe da Zeeway, dedicada exclusivamente ao desenvolvimento do servidor, da modelagem do banco de dados e da implementação das regras de negócio do lado do servidor. Os capítulos seguintes detalham apenas as atividades realizadas na camada de \textit{front-end}.}
+
+\novop{A coordenação entre as duas equipes foi baseada em uma estratégia de paralelização do trabalho a partir de uma interface comum. No início de cada nova funcionalidade, eram definidos em conjunto os contratos das chamadas à API, isto é, o caminho de cada \textit{endpoint}, o método HTTP utilizado e a estrutura dos dados de entrada e de saída. Com esse contrato acordado, as duas equipes passavam a trabalhar simultaneamente na mesma \textit{Sprint}: a equipe de \textit{back-end} implementava o \textit{endpoint} correspondente, enquanto a equipe de \textit{front-end} construía a tela e consumia inicialmente os dados em uma versão mascarada (\textit{mock}) que respeitava o contrato. Quando o \textit{endpoint} ficava disponível, a integração era feita substituindo a fonte dos dados pela API real. Ajustes pontuais no contrato eram negociados nas reuniões diárias ou na \textit{planning} da \textit{Sprint} seguinte, evitando que uma equipe ficasse permanentemente em ritmo diferente da outra.}
 
 \begin{figure}[ht]
 \centering

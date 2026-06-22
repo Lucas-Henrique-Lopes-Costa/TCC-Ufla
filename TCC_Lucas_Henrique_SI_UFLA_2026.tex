@@ -121,6 +121,21 @@ citecolor=rltgreen,%
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, calc}
 
+% Destaque de alteracoes para revisao do orientador.
+% \destacarfalse para gerar versao com marcacao amarela; \destacartrue para versao limpa.
+\newif\ifdestacar
+\destacarfalse
+
+% \novo{...} para trechos inline (quebra com o texto, usando texto em negrito laranja).
+% \novop{...} para paragrafos inteiros (com fundo amarelo).
+\newcommand{\novo}[1]{\ifdestacar{\textcolor{orange!90!black}{\textbf{#1}}}\else{#1}\fi}
+\newcommand{\novop}[1]{\ifdestacar
+  \par\noindent\colorbox{yellow!50}{\begin{minipage}{\dimexpr\linewidth-2\fboxsep\relax}#1\end{minipage}}\par\vspace{4pt}
+  \else
+  \par #1\par
+  \fi}
+\newcommand{\novamarca}[1]{\ifdestacar{\par\noindent\textcolor{orange!80!black}{\textbf{[ALTERADO: #1]}}\par}\else\fi}
+
 % Carregamento do glossário, listas de siglas, símbolos e etc
 \loadglsentries{glossarios/abreviaturas}
 \loadglsentries{glossarios/glossario}
@@ -271,14 +286,14 @@ Por fim, agradeço ao professor Paulo Afonso pela orientação, paciência e por
 % As palavras-chave PRECISAM vir primeiro
 \palchaves{desenvolvimento web; React; TypeScript; Scrum; agronegócio.}
 \resumo{%
-Este trabalho apresenta as atividades desenvolvidas durante o estágio supervisionado na empresa Zeeway, sediada em Lavras (MG), no desenvolvimento de uma plataforma web sob demanda para a Terra Gerais, empresa do agronegócio especializada em pesquisa agrícola de solos e sementes. A atuação concentrou-se na construção da camada de interface (\textit{front-end}) da plataforma, responsável pelo registro e pela análise dos protocolos de pesquisa, em substituição ao uso descentralizado de planilhas. As tecnologias adotadas foram o \textit{React} e o \textit{TypeScript}, com componentes do \textit{Material UI}, formulários com \textit{Formik} e \textit{Yup}, gerenciamento de estado global com \textit{Zustand}, comunicação com a API por meio de \textit{Axios} e \textit{React Query}, e visualização de dados com \textit{ApexCharts}. O desenvolvimento foi conduzido pela metodologia ágil \textit{Scrum}, com \textit{Sprints} quinzenais. As atividades incluíram a autenticação com \textit{JSON Web Tokens} (JWT) e a renovação automática do \textit{token}, o controle de acesso por perfil no nível das rotas, formulários extensos com validação declarativa, a geração automatizada de gráficos e \textit{dashboards} e a exportação de imagens com a identidade visual do cliente. A experiência consolidou competências em desenvolvimento web e em visualização de dados, e permitiu vivenciar a engenharia de \textit{software} em equipe, com cliente externo e regras de negócio reais.
+Este trabalho apresenta as atividades desenvolvidas durante o estágio supervisionado na empresa Zeeway, sediada em Lavras (MG), no desenvolvimento de uma plataforma web sob demanda para uma empresa de pesquisa agrícola de Lavras, atuante no agronegócio e especializada em análises de solos e sementes. A atuação concentrou-se na construção da camada de interface (\textit{front-end}) da plataforma, responsável pelo registro e pela análise dos protocolos de pesquisa, em substituição ao uso descentralizado de planilhas. As tecnologias adotadas foram o \textit{React} e o \textit{TypeScript}, com componentes do \textit{Material UI}, formulários com \textit{Formik} e \textit{Yup}, gerenciamento de estado global com \textit{Zustand}, comunicação com a API por meio de \textit{Axios} e \textit{React Query}, e visualização de dados com \textit{ApexCharts}. O desenvolvimento foi conduzido pela metodologia ágil \textit{Scrum}, com \textit{Sprints} quinzenais. As atividades incluíram a autenticação com \textit{JSON Web Tokens} (JWT) e a renovação automática do \textit{token}, o controle de acesso por perfil no nível das rotas, formulários extensos com validação declarativa, a geração automatizada de gráficos e \textit{dashboards} e a exportação de imagens com a identidade visual do cliente. A experiência consolidou competências em desenvolvimento web e em visualização de dados, e permitiu vivenciar a engenharia de \textit{software} em equipe, com cliente externo e regras de negócio reais.
 }
 
 % Abstract e keywords
 % As keywords PRECISAM vir primeiro
 \keywords{web development; React; TypeScript; Scrum; agribusiness.}
 \abstract{%
-This report presents the activities developed during the supervised internship at Zeeway, a company based in Lavras (MG), in the development of a custom web platform for Terra Gerais, an agribusiness company specialized in agricultural research on soils and seeds. The work focused on building the front-end layer of the platform, responsible for registering and analyzing research protocols, replacing the decentralized use of spreadsheets. The technologies adopted were React and TypeScript, with Material UI components, forms with Formik and Yup, global state management with Zustand, API communication through Axios and React Query, and data visualization with ApexCharts. The development followed the Scrum agile methodology, with biweekly Sprints. The activities included authentication with JSON Web Tokens (JWT) and automatic token refresh, role-based access control at the route level, extensive forms with declarative validation, automated generation of charts and dashboards, and image export with the client's visual identity. The experience consolidated competencies in web development and data visualization, and provided practical software engineering experience in a team, with an external client and real business rules.
+This report presents the activities developed during the supervised internship at Zeeway, a company based in Lavras (MG), in the development of a custom web platform for an agricultural research company also based in Lavras, working in the agribusiness sector and specialized in soil and seed analysis. The work focused on building the front-end layer of the platform, responsible for registering and analyzing research protocols, replacing the decentralized use of spreadsheets. The technologies adopted were React and TypeScript, with Material UI components, forms with Formik and Yup, global state management with Zustand, API communication through Axios and React Query, and data visualization with ApexCharts. The development followed the Scrum agile methodology, with biweekly Sprints. The activities included authentication with JSON Web Tokens (JWT) and automatic token refresh, role-based access control at the route level, extensive forms with declarative validation, automated generation of charts and dashboards, and image export with the client's visual identity. The experience consolidated competencies in web development and data visualization, and provided practical software engineering experience in a team, with an external client and real business rules.
 }
 
 

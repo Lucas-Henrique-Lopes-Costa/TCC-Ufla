@@ -89,7 +89,7 @@ O \textit{Material UI} (MUI) é uma biblioteca de componentes \textit{React} que
 \fonte{Material UI. Disponível em: https://mui.com/. Acesso em: maio 2026.}
 \end{figure}
 
-Uma das vantagens do \textit{MUI} é a possibilidade de personalização por meio de temas. No projeto da Terra Gerais, foi criado um tema personalizado que definia as cores, tipografia e espaçamentos de acordo com a identidade visual da empresa cliente. Dessa forma, todos os componentes da biblioteca adotavam automaticamente o padrão visual definido, garantindo consistência em toda a plataforma.
+Uma das vantagens do \textit{MUI} é a possibilidade de personalização por meio de temas. No projeto desenvolvido durante o estágio, foi criado um tema personalizado que definia as cores, tipografia e espaçamentos de acordo com a identidade visual da empresa cliente. Dessa forma, todos os componentes da biblioteca adotavam automaticamente o padrão visual definido, garantindo consistência em toda a plataforma.
 
 Além dos componentes básicos do \textit{MUI}, o projeto utilizou a biblioteca \textit{MUI X Date Pickers} para os campos de seleção de data, recurso frequentemente utilizado nos formulários de protocolos que exigiam o registro de datas de plantio, colheita e emergência. Também foi utilizada a biblioteca \textit{TanStack React Table} para a construção de tabelas com funcionalidades avançadas de ordenação, paginação e filtragem.
 
@@ -115,4 +115,14 @@ export function GraficoVendas() {
 
 No exemplo, \texttt{series} é a lista de séries do gráfico, cada uma contendo um nome e um vetor de valores numéricos correspondentes a cada categoria. O objeto \texttt{options} concentra a configuração visual, definindo o tipo de gráfico (\texttt{chart.type}) e os rótulos do eixo horizontal (\texttt{xaxis.categories}). O componente \texttt{ApexCharts} recebe esses dois objetos e cuida da renderização do gráfico na tela.
 
-Para a avaliação de campos definidos como fórmulas nos protocolos, isto é, expressões matemáticas calculadas a partir dos valores de outros campos, foi utilizada a biblioteca \textit{mathjs}, que interpreta e avalia expressões em tempo de execução. A exportação dos gráficos em formato de imagem, com a identidade visual da Terra Gerais, foi implementada com a biblioteca \textit{use-react-screenshot}, que captura um elemento da interface como imagem. Já a biblioteca \textit{JSZip} foi empregada para empacotar as fotografias de campo de uma avaliação em um único arquivo compactado para \textit{download}.
+\novop{A \autoref{fig:apexex} apresenta uma representação aproximada do gráfico produzido pelo \autoref{cod:apexex}, em que as três categorias (Jan, Fev e Mar) são exibidas no eixo horizontal e os valores numéricos correspondentes (10, 20 e 30) compõem as barras verticais.}
+
+\begin{figure}[ht]
+\centering
+\caption{\novo{Renderização aproximada do gráfico de barras configurado no \autoref{cod:apexex}.}}
+\label{fig:apexex}
+\includegraphics[width=0.7\textwidth]{imgs/apexcharts_vendas.png}
+\fonte{\novo{do autor (2026), com base na biblioteca \textit{ApexCharts}.}}
+\end{figure}
+
+Para a avaliação de campos definidos como fórmulas nos protocolos, isto é, expressões matemáticas calculadas a partir dos valores de outros campos, foi utilizada a biblioteca \textit{mathjs}, que interpreta e avalia expressões em tempo de execução. A exportação dos gráficos em formato de imagem, com a identidade visual da empresa cliente, foi implementada com a biblioteca \textit{use-react-screenshot}, que captura um elemento da interface como imagem. Já a biblioteca \textit{JSZip} foi empregada para empacotar as fotografias de campo de uma avaliação em um único arquivo compactado para \textit{download}.
