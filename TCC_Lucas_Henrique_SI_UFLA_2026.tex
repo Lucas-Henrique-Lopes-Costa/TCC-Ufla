@@ -33,6 +33,23 @@
 \usepackage{xcolor}              % para mais cores
 \usepackage{subfigure}           % para figuras dentro de figuras
 \usepackage{caption}             % para remodelar o formato dos títulos
+% Impede que uma figura "escape" para outra seção (opcional: só é usado se o
+% pacote estiver disponível na distribuição TeX, como no Overleaf).
+\IfFileExists{placeins.sty}{\usepackage[section]{placeins}}{}
+
+%==============================================================================
+% Posicionamento dos elementos flutuantes (figuras)
+% Os parâmetros padrão do LaTeX são restritivos e empurram figuras grandes para
+% páginas distantes do ponto em que são citadas. Os valores abaixo permitem que
+% uma figura ocupe boa parte do topo (ou do rodapé) da página em que aparece,
+% mantendo-a próxima do texto que a explica.
+\setcounter{topnumber}{2}          % até 2 figuras no topo da página
+\setcounter{bottomnumber}{2}       % até 2 figuras no rodapé da página
+\setcounter{totalnumber}{3}        % até 3 figuras por página
+\renewcommand{\topfraction}{0.85}      % fração máxima da página ocupada no topo
+\renewcommand{\bottomfraction}{0.70}   % fração máxima da página ocupada no rodapé
+\renewcommand{\textfraction}{0.10}     % fração mínima de texto por página
+\renewcommand{\floatpagefraction}{0.80}% ocupação mínima de uma página só de figuras
 
 %==============================================================================
 % O pacote hyperref para referência cruzadas dentro do documento \ref e \autoref
@@ -122,15 +139,21 @@ citecolor=rltgreen,%
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, calc}
 
 % Destaque de alteracoes para revisao do orientador.
-% \destacarfalse para gerar versao com marcacao amarela; \destacartrue para versao limpa.
+% \destacartrue gera a versao com marcacao amarela (para revisao do orientador);
+% \destacarfalse gera a versao limpa (final).
 \newif\ifdestacar
 \destacarfalse
 
 % \novo{...} para trechos inline (quebra com o texto, usando texto em negrito laranja).
 % \novop{...} para paragrafos inteiros (com fundo amarelo).
+% O recuo de primeira linha e preservado dentro da caixa amarela, para que o
+% paragrafo destacado fique alinhado como os demais paragrafos do texto.
+\newlength{\recuonovop}
+\AtBeginDocument{\setlength{\recuonovop}{\parindent}}
 \newcommand{\novo}[1]{\ifdestacar{\textcolor{orange!90!black}{\textbf{#1}}}\else{#1}\fi}
 \newcommand{\novop}[1]{\ifdestacar
-  \par\noindent\colorbox{yellow!50}{\begin{minipage}{\dimexpr\linewidth-2\fboxsep\relax}#1\end{minipage}}\par\vspace{4pt}
+  \par\noindent\colorbox{yellow!50}{\begin{minipage}{\dimexpr\linewidth-2\fboxsep\relax}%
+  \setlength{\parindent}{\recuonovop}\indent #1\end{minipage}}\par\vspace{4pt}
   \else
   \par #1\par
   \fi}
@@ -301,7 +324,7 @@ This report presents the activities developed during the supervised internship a
 % Listas gerais
 % Comente para remover.
 \listoffigures      % Lista de Figuras
-\listoftables       % Lista de Tabelas
+%\listoftables      % Lista de Tabelas (removida: o trabalho não possui tabelas)
 %\listofabreviaturas % Lista de Abreviaturas
 %\listofsiglas       % Lista de Siglas
 %\listofsimbolos     % Lista de Símbolos

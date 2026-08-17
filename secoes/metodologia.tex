@@ -8,11 +8,11 @@ O desenvolvimento da plataforma seguiu a metodologia \textit{Scrum}, organizada 
 
 Para o gerenciamento do \textit{Product Backlog} e do \textit{Sprint Backlog} foi utilizado o \textit{Azure DevOps Boards}, ferramenta da \textit{Microsoft} voltada à gestão ágil de trabalho e ao acompanhamento de \textit{itens de trabalho} (\textit{Work Items}) ao longo do ciclo de desenvolvimento. Cada tarefa do \textit{backlog} possuía identificador, estado (por exemplo, \textit{New}, \textit{Approved} ou \textit{Committed}), título, área de produto e marcadores associados, o que facilitava a priorização e a distribuição das atividades entre os membros da equipe. A \autoref{fig:azure} apresenta um exemplo de tela do \textit{Azure DevOps Boards} com a listagem de \textit{Work Items} de um \textit{backlog}.
 
-\begin{figure}[ht]
+\begin{figure}[!htb]
 \centering
 \caption{Tela de \textit{backlog} do \textit{Azure DevOps Boards}.}
 \label{fig:azure}
-\includegraphics[width=0.95\textwidth]{imgs/azure_devops_backlog.png}
+\includegraphics[width=0.95\textwidth,height=0.35\textheight,keepaspectratio]{imgs/azure_devops_backlog.png}
 \fonte{Microsoft Learn. Disponível em: https://learn.microsoft.com/pt-br/azure/devops/boards/backlogs/create-your-backlog. Acesso em: maio 2026.}
 \end{figure}
 
@@ -28,11 +28,7 @@ Dois conjuntos de regras concentraram a maior complexidade. O primeiro dizia res
 
 A aplicação foi construída como uma \textit{Single Page Application} (SPA) em \textit{React} com \textit{TypeScript}, empacotada pelo \textit{Vite}. A organização do código seguiu uma separação por responsabilidades, distribuída em três camadas lógicas: a camada de apresentação, responsável pela renderização da interface; a camada de estado, responsável por manter os dados em memória durante a navegação; e a camada de acesso a dados, responsável pela comunicação com a API do servidor. A \autoref{fig:arquitetura} apresenta uma visão de alto nível dessa organização.
 
-\novop{É importante destacar que o \textit{back-end} da plataforma, incluindo a API REST representada na \autoref{fig:arquitetura}, não foi desenvolvido pelo autor deste trabalho. Sua construção ficou a cargo de outra equipe da Zeeway, dedicada exclusivamente ao desenvolvimento do servidor, da modelagem do banco de dados e da implementação das regras de negócio do lado do servidor. Os capítulos seguintes detalham apenas as atividades realizadas na camada de \textit{front-end}.}
-
-\novop{A coordenação entre as duas equipes foi baseada em uma estratégia de paralelização do trabalho a partir de uma interface comum. No início de cada nova funcionalidade, eram definidos em conjunto os contratos das chamadas à API, isto é, o caminho de cada \textit{endpoint}, o método HTTP utilizado e a estrutura dos dados de entrada e de saída. Com esse contrato acordado, as duas equipes passavam a trabalhar simultaneamente na mesma \textit{Sprint}: a equipe de \textit{back-end} implementava o \textit{endpoint} correspondente, enquanto a equipe de \textit{front-end} construía a tela e consumia inicialmente os dados em uma versão mascarada (\textit{mock}) que respeitava o contrato. Quando o \textit{endpoint} ficava disponível, a integração era feita substituindo a fonte dos dados pela API real. Ajustes pontuais no contrato eram negociados nas reuniões diárias ou na \textit{planning} da \textit{Sprint} seguinte, evitando que uma equipe ficasse permanentemente em ritmo diferente da outra.}
-
-\begin{figure}[ht]
+\begin{figure}[!htb]
 \centering
 \caption{Arquitetura em camadas do \textit{front-end} da plataforma de protocolos.}
 \label{fig:arquitetura}
@@ -58,6 +54,10 @@ A aplicação foi construída como uma \textit{Single Page Application} (SPA) em
 \vspace{0.2cm}
 {\footnotesize Fonte: do autor (2026).}
 \end{figure}
+
+\novop{É importante destacar que o \textit{back-end} da plataforma, incluindo a API REST representada na \autoref{fig:arquitetura}, não foi desenvolvido pelo autor deste trabalho. Sua construção ficou a cargo de outra equipe da Zeeway, dedicada exclusivamente ao desenvolvimento do servidor, da modelagem do banco de dados e da implementação das regras de negócio do lado do servidor. Os capítulos seguintes detalham apenas as atividades realizadas na camada de \textit{front-end}.}
+
+\novop{A coordenação entre as duas equipes foi baseada em uma estratégia de paralelização do trabalho a partir de uma interface comum. No início de cada nova funcionalidade, eram definidos em conjunto os contratos das chamadas à API, isto é, o caminho de cada \textit{endpoint}, o método HTTP utilizado e a estrutura dos dados de entrada e de saída. Com esse contrato acordado, as duas equipes passavam a trabalhar simultaneamente na mesma \textit{Sprint}: a equipe de \textit{back-end} implementava o \textit{endpoint} correspondente, enquanto a equipe de \textit{front-end} construía a tela e consumia inicialmente os dados em uma versão mascarada (\textit{mock}) que respeitava o contrato. Quando o \textit{endpoint} ficava disponível, a integração era feita substituindo a fonte dos dados pela API real. Ajustes pontuais no contrato eram negociados nas reuniões diárias ou na \textit{planning} da \textit{Sprint} seguinte, evitando que uma equipe ficasse permanentemente em ritmo diferente da outra.}
 
 A estrutura de diretórios do projeto refletia essa separação de responsabilidades, agrupando os arquivos por função, conforme ilustrado no \autoref{cod:estrutura}. Os diretórios \texttt{components/}, \texttt{pages/} e \texttt{layouts/} concentram a parte visual da aplicação, enquanto \texttt{store/}, \texttt{services/} e \texttt{routes/} tratam, respectivamente, do estado global, da comunicação com a API e da definição das rotas. O diretório \texttt{hooks/} centraliza os \textit{hooks} customizados, como \texttt{useForm} e \texttt{useRoles}, e \texttt{utils/} reúne funções auxiliares reutilizadas em diferentes contextos.
 

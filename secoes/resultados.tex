@@ -55,15 +55,31 @@ O componente recebe como propriedades os elementos filhos (\texttt{children}) qu
 
 \novop{A \autoref{fig:tela-login} apresenta a tela de \textit{login} da plataforma, que era o ponto de entrada de todos os usuários.}
 
-\begin{figure}[ht]
+\begin{figure}[!htb]
 \centering
 \caption{\novo{Tela de \textit{login} da plataforma.}}
 \label{fig:tela-login}
-\includegraphics[width=0.8\textwidth]{imgs/tela-login.png}
+\includegraphics[width=0.75\textwidth,height=0.35\textheight,keepaspectratio]{imgs/tela-login.png}
 \fonte{\novo{do autor (2026).}}
 \end{figure}
 
-\novop{Já a gestão de usuários, acessível apenas pelo perfil Administrador, permitia visualizar, adicionar, editar e excluir os colaboradores cadastrados. A listagem exibia nome, tipo de perfil, e-mail e contato de cada usuário, com suporte a busca textual e filtros por tipo de perfil. As operações de criação e exclusão de usuários eram realizadas por meio de modais, componentes sobrepostos à tela principal que permitem ao usuário executar uma ação sem perder o contexto da página atual. Foram implementados modais para o formulário de adição de usuário, para a confirmação de exclusão e para o \textit{feedback} de sucesso e erro. Todos os formulários utilizavam a biblioteca \textit{Formik} para gerenciamento de estado dos campos e \textit{Yup} para validação dos dados antes do envio à API.}
+\novop{Já a gestão de usuários, acessível apenas pelo perfil Administrador, permitia visualizar, adicionar, editar e excluir os colaboradores cadastrados. A listagem exibia nome, tipo de perfil, e-mail e contato de cada usuário, com suporte a busca textual e filtros por tipo de perfil, conforme apresentado na \autoref{fig:tela-usuarios}. As operações de criação e exclusão de usuários eram realizadas por meio de modais, componentes sobrepostos à tela principal que permitem ao usuário executar uma ação sem perder o contexto da página atual. Foram implementados modais para o formulário de adição de usuário, para a confirmação de exclusão e para o \textit{feedback} de sucesso e erro, ilustrados na \autoref{fig:tela-modais} junto com as variações do painel de filtros. Todos os formulários utilizavam a biblioteca \textit{Formik} para gerenciamento de estado dos campos e \textit{Yup} para validação dos dados antes do envio à API.}
+
+\begin{figure}[!htb]
+\centering
+\caption{\novo{Tela de gestão de usuários.}}
+\label{fig:tela-usuarios}
+\includegraphics[width=0.95\textwidth,height=0.40\textheight,keepaspectratio]{imgs/tela-gestao-usuarios.png}
+\fonte{\novo{do autor (2026).}}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\caption{\novo{Modais de filtro, adição, exclusão e \textit{feedback} da gestão de usuários.}}
+\label{fig:tela-modais}
+\includegraphics[width=0.95\textwidth,height=0.42\textheight,keepaspectratio]{imgs/tela-modais.png}
+\fonte{\novo{do autor (2026).}}
+\end{figure}
 
 \section{Módulo de Registros Agrícolas}
 
@@ -73,41 +89,17 @@ O módulo de registros agrícolas constituiu o núcleo da plataforma, sendo resp
 
 A tela de listagem de protocolos foi construída utilizando a biblioteca \textit{TanStack React Table}, que oferece recursos avançados de tabela como ordenação, paginação e filtragem. Cada protocolo era exibido com seu código, tipo, cliente, classe, cultura e status atual. As ações disponíveis incluíam edição, exclusão, geração de QR Code e exportação para planilha.
 
-A funcionalidade de geração de QR Code foi implementada com a biblioteca \textit{qrcode} e tinha como objetivo facilitar a identificação dos protocolos em campo. Cada QR Code gerado continha um identificador único que, ao ser escaneado, direcionava o colaborador diretamente para a página do protocolo correspondente na plataforma. \novo{A \autoref{fig:tela-protocolos} apresenta a tela de listagem.}
-
-\begin{figure}[ht]
-\centering
-\caption{\novo{Tela de listagem de protocolos.}}
-\label{fig:tela-protocolos}
-\includegraphics[width=0.95\textwidth]{imgs/tela-listagem-protocolos.png}
-\fonte{\novo{do autor (2026).}}
-\end{figure}
+A funcionalidade de geração de QR Code foi implementada com a biblioteca \textit{qrcode} e tinha como objetivo facilitar a identificação dos protocolos em campo. Cada QR Code gerado continha um identificador único que, ao ser escaneado, direcionava o colaborador diretamente para a página do protocolo correspondente na plataforma.
 
 \subsection{Formulário de Cadastro e Edição de Protocolos}
 
 O formulário de cadastro de protocolos representou um dos maiores desafios técnicos do projeto, dado o grande volume de campos e a complexidade das regras de negócio envolvidas. O formulário foi organizado em abas para melhorar a usabilidade: Informações, Avaliações, Tratamentos, Local, Solo, Aplicações, Manejo e Dashboard.
 
-A aba de Informações continha os dados gerais do protocolo. Entre os campos obrigatórios estavam o tipo do protocolo (Ret ou Comercial), o código, o cliente, as classes do experimento, o status, o número de tratamentos e o número de repetições. Os demais campos eram opcionais, como cultura utilizada, variedade, cultura anterior, tipo de plantio, datas de plantio, colheita e emergência, adubação, espaçamento entre linhas, delineamento experimental, tamanho da parcela e parcela útil. Essa distinção entre campos obrigatórios e opcionais era expressa no esquema de validação apresentado adiante, e o campo de classes permitia a seleção de múltiplos valores, com a possibilidade de cadastrar novas classes diretamente no formulário. \novo{A \autoref{fig:tela-informacoes} ilustra essa aba.}
-
-\begin{figure}[ht]
-\centering
-\caption{\novo{Aba de Informações do formulário de protocolo.}}
-\label{fig:tela-informacoes}
-\includegraphics[width=0.95\textwidth]{imgs/tela-protocolo-informacoes.png}
-\fonte{\novo{do autor (2026).}}
-\end{figure}
+A aba de Informações continha os dados gerais do protocolo. Entre os campos obrigatórios estavam o tipo do protocolo (Ret ou Comercial), o código, o cliente, as classes do experimento, o status, o número de tratamentos e o número de repetições. Os demais campos eram opcionais, como cultura utilizada, variedade, cultura anterior, tipo de plantio, datas de plantio, colheita e emergência, adubação, espaçamento entre linhas, delineamento experimental, tamanho da parcela e parcela útil. Essa distinção entre campos obrigatórios e opcionais era expressa no esquema de validação apresentado adiante, e o campo de classes permitia a seleção de múltiplos valores, com a possibilidade de cadastrar novas classes diretamente no formulário. \novop{O padrão visual adotado nessa aba, com os campos agrupados em duas colunas e os obrigatórios marcados com asterisco, é o mesmo apresentado na \autoref{fig:tela-orcamento}, discutida adiante.}
 
 A aba de Avaliações permitia o registro dos dados coletados em cada momento de avaliação. A estrutura desta aba era dinâmica: o número de colunas da tabela variava de acordo com o número de repetições configurado na aba de Informações, e novas linhas podiam ser adicionadas conforme a necessidade. Alguns campos podiam ser definidos como fórmulas, isto é, expressões matemáticas calculadas a partir dos valores de outros campos; para avaliar essas expressões em tempo de execução, foi utilizada a função \texttt{evaluate} da biblioteca \textit{mathjs}.
 
 Além dos dados numéricos, a aba suportava o \textit{upload} de fotografias de campo, permitindo que os técnicos anexassem registros visuais diretamente vinculados a cada momento de avaliação. Para facilitar o trabalho posterior, foi implementada a funcionalidade de \textit{download} de todas as fotografias de uma avaliação em um único arquivo compactado, utilizando a biblioteca \textit{JSZip}. As imagens eram obtidas da API por meio de uma requisição gerenciada pelo \textit{React Query}, convertidas em \textit{blobs}, agrupadas em um arquivo \textit{.zip} e salvas no dispositivo do usuário, conforme o \autoref{cod:jszip}. \novo{A \autoref{fig:tela-avaliacoes} apresenta a aba de Avaliações da plataforma.}
-
-\begin{figure}[ht]
-\centering
-\caption{\novo{Aba de Avaliações do formulário de protocolo.}}
-\label{fig:tela-avaliacoes}
-\includegraphics[width=0.95\textwidth]{imgs/tela-protocolo-avaliacoes.png}
-\fonte{\novo{do autor (2026).}}
-\end{figure}
 
 \begin{lstlisting}[caption={Trecho do \textit{download} das fotografias de uma avaliação em arquivo \textit{.zip} com \textit{JSZip}.}, label={cod:jszip}]
 const handleDownloadImages = async (evaluation) => {
@@ -128,15 +120,23 @@ const handleDownloadImages = async (evaluation) => {
 
 A função recebe a avaliação selecionada e dispara a busca das imagens pela API por meio do \textit{mutation} \texttt{getImages}, fornecido pelo \textit{React Query}. No \textit{callback} de sucesso, a lista de imagens retornada é percorrida e cada item é mapeado para uma promessa que baixa o arquivo como \textit{blob}, utilizando o \texttt{fetch} nativo do navegador; as promessas são aguardadas em paralelo com \texttt{Promise.all}. Em seguida, uma instância de \texttt{JSZip} é criada e cada \textit{blob} é adicionado ao arquivo com o nome correspondente. Por fim, o método \texttt{generateAsync} produz o arquivo \texttt{.zip} final em memória, que é entregue ao usuário pela função utilitária \texttt{saveFile}.
 
+\begin{figure}[!htb]
+\centering
+\caption{\novo{Aba de Avaliações do formulário de protocolo.}}
+\label{fig:tela-avaliacoes}
+\includegraphics[width=0.95\textwidth,height=0.50\textheight,keepaspectratio]{imgs/tela-protocolo-avaliacoes.png}
+\fonte{\novo{do autor (2026).}}
+\end{figure}
+
 O gerenciamento do estado do formulário foi implementado com a biblioteca \textit{Formik}, encapsulada em um \textit{hook} customizado (\texttt{useForm}) que padronizava o controle dos valores dos campos e a orquestração das validações em todas as telas. Essa padronização era importante, dado que um protocolo podia conter dezenas de tratamentos, cada um com múltiplas repetições e avaliações, resultando em estruturas de dados profundamente aninhadas.
 
 \novop{O mesmo padrão de organização de formulários (estrutura em abas, agrupamento de campos por área e separação visual entre seções obrigatórias e opcionais) foi reutilizado em outros módulos da plataforma, como o de orçamentos. A \autoref{fig:tela-orcamento} apresenta variações da tela de Informações desse módulo, incluindo o estado padrão e estados com mensagens de validação, além de uma amostra dos componentes de seleção (\textit{selects}) reaproveitados em diferentes contextos.}
 
-\begin{figure}[ht]
+\begin{figure}[!htb]
 \centering
 \caption{\novo{Tela de Informações do módulo de orçamentos e componentes reutilizados.}}
 \label{fig:tela-orcamento}
-\includegraphics[width=0.95\textwidth]{imgs/tela-orcamento-formulario.png}
+\includegraphics[width=0.95\textwidth,height=0.55\textheight,keepaspectratio]{imgs/tela-orcamento-formulario.png}
 \fonte{\novo{do autor (2026).}}
 \end{figure}
 
@@ -169,7 +169,7 @@ A geração de gráficos foi implementada utilizando a biblioteca \textit{ApexCh
 
 O processo de transformação dos dados em visualizações seguia um fluxo bem definido, desde a obtenção dos dados até a exportação da imagem final, conforme apresentado na \autoref{fig:pipeline}.
 
-\begin{figure}[ht]
+\begin{figure}[!htb]
 \centering
 \caption{Fluxo de geração de gráficos a partir dos dados de avaliação.}
 \label{fig:pipeline}
@@ -230,27 +230,37 @@ const downloadChart = async (format) => {
 
 A primeira linha obtém, do \textit{hook} \texttt{useScreenshot}, a função \texttt{takeScreenshot}, usada para gerar uma imagem a partir de um elemento do DOM. A função \texttt{downloadChart} é assíncrona e recebe como argumento o formato de imagem desejado. No seu corpo, \texttt{takeScreenshot} captura o elemento referenciado por \texttt{imageRef}, que contém o gráfico acompanhado do logotipo, devolvendo a imagem em \textit{base64}. Em seguida, um elemento de \textit{link} é criado dinamicamente, o atributo \texttt{href} recebe a imagem capturada, o atributo \texttt{download} define o nome do arquivo final (combinando o título da imagem, o título do gráfico e o formato) e o clique programático no \textit{link} força o navegador a salvar a imagem no dispositivo do usuário.
 
-\novop{A \autoref{fig:tela-graficos} apresenta o resultado da geração automatizada dos gráficos de barras a partir dos dados de uma avaliação, e a \autoref{fig:tela-exportacao} ilustra a imagem exportada em PNG já com o logotipo da empresa cliente.}
+\novop{A \autoref{fig:tela-graficos} apresenta o resultado da geração automatizada dos gráficos de barras a partir dos dados de uma avaliação. Cada gráfico ocupa um \textit{card} próprio, dispostos em uma grade na tela, com as colunas coloridas por categoria e os valores numéricos exibidos sobre elas, de modo que o pesquisador consegue comparar os momentos de avaliação sem precisar montar manualmente as visualizações. Além do \textit{download} individual disponível em cada \textit{card}, a tela oferecia a opção de baixar todos os gráficos de uma só vez.}
 
-\begin{figure}[ht]
+\begin{figure}[!htb]
 \centering
 \caption{\novo{Gráficos de barras gerados automaticamente para uma avaliação.}}
 \label{fig:tela-graficos}
-\includegraphics[width=0.5\textwidth]{imgs/tela-graficos-barras.png}
+\includegraphics[width=0.72\textwidth,height=0.60\textheight,keepaspectratio]{imgs/tela-graficos-avaliacao.png}
 \fonte{\novo{do autor (2026).}}
 \end{figure}
 
-\begin{figure}[ht]
+\novop{Já a \autoref{fig:tela-exportacao} ilustra o produto final do processo de exportação descrito no \autoref{cod:export}. A imagem capturada reúne, em um único arquivo PNG, o gráfico selecionado, o logotipo da empresa cliente e o título dos dados representados, resultando em um material pronto para ser incluído nos relatórios entregues pela empresa aos seus próprios clientes.}
+
+\begin{figure}[!htb]
 \centering
 \caption{\novo{Imagem PNG exportada de um gráfico, com a identidade visual da empresa.}}
 \label{fig:tela-exportacao}
-\includegraphics[width=0.7\textwidth]{imgs/tela-graficos-exportacao.png}
+\includegraphics[width=0.65\textwidth,height=0.48\textheight,keepaspectratio]{imgs/tela-graficos-exportacao.png}
 \fonte{\novo{do autor (2026).}}
 \end{figure}
 
 \subsection{Dashboard Geral}
 
-Além dos gráficos individuais por protocolo, a plataforma contava com um \novo{\textit{dashboard}} geral que apresentava uma visão consolidada de todos os protocolos cadastrados, incluindo a distribuição de protocolos por classe, por cultura e por status.
+Além dos gráficos individuais por protocolo, a plataforma contava com um \novo{\textit{dashboard}} geral que apresentava uma visão consolidada de todos os protocolos cadastrados, incluindo a distribuição de protocolos por classe, por cultura e por status. \novop{A \autoref{fig:tela-dashboard} apresenta essa tela, em que os gráficos de pizza resumem a divisão dos protocolos por tipo e por status e os gráficos de barras horizontais detalham a distribuição por classe, por cultura e por cliente.}
+
+\begin{figure}[!htb]
+\centering
+\caption{\novo{\textit{Dashboard} geral com a visão consolidada dos protocolos.}}
+\label{fig:tela-dashboard}
+\includegraphics[width=0.60\textwidth,height=0.86\textheight,keepaspectratio]{imgs/tela-dashboard-geral.png}
+\fonte{\novo{do autor (2026).}}
+\end{figure}
 
 Os dados consolidados desse dashboard, como a contagem e o percentual de protocolos por cultura, por classe e por cliente, eram fornecidos por um \textit{endpoint} específico do \textit{back-end} e buscados via API utilizando o \textit{React Query} (\textit{TanStack Query}), que gerenciava o cache das requisições e garantia que as visualizações estivessem sempre atualizadas sem a necessidade de recarregamentos manuais da página. No \textit{front-end}, esses dados eram mapeados para os vetores de rótulos e valores consumidos pelos componentes de gráfico.
 
