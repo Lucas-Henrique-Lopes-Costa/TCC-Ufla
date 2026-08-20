@@ -124,7 +124,7 @@ Depois percorra os três cartões, um por vez, sem ler:
 
 ▶ "Este foi um aprendizado que eu não esperava. Como o cliente atua em pesquisa agrícola, boa parte das regras de negócio era específica do domínio e não estava documentada em lugar nenhum. Não havia um documento de requisitos para consultar, as regras estavam na prática de trabalho das pessoas."
 
-"Dois conjuntos concentraram a maior complexidade: o controle de acesso, com dois perfis de permissão, e as regras de preenchimento dos protocolos, em que a obrigatoriedade e o formato de cada campo dependiam do tipo do protocolo, da cultura selecionada e da classe do experimento."
+"O que concentrou a maior complexidade foram as regras de preenchimento dos protocolos. A obrigatoriedade e o formato de cada campo dependiam da combinação de três coisas: o tipo do protocolo, se Ret ou Comercial, a cultura selecionada e a classe do experimento. Como nenhuma dessas combinações estava descrita em documento, cada variação precisava ser esclarecida diretamente com a equipe do cliente antes de virar esquema de validação no formulário."
 
 **Slide 16 · Arquitetura**
 
