@@ -536,11 +536,12 @@ body.editing .edit-hint{display:block}
   <div class="pad">
     <div class="eyebrow rv" style="--d:.05s">Tecnologias adotadas</div>
     <h2 class="rv" style="--d:.14s">A stack, organizada por responsabilidade</h2>
-    <div class="cards c4 rv" style="--d:.3s;margin-top:52px;margin-bottom:24px">
-      <div class="card"><div class="n">APRESENTAÇÃO</div><h3>React + TypeScript</h3><p>Componentização e tipagem estática. Material UI com tema próprio do cliente, TanStack Table para tabelas e ApexCharts para gráficos.</p></div>
-      <div class="card"><div class="n">ESTADO</div><h3>Zustand + Immer</h3><p>Estado global leve, com middleware de persistência para manter a sessão. Formik e Yup para o estado e a validação dos formulários.</p></div>
-      <div class="card"><div class="n">DADOS</div><h3>Axios + React Query</h3><p>Cliente HTTP com injeção de token e camada de cache e sincronização que evita requisições desnecessárias.</p></div>
-      <div class="card"><div class="n">BUILD</div><h3>Vite</h3><p>Servidor de desenvolvimento com Hot Module Replacement, refletindo alterações no navegador instantaneamente.</p></div>
+    <p class="deck rv" style="--d:.22s;max-width:1560px">Toda tela do sistema faz quatro coisas: <b>desenha</b> o que aparece, <b>lembra</b> o que já aconteceu, <b>busca</b> os dados no servidor e precisa ser <b>montada</b>. Cada coluna resolve uma delas.</p>
+    <div class="cards c4 rv" style="--d:.34s;margin-top:44px;margin-bottom:24px">
+      <div class="card"><div class="n">APRESENTAÇÃO &middot; DESENHA</div><h3>React + TypeScript</h3><p>Componentização e tipagem estática. Material UI com tema próprio do cliente, TanStack Table para tabelas e ApexCharts para gráficos.</p></div>
+      <div class="card"><div class="n">ESTADO &middot; LEMBRA</div><h3>Zustand + Immer</h3><p>Estado global leve, com middleware de persistência para manter a sessão. Formik e Yup para o estado e a validação dos formulários.</p></div>
+      <div class="card"><div class="n">DADOS &middot; BUSCA</div><h3>Axios + React Query</h3><p>Cliente HTTP com injeção de token e camada de cache e sincronização que evita requisições desnecessárias.</p></div>
+      <div class="card"><div class="n">BUILD &middot; MONTA</div><h3>Vite</h3><p>Servidor de desenvolvimento com Hot Module Replacement, refletindo alterações no navegador instantaneamente.</p></div>
     </div>
     <div class="rv" style="--d:.46s">
       <div class="code-title">Bibliotecas de apoio, cada uma resolvendo um problema específico</div>
@@ -597,8 +598,8 @@ body.editing .edit-hint{display:block}
 <section class="slide" data-block="03 · Metodologia">
   <div class="pad">
     <div class="eyebrow rv" style="--d:.05s">Levantamento de requisitos</div>
-    <h2 class="rv" style="--d:.14s">As regras do domínio não estavam escritas em lugar nenhum</h2>
-    <p class="deck rv" style="--d:.24s">Como o cliente atua em pesquisa agrícola, boa parte das regras era específica do domínio e não estava formalmente documentada. Isso exigiu reuniões frequentes para esclarecer o comportamento esperado.</p>
+    <h2 class="rv" style="--d:.14s">As regras estavam na prática, não no papel</h2>
+    <p class="deck rv" style="--d:.24s">Como o cliente atua em pesquisa agrícola, boa parte das regras era específica do domínio e vivia na rotina de trabalho da equipe. Esclarecer o comportamento esperado exigiu reuniões frequentes.</p>
     <div class="rv" style="--d:.38s;margin-top:auto">
       <div class="combo">
         <div class="chip">Tipo do protocolo<span>Ret ou Comercial</span></div>
@@ -611,7 +612,7 @@ body.editing .edit-hint{display:block}
       <div class="combo-out">Obrigatoriedade e formato de cada campo do formulário</div>
     </div>
     <ul class="bul tight rv" style="--d:.54s;margin-top:40px;margin-bottom:auto">
-      <li>Nenhuma dessas combinações estava descrita em documento</li>
+      <li>Nenhuma dessas combinações estava registrada em documento</li>
       <li>Cada variação precisava ser esclarecida diretamente com a equipe do cliente</li>
       <li>A regra acordada virava esquema de validação, refinado a cada <b>Sprint</b></li>
     </ul>
@@ -1269,8 +1270,9 @@ body.editing .edit-hint{display:block}
             <li><b>Frameworks modernos de front-end</b>, como React e o ecossistema em torno do TypeScript, vistos de forma superficial nas obrigatórias</li>
             <li><b>Testes automatizados de interface</b>, pouco trabalhados no curso e cada vez mais valorizados no mercado</li>
             <li><b>Integração contínua, versionamento em equipe</b> (com pull requests e revisão de código) e deploy em nuvem</li>
+            <li>No mesmo grupo, noções de <b>conteinerização e infraestrutura</b>, como Docker e configuração de ambientes</li>
           </ul>
-          <p style="font-size:23px;margin-top:26px">Cobrir essas lacunas teria reduzido a curva de aprendizado dos primeiros dias de estágio.</p>
+          <p style="font-size:23px;margin-top:24px">Cobrir essas lacunas teria reduzido a curva de aprendizado dos primeiros dias de estágio.</p>
         </div>
       </div>
     </div>

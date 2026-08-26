@@ -106,7 +106,39 @@ Depois percorra os três cartões, um por vez, sem ler:
 
 **Slide 12 · A stack**
 
-"As tecnologias foram escolhidas por camada de responsabilidade. Na apresentação, React com TypeScript, Material UI com tema personalizado do cliente, TanStack Table e ApexCharts. No estado, Zustand com Immer para o estado global e Formik com Yup para os formulários. No acesso a dados, Axios e React Query. E o build com Vite. Embaixo estão as bibliotecas de apoio, cada uma resolvendo um problema pontual que vai aparecer nos próximos slides."
+*Este slide é o mais difícil de falar bem, porque duas das quatro colunas são abstratas. Use a frase de abertura como muleta: ela transforma tecnologia em verbo, e verbo qualquer pessoa entende.*
+
+▶ "Toda tela deste sistema faz quatro coisas: ela desenha o que aparece, ela lembra o que já aconteceu, ela busca os dados no servidor e ela precisa ser montada. Escolhi as tecnologias por essas quatro responsabilidades."
+
+**Desenha.** "É o React com TypeScript. O React divide a interface em componentes reutilizáveis e o TypeScript garante que cada componente receba os dados no formato certo. Em cima disso, o Material UI com um tema personalizado com as cores do cliente, o TanStack Table para as tabelas e o ApexCharts para os gráficos."
+
+**Lembra.** *Aqui vale ir devagar, é o ponto que menos se explica sozinho.*
+
+"Estado é tudo que a aplicação precisa lembrar enquanto você usa. E tem dois tamanhos disso no sistema."
+
+"O primeiro é o estado global, que vale em qualquer tela: quem está logado, qual é o perfil, qual é o token da sessão. Quando você faz login uma vez, todas as telas seguintes precisam saber disso sem perguntar de novo. Quem guarda é o Zustand. O Immer entra por causa de um detalhe do React: você não pode alterar o estado no lugar, precisa devolver uma cópia nova. Escrever essa cópia à mão, em objeto aninhado, é verboso e fácil de errar. O Immer deixa escrever como se estivesse alterando direto e monta a cópia por baixo dos panos."
+
+"O segundo é o estado local, que vive dentro de uma tela só: o que já foi digitado no formulário, o que ainda falta, o que está inválido. Esse é o Formik, com o Yup dizendo o que é válido."
+
+**Busca.** *O segundo ponto abstrato. A chave é explicar o problema antes da ferramenta.*
+
+"O Axios é quem leva o pedido até a API e traz a resposta. No nosso caso ele também carimba o token de autenticação em toda requisição, para não repetir essa linha em cada chamada do sistema."
+
+"O React Query fica entre a tela e o Axios. Sem ele, toda vez que você voltasse para uma tela, ela pediria os mesmos dados de novo e piscaria carregando. O React Query guarda a última resposta, entrega ela na hora quando você volta e vai buscar de novo por baixo quando o dado pode ter mudado. É o que faz o dashboard continuar atualizado sem ninguém precisar recarregar a página."
+
+**Monta.** "E o Vite, que é a ferramenta de build. Ele junta tudo isso em um site e, durante o desenvolvimento, reflete cada alteração no navegador instantaneamente."
+
+*Sobre a faixa de baixo, não leia item por item:* "Embaixo estão as bibliotecas de apoio, cada uma resolvendo um problema pontual. Elas vão aparecer nos próximos slides, no contexto em que foram usadas."
+
+---
+
+**Se estiver com pressa, versão de 25 segundos:**
+
+"Escolhi as tecnologias por quatro responsabilidades. Desenhar a tela é o React com TypeScript, mais Material UI, TanStack Table e ApexCharts. Lembrar o que a aplicação já sabe, como quem está logado, é o Zustand, e lembrar o que está sendo digitado num formulário é o Formik com Yup. Buscar dados no servidor é o Axios, com o React Query fazendo cache para não repetir requisição. E montar o projeto é o Vite. Embaixo estão as bibliotecas de apoio, que aparecem nos próximos slides."
+
+**Imagem de reserva, se sentir que não colou:**
+
+"Pensando na tela como uma loja: o React monta a vitrine, o Zustand é o caderninho do que a loja já sabe sobre você, o Axios é o entregador que vai até o depósito e o React Query é a prateleira que guarda o que o entregador trouxe, para não ir ao depósito toda hora."
 
 ---
 
@@ -122,7 +154,7 @@ Depois percorra os três cartões, um por vez, sem ler:
 
 **Slide 15 · Requisitos**
 
-▶ "Este foi um aprendizado que eu não esperava. Como o cliente atua em pesquisa agrícola, boa parte das regras de negócio era específica do domínio e não estava documentada em lugar nenhum. Não havia um documento de requisitos para consultar, as regras estavam na prática de trabalho das pessoas."
+▶ "Este foi um aprendizado que eu não esperava. Como o cliente atua em pesquisa agrícola, boa parte das regras de negócio era específica do domínio e vivia na rotina de trabalho da equipe, não em um documento de requisitos que eu pudesse consultar. Faz sentido: são regras que a empresa pratica há anos e que nunca precisaram estar escritas para funcionar. Só que, para virar software, elas precisavam estar."
 
 "O que concentrou a maior complexidade foram as regras de preenchimento dos protocolos. A obrigatoriedade e o formato de cada campo dependiam da combinação de três coisas: o tipo do protocolo, se Ret ou Comercial, a cultura selecionada e a classe do experimento. Como nenhuma dessas combinações estava descrita em documento, cada variação precisava ser esclarecida diretamente com a equipe do cliente antes de virar esquema de validação no formulário."
 
@@ -274,7 +306,7 @@ Depois percorra os três cartões, um por vez, sem ler:
 
 "Também vale registrar o caminho inverso, o que a graduação deu para o estágio. Engenharia de Software me deu a base do ciclo de desenvolvimento e dos métodos ágeis. Programação Orientada a Objetos, os conceitos de modularidade e responsabilidade única, que se traduzem naturalmente na componentização do React. Banco de Dados ajudou a entender as estruturas devolvidas pela API. E Interação Humano-Computador orientou as decisões de usabilidade."
 
-"Do outro lado, percebi três lacunas: pouco contato com frameworks modernos de front-end nas disciplinas obrigatórias, pouca prática de testes automatizados de interface e pouca exposição a integração contínua, versionamento em equipe com pull requests e deploy em nuvem. Cobrir essas lacunas teria reduzido bastante minha curva de aprendizado nos primeiros dias."
+"Do outro lado, percebi três lacunas: pouco contato com frameworks modernos de front-end nas disciplinas obrigatórias, pouca prática de testes automatizados de interface e pouca exposição a integração contínua, versionamento em equipe com pull requests e deploy em nuvem. Nesse último grupo entram também noções de conteinerização e infraestrutura, como Docker e configuração de ambientes, que apareceram tanto neste projeto quanto em outros que acompanhei no estágio. Cobrir essas lacunas teria reduzido bastante minha curva de aprendizado nos primeiros dias."
 
 **Slide 43 · Encerramento**
 
@@ -403,7 +435,7 @@ Se você decorar só cinco frases, decore estas:
 "Engenharia de Software, sem dúvida, porque ela me deu o vocabulário e a estrutura para entender o que estava acontecendo no time: o que é requisito, o que é backlog, por que iterar. Sem isso eu teria aprendido a ferramenta, mas não o processo. Em segundo lugar, Programação Orientada a Objetos, porque a ideia de responsabilidade única se traduz quase literalmente na componentização do React."
 
 **26. Você aponta lacunas no curso. Que sugestão concreta você daria?**
-"Duas coisas práticas. Uma disciplina ou um módulo optativo com um framework moderno de front-end, porque o mercado de desenvolvimento web hoje passa por aí e o contato nas obrigatórias é superficial. E incorporar fluxo de trabalho com Git em equipe, com pull request e revisão de código, dentro dos trabalhos em grupo que já existem, porque isso não custa uma disciplina nova e já resolveria boa parte da defasagem."
+"Três coisas práticas. Uma disciplina ou um módulo optativo com um framework moderno de front-end, porque o mercado de desenvolvimento web hoje passa por aí e o contato nas obrigatórias é superficial. Incorporar fluxo de trabalho com Git em equipe, com pull request e revisão de código, dentro dos trabalhos em grupo que já existem, porque isso não custa uma disciplina nova e já resolveria boa parte da defasagem. E um contato mínimo com containers e publicação de aplicação, nem que seja empacotar num Docker e subir um trabalho da própria disciplina, porque hoje o aluno sai sabendo escrever o código mas sem saber como ele chega no usuário."
 
 ### G. Sobre o texto do relatório
 
