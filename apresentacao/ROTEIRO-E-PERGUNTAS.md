@@ -29,7 +29,7 @@ Ensaie duas vezes cronometrado. Na primeira você vai estourar o tempo, é norma
 
 **Se estiver adiantado**, expanda os slides 23, 29 e 30 (os de código), explicando linha a linha. Eles têm material de sobra.
 
-**Navegação:** setas, espaço ou roda do mouse. `Home` volta ao início, `End` vai ao último slide. O número do slide e o bloco atual aparecem no rodapé.
+**Navegação:** setas, espaço ou roda do mouse. `Home` volta ao início, `End` vai ao último slide. **`F` entra e sai de tela cheia.** O número do slide e o bloco atual aparecem no rodapé.
 
 ---
 
@@ -467,7 +467,7 @@ Se você decorar só cinco frases, decore estas:
 
 ## 8. Checklist do dia
 
-- [ ] Abrir `apresentacao/index.html` no navegador e testar em tela cheia (F11) no projetor da sala
+- [ ] Abrir `apresentacao/index.html` no navegador e testar em tela cheia (tecla `F`) no projetor da sala
 - [ ] Conferir que as imagens em `apresentacao/imgs/` estão junto do arquivo
 - [ ] Levar o deck também em PDF, como plano B, caso o navegador falhe
 - [ ] Preencher os **[preencher]** deste documento

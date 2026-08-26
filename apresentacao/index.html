@@ -1,650 +1,1738 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Desenvolvimento de Aplicações Web na Empresa Zeeway — Defesa de TCC</title>
 
-<!-- ===========================================
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desenvolvimento de Aplicações Web na Empresa Zeeway — Defesa de TCC</title>
+
+  <!-- ===========================================
      FONTES (Google Fonts)
      Display: Bricolage Grotesque | Corpo: IBM Plex Sans | Rótulos e código: IBM Plex Mono
      Troque aqui para mudar toda a tipografia do deck.
      =========================================== -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
 
-<style>
-/* ===========================================
+  <style>
+    /* ===========================================
    1. TEMA "CAMPO EXPERIMENTAL"
    Paleta derivada da identidade visual da própria plataforma:
    verde-floresta de fundo, verde vivo de destaque e creme de papel.
    Altere estas variáveis para mudar o deck inteiro.
    =========================================== */
-:root{
-  /* Cores */
-  --stage-bg:#040C0A;          /* moldura fora do palco 16:9 */
-  --forest:#0C3229;            /* fundo padrão dos slides */
-  --forest-2:#0A2921;
-  --deep:#061A15;              /* painéis e blocos de código */
-  --leaf:#22C55E;              /* verde de destaque */
-  --leaf-2:#9FE8B8;
-  --amber:#E4B363;             /* segundo acento, usado em código e dados */
-  --cream:#FBF1DA;             /* texto principal */
-  --cream-dim:rgba(251,241,218,.66);
-  --cream-faint:rgba(251,241,218,.42);
-  --hair:rgba(251,241,218,.16);
-  --hair-soft:rgba(251,241,218,.08);
-  --paper:#F3ECDA;             /* slides claros (divisores) */
-  --ink:#0C3229;               /* texto sobre papel */
-  --ink-dim:rgba(12,50,41,.66);
-  --slide-bg:var(--forest);
+    :root {
+      /* Cores */
+      --stage-bg: #040C0A;
+      /* moldura fora do palco 16:9 */
+      --forest: #0C3229;
+      /* fundo padrão dos slides */
+      --forest-2: #0A2921;
+      --deep: #061A15;
+      /* painéis e blocos de código */
+      --leaf: #22C55E;
+      /* verde de destaque */
+      --leaf-2: #9FE8B8;
+      --amber: #E4B363;
+      /* segundo acento, usado em código e dados */
+      --cream: #FBF1DA;
+      /* texto principal */
+      --cream-dim: rgba(251, 241, 218, .66);
+      --cream-faint: rgba(251, 241, 218, .42);
+      --hair: rgba(251, 241, 218, .16);
+      --hair-soft: rgba(251, 241, 218, .08);
+      --paper: #F3ECDA;
+      /* slides claros (divisores) */
+      --ink: #0C3229;
+      /* texto sobre papel */
+      --ink-dim: rgba(12, 50, 41, .66);
+      --slide-bg: var(--forest);
 
-  /* Tipografia (autorada no palco de 1920×1080) */
-  --font-display:'Bricolage Grotesque',sans-serif;
-  --font-body:'IBM Plex Sans',sans-serif;
-  --font-mono:'IBM Plex Mono',monospace;
+      /* Tipografia (autorada no palco de 1920×1080) */
+      --font-display: 'Bricolage Grotesque', sans-serif;
+      --font-body: 'IBM Plex Sans', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
 
-  /* Movimento */
-  --ease:cubic-bezier(.2,.7,.25,1);
-}
+      /* Movimento */
+      --ease: cubic-bezier(.2, .7, .25, 1);
+    }
 
-/* ===========================================
+    /* ===========================================
    2. PALCO FIXO 16:9 (viewport-base.css completo)
    Slides são autorados em 1920×1080 e o palco inteiro é escalado.
    =========================================== */
-html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--stage-bg,#000)}
-.deck-viewport{position:fixed;inset:0;overflow:hidden;background:var(--stage-bg,#000)}
-.deck-stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;background:var(--slide-bg,#fff)}
-.slide{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;display:block;visibility:hidden;opacity:0;pointer-events:none;background:var(--slide-bg,#fff)}
-.slide.active,.slide.visible{visibility:visible;opacity:1;pointer-events:auto;z-index:1}
-img,video,canvas,svg{max-width:100%;max-height:100%}
-.deck-controls{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1000}
-@media print{
-  html,body{width:1920px;height:auto;overflow:visible;background:#fff}
-  .deck-viewport{position:static;overflow:visible;background:#fff}
-  .deck-stage{position:static;width:auto;height:auto;transform:none!important;background:none}
-  .slide{position:relative;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;width:1920px;height:1080px;break-after:page;page-break-after:always}
-  .slide:last-child{break-after:auto;page-break-after:auto}
-  .deck-controls{display:none!important}
-  /* Sem JS na impressão, as animações de entrada precisam do estado final */
-  .rv,.rvx,.plots i{opacity:1!important;transform:none!important;transition:none!important}
-  /* O rodapé é único e fixo no palco, então não faz sentido em papel */
-  .chrome,.progress{display:none!important}
-}
-@media (prefers-reduced-motion: reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.2s!important}
-}
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--stage-bg, #000)
+    }
 
-/* ===========================================
+    .deck-viewport {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      background: var(--stage-bg, #000)
+    }
+
+    .deck-stage {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      transform-origin: 0 0;
+      background: var(--slide-bg, #fff)
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      display: block;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      background: var(--slide-bg, #fff)
+    }
+
+    .slide.active,
+    .slide.visible {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 1
+    }
+
+    img,
+    video,
+    canvas,
+    svg {
+      max-width: 100%;
+      max-height: 100%
+    }
+
+    .deck-controls {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      z-index: 1000
+    }
+
+    @media print {
+
+      html,
+      body {
+        width: 1920px;
+        height: auto;
+        overflow: visible;
+        background: #fff
+      }
+
+      .deck-viewport {
+        position: static;
+        overflow: visible;
+        background: #fff
+      }
+
+      .deck-stage {
+        position: static;
+        width: auto;
+        height: auto;
+        transform: none !important;
+        background: none
+      }
+
+      .slide {
+        position: relative;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 1920px;
+        height: 1080px;
+        break-after: page;
+        page-break-after: always
+      }
+
+      .slide:last-child {
+        break-after: auto;
+        page-break-after: auto
+      }
+
+      .deck-controls {
+        display: none !important
+      }
+
+      /* Sem JS na impressão, as animações de entrada precisam do estado final */
+      .rv,
+      .rvx,
+      .plots i {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important
+      }
+
+      /* O rodapé é único e fixo no palco, então não faz sentido em papel */
+      .chrome,
+      .progress {
+        display: none !important
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .2s !important
+      }
+    }
+
+    /* ===========================================
    3. BASE
    =========================================== */
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:var(--font-body);-webkit-font-smoothing:antialiased}
-.slide{color:var(--cream)}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
 
-/* Atmosfera: gradiente + grade fina de parcelas experimentais */
-.slide::before{content:"";position:absolute;inset:0;pointer-events:none;
-  background:
-    radial-gradient(1300px 780px at 82% 10%, rgba(34,197,94,.12), transparent 62%),
-    linear-gradient(158deg,var(--forest) 0%,var(--forest-2) 100%);
-  z-index:0}
-.slide::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
-  background-image:linear-gradient(var(--hair-soft) 1px,transparent 1px),linear-gradient(90deg,var(--hair-soft) 1px,transparent 1px);
-  background-size:120px 120px}
-/* Slides de papel (divisores e encerramento) invertem o esquema */
-.slide.paper{background:var(--paper);color:var(--ink)}
-.slide.paper::before{background:radial-gradient(1200px 800px at 78% 20%, rgba(34,197,94,.14), transparent 60%),linear-gradient(160deg,#F6F0E0 0%,#EBE3CE 100%)}
-.slide.paper::after{background-image:linear-gradient(rgba(12,50,41,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(12,50,41,.06) 1px,transparent 1px)}
+    body {
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased
+    }
 
-/* Área útil de conteúdo */
-.pad{position:absolute;inset:74px 92px 104px;z-index:2;display:flex;flex-direction:column}
+    .slide {
+      color: var(--cream)
+    }
 
-/* ===========================================
+    /* Atmosfera: gradiente + grade fina de parcelas experimentais */
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(1300px 780px at 82% 10%, rgba(34, 197, 94, .12), transparent 62%),
+        linear-gradient(158deg, var(--forest) 0%, var(--forest-2) 100%);
+      z-index: 0
+    }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: linear-gradient(var(--hair-soft) 1px, transparent 1px), linear-gradient(90deg, var(--hair-soft) 1px, transparent 1px);
+      background-size: 120px 120px
+    }
+
+    /* Slides de papel (divisores e encerramento) invertem o esquema */
+    .slide.paper {
+      background: var(--paper);
+      color: var(--ink)
+    }
+
+    .slide.paper::before {
+      background: radial-gradient(1200px 800px at 78% 20%, rgba(34, 197, 94, .14), transparent 60%), linear-gradient(160deg, #F6F0E0 0%, #EBE3CE 100%)
+    }
+
+    .slide.paper::after {
+      background-image: linear-gradient(rgba(12, 50, 41, .06) 1px, transparent 1px), linear-gradient(90deg, rgba(12, 50, 41, .06) 1px, transparent 1px)
+    }
+
+    /* Área útil de conteúdo */
+    .pad {
+      position: absolute;
+      inset: 74px 92px 104px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column
+    }
+
+    /* ===========================================
    4. COMPONENTES TIPOGRÁFICOS
    =========================================== */
-.eyebrow{display:inline-flex;align-items:center;gap:16px;font-family:var(--font-mono);font-weight:500;
-  font-size:18px;letter-spacing:.22em;text-transform:uppercase;color:var(--leaf)}
-.eyebrow::before{content:"";width:46px;height:2px;background:var(--leaf);flex:none}
-.paper .eyebrow{color:#12796F}
-.paper .eyebrow::before{background:#12796F}
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      font-size: 20px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--leaf)
+    }
 
-h2{font-family:var(--font-display);font-weight:700;font-size:62px;line-height:1.04;letter-spacing:-.028em;
-  color:var(--cream);margin-top:24px;max-width:1560px}
-h2 .hl{color:var(--leaf)}
-.paper h2{color:var(--ink)}
+    .eyebrow::before {
+      content: "";
+      width: 46px;
+      height: 2px;
+      background: var(--leaf);
+      flex: none
+    }
 
-.deck{font-family:var(--font-body);font-weight:300;font-size:29px;line-height:1.52;color:var(--cream-dim);
-  margin-top:22px;max-width:1180px}
-.deck b{color:var(--cream);font-weight:500}
-.paper .deck{color:var(--ink-dim)}
-.paper .deck b{color:var(--ink)}
+    .paper .eyebrow {
+      color: #12796F
+    }
 
-.body{font-family:var(--font-body);font-weight:300;font-size:27px;line-height:1.55;color:var(--cream-dim)}
-.body b{color:var(--cream);font-weight:500}
+    .paper .eyebrow::before {
+      background: #12796F
+    }
 
-/* Listas com marcador de parcela */
-.bul{list-style:none;display:flex;flex-direction:column;gap:22px}
-.bul li{position:relative;padding-left:42px;font-size:28px;line-height:1.5;font-weight:300;color:var(--cream-dim)}
-.bul li::before{content:"";position:absolute;left:0;top:14px;width:14px;height:14px;background:var(--leaf)}
-.bul li b{color:var(--cream);font-weight:500}
-.bul.tight li{font-size:25px;gap:16px}
+    h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 72px;
+      line-height: 1.04;
+      letter-spacing: -.028em;
+      color: var(--cream);
+      margin-top: 24px;
+      max-width: 1560px
+    }
 
-/* ===========================================
+    h2 .hl {
+      color: var(--leaf)
+    }
+
+    .paper h2 {
+      color: var(--ink)
+    }
+
+    .deck {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 34px;
+      line-height: 1.48;
+      color: var(--cream-dim);
+      margin-top: 22px;
+      max-width: 1180px
+    }
+
+    .deck b {
+      color: var(--cream);
+      font-weight: 500
+    }
+
+    .paper .deck {
+      color: var(--ink-dim)
+    }
+
+    .paper .deck b {
+      color: var(--ink)
+    }
+
+    .body {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 31px;
+      line-height: 1.5;
+      color: var(--cream-dim)
+    }
+
+    .body b {
+      color: var(--cream);
+      font-weight: 500
+    }
+
+    /* Listas com marcador de parcela */
+    .bul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 26px
+    }
+
+    .bul li {
+      position: relative;
+      padding-left: 44px;
+      font-size: 34px;
+      line-height: 1.42;
+      font-weight: 300;
+      color: var(--cream-dim)
+    }
+
+    .bul li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 14px;
+      width: 14px;
+      height: 14px;
+      background: var(--leaf)
+    }
+
+    .bul li b {
+      color: var(--cream);
+      font-weight: 500
+    }
+
+    .bul.tight li {
+      font-size: 30px
+    }
+
+    /* ===========================================
    5. COMPONENTES DE LAYOUT
    =========================================== */
-/* Cartões em linha */
-.cards{display:grid;gap:26px;margin-top:auto}
-.cards.c2{grid-template-columns:repeat(2,1fr)}
-.cards.c3{grid-template-columns:repeat(3,1fr)}
-.cards.c4{grid-template-columns:repeat(4,1fr)}
-.card{border:1px solid var(--hair);background:rgba(251,241,218,.035);padding:34px 32px 36px;display:flex;flex-direction:column}
-.card .n{font-family:var(--font-mono);font-weight:600;font-size:16px;letter-spacing:.2em;color:var(--leaf);margin-bottom:20px}
-.card h3{font-family:var(--font-display);font-weight:600;font-size:31px;line-height:1.15;letter-spacing:-.02em;color:var(--cream)}
-.card p{font-size:22px;line-height:1.5;font-weight:300;color:var(--cream-dim);margin-top:14px}
-.card p b{color:var(--cream);font-weight:500}
-.card.lit{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.45)}
-.card.dim{opacity:.4}
+    /* Cartões em linha */
+    .cards {
+      display: grid;
+      gap: 26px;
+      margin-top: auto
+    }
 
-/* Cartão de objetivo: rótulo e numeral vazado no topo, lista ancorada na base */
-.obj{overflow:hidden}
-.objhead{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
-.objhead .n{margin-bottom:0}
-.objnum{font-family:var(--font-display);font-weight:800;font-size:104px;line-height:.74;
-  letter-spacing:-.05em;color:transparent;-webkit-text-stroke:2px rgba(251,241,218,.18);
-  margin-top:-14px;flex:none}
-.card.lit .objnum{-webkit-text-stroke-color:rgba(34,197,94,.5)}
-.obj h3{margin-top:30px}
-.objrule{height:1px;background:var(--hair);margin:0 0 28px}
-.card.lit .objrule{background:rgba(34,197,94,.35)}
-/* Faixa de textura que ocupa a folga vertical do cartão, no mesmo motivo da capa */
-.objgrid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(8,1fr);
-  grid-auto-rows:62px;gap:10px;align-content:center;margin:26px 0}
-.objgrid i{border:1px solid var(--hair-soft);background:rgba(251,241,218,.02)}
-.objgrid i.on{background:var(--leaf);border-color:var(--leaf);opacity:.85}
-.objgrid i.mid{background:rgba(34,197,94,.3);border-color:transparent}
-.objgrid i.pap{background:rgba(251,241,218,.88);border-color:transparent}
+    .cards.c2 {
+      grid-template-columns: repeat(2, 1fr)
+    }
 
-/* Divisão em duas colunas */
-.split{display:grid;gap:64px;flex:1;min-height:0;align-items:center}
-.split.tx-im{grid-template-columns:640px 1fr}
-.split.im-tx{grid-template-columns:1fr 640px}
-.split.half{grid-template-columns:1fr 1fr}
-.split.wide-l{grid-template-columns:1fr 860px}
+    .cards.c3 {
+      grid-template-columns: repeat(3, 1fr)
+    }
 
-/* Moldura de captura de tela com recorte controlado */
-.shot{position:relative;overflow:hidden;border:1px solid var(--hair);background:#E9E9E9;flex:none;
-  box-shadow:0 30px 70px rgba(0,0,0,.35)}
-.shot img{position:absolute;max-width:none;max-height:none;display:block}
-.shot-cap{font-family:var(--font-mono);font-size:16px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--cream-faint);margin-top:18px}
+    .cards.c4 {
+      grid-template-columns: repeat(4, 1fr)
+    }
 
-/* Painel de código */
-.code{background:var(--deep);border:1px solid var(--hair);padding:30px 34px;font-family:var(--font-mono);
-  font-size:21px;line-height:1.68;color:var(--cream-dim);white-space:pre;overflow:hidden}
-.code .k{color:var(--leaf)}          /* palavras-chave */
-.code .f{color:var(--leaf-2)}        /* funções */
-.code .s{color:var(--amber)}         /* strings */
-.code .c{color:var(--cream-faint)}   /* comentários */
-.code .p{color:rgba(251,241,218,.5)} /* pontuação */
-.code-title{font-family:var(--font-mono);font-size:16px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--leaf);margin-bottom:16px}
+    .card {
+      border: 1px solid var(--hair);
+      background: rgba(251, 241, 218, .035);
+      padding: 34px 32px 36px;
+      display: flex;
+      flex-direction: column
+    }
 
-/* Diagrama de camadas */
-.layer{border:1px solid var(--hair);background:rgba(251,241,218,.04);padding:26px 34px;display:flex;
-  align-items:center;gap:32px}
-.layer .lb{font-family:var(--font-display);font-weight:600;font-size:29px;color:var(--cream);width:330px;flex:none}
-.layer .lt{font-family:var(--font-mono);font-size:20px;line-height:1.6;color:var(--cream-dim)}
-.layer.api{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.4)}
-.arrow{height:34px;display:flex;align-items:center;justify-content:center;color:var(--leaf);font-size:24px}
+    .card .n {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: .2em;
+      color: var(--leaf);
+      margin-bottom: 20px
+    }
 
-/* Pipeline horizontal */
-.pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:0;align-items:stretch}
-.pipe .st{border:1px solid var(--hair);background:rgba(251,241,218,.035);padding:30px 26px;position:relative}
-.pipe .st + .st{border-left:none}
-.pipe .st .n{font-family:var(--font-mono);font-size:15px;letter-spacing:.2em;color:var(--leaf)}
-.pipe .st h4{font-family:var(--font-display);font-weight:600;font-size:26px;line-height:1.2;color:var(--cream);margin-top:16px}
-.pipe .st p{font-family:var(--font-mono);font-size:18px;line-height:1.5;color:var(--cream-faint);margin-top:12px}
-.pipe .st:last-child{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.4)}
+    .card h3 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 36px;
+      line-height: 1.14;
+      letter-spacing: -.02em;
+      color: var(--cream)
+    }
 
-/* Combinação de variáveis que definiam a regra de preenchimento */
-.combo{display:flex;align-items:stretch;gap:20px}
-.combo .chip{flex:1;border:1px solid var(--hair);background:rgba(251,241,218,.035);padding:28px 26px;
-  font-family:var(--font-display);font-weight:600;font-size:30px;line-height:1.2;color:var(--cream)}
-.combo .chip span{display:block;font-family:var(--font-mono);font-weight:400;font-size:17px;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--leaf);margin-top:14px}
-.combo .x{display:flex;align-items:center;flex:none;font-family:var(--font-display);
-  font-weight:500;font-size:34px;color:var(--leaf)}
-.combo-arrow{text-align:center;color:var(--leaf);font-size:22px;margin:16px 0}
-.combo-out{border:1px solid rgba(34,197,94,.45);background:rgba(34,197,94,.1);padding:26px 34px;
-  text-align:center;font-family:var(--font-display);font-weight:600;font-size:31px;color:var(--cream)}
+    .card p {
+      font-size: 27px;
+      line-height: 1.45;
+      font-weight: 300;
+      color: var(--cream-dim);
+      margin-top: 14px
+    }
 
-/* Tira de abas (formulário de protocolo) */
-.tabs{display:flex;flex-wrap:wrap;gap:14px}
-.tabs span{font-family:var(--font-mono);font-size:23px;letter-spacing:.04em;padding:16px 26px;
-  border:1px solid var(--hair);color:var(--cream-dim)}
-.tabs span.on{background:var(--leaf);border-color:var(--leaf);color:#06231C;font-weight:600}
+    .card p b {
+      color: var(--cream);
+      font-weight: 500
+    }
 
-/* Tabela simulada (listagem de protocolos) */
-.tbl{border:1px solid var(--hair);background:rgba(251,241,218,.035);font-family:var(--font-mono);font-size:20px}
-.tbl .r{display:grid;grid-template-columns:1.5fr .8fr 1.2fr 1fr 1fr .9fr;gap:18px;padding:19px 28px;
-  border-bottom:1px solid var(--hair-soft);color:var(--cream-dim)}
-.tbl .r.h{color:var(--leaf);font-weight:600;font-size:17px;letter-spacing:.14em;text-transform:uppercase}
-.tbl .r:last-child{border-bottom:none}
-.tbl .tag{color:var(--leaf)}
+    .card.lit {
+      background: rgba(34, 197, 94, .1);
+      border-color: rgba(34, 197, 94, .45)
+    }
 
-/* Números-destaque */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
-.stat{border-top:3px solid var(--leaf);padding-top:24px}
-.stat .v{font-family:var(--font-display);font-weight:700;font-size:66px;line-height:1;letter-spacing:-.03em;color:var(--cream)}
-.stat .l{font-family:var(--font-mono);font-size:19px;line-height:1.45;color:var(--cream-faint);margin-top:14px}
+    .card.dim {
+      opacity: .4
+    }
 
-/* Grade de parcelas (capa) */
-.plots{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:74px;gap:12px}
-.plots i{border:1px solid var(--hair);background:rgba(251,241,218,.03)}
-.plots i.on{background:var(--leaf);border-color:var(--leaf)}
-.plots i.mid{background:rgba(34,197,94,.42);border-color:transparent}
-.plots i.pap{background:var(--cream);border-color:var(--cream)}
+    /* Cartão de objetivo: rótulo e numeral vazado no topo, lista ancorada na base */
+    .obj {
+      overflow: hidden
+    }
 
-/* ===========================================
+    .objhead {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px
+    }
+
+    .objhead .n {
+      margin-bottom: 0
+    }
+
+    .objnum {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 112px;
+      line-height: .74;
+      letter-spacing: -.05em;
+      color: transparent;
+      -webkit-text-stroke: 2px rgba(251, 241, 218, .18);
+      margin-top: -14px;
+      flex: none
+    }
+
+    .card.lit .objnum {
+      -webkit-text-stroke-color: rgba(34, 197, 94, .5)
+    }
+
+    .obj h3 {
+      margin-top: 30px
+    }
+
+    .objrule {
+      height: 1px;
+      background: var(--hair);
+      margin: 0 0 28px
+    }
+
+    .card.lit .objrule {
+      background: rgba(34, 197, 94, .35)
+    }
+
+    /* Faixa de textura que ocupa a folga vertical do cartão, no mesmo motivo da capa */
+    .objgrid {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-auto-rows: 52px;
+      gap: 10px;
+      align-content: center;
+      margin: 26px 0
+    }
+
+    .objgrid i {
+      border: 1px solid var(--hair-soft);
+      background: rgba(251, 241, 218, .02)
+    }
+
+    .objgrid i.on {
+      background: var(--leaf);
+      border-color: var(--leaf);
+      opacity: .85
+    }
+
+    .objgrid i.mid {
+      background: rgba(34, 197, 94, .3);
+      border-color: transparent
+    }
+
+    .objgrid i.pap {
+      background: rgba(251, 241, 218, .88);
+      border-color: transparent
+    }
+
+    /* Divisão em duas colunas */
+    .split {
+      display: grid;
+      gap: 64px;
+      flex: 1;
+      min-height: 0;
+      align-items: center
+    }
+
+    .split.tx-im {
+      grid-template-columns: 640px 1fr
+    }
+
+    .split.im-tx {
+      grid-template-columns: 1fr 640px
+    }
+
+    .split.half {
+      grid-template-columns: 1fr 1fr
+    }
+
+    .split.wide-l {
+      grid-template-columns: 1fr 860px
+    }
+
+    /* Moldura de captura de tela com recorte controlado */
+    .shot {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--hair);
+      background: #E9E9E9;
+      flex: none;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, .35)
+    }
+
+    .shot img {
+      position: absolute;
+      max-width: none;
+      max-height: none;
+      display: block
+    }
+
+    .shot-cap {
+      font-family: var(--font-mono);
+      font-size: 19px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--cream-faint);
+      margin-top: 18px
+    }
+
+    /* Painel de código */
+    .code {
+      margin: 0;
+      background: var(--deep);
+      border: 1px solid var(--hair);
+      padding: 30px 34px;
+      font-family: var(--font-mono);
+      font-size: 21px;
+      line-height: 1.68;
+      color: var(--cream-dim);
+      white-space: pre;
+      overflow: hidden
+    }
+
+    .code .k {
+      color: var(--leaf)
+    }
+
+    /* palavras-chave */
+    .code .f {
+      color: var(--leaf-2)
+    }
+
+    /* funções */
+    .code .s {
+      color: var(--amber)
+    }
+
+    /* strings */
+    .code .c {
+      color: var(--cream-faint)
+    }
+
+    /* comentários */
+    .code .p {
+      color: rgba(251, 241, 218, .5)
+    }
+
+    /* pontuação */
+    .code-title {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--leaf);
+      margin-bottom: 16px
+    }
+
+    /* Diagrama de camadas */
+    .layer {
+      border: 1px solid var(--hair);
+      background: rgba(251, 241, 218, .04);
+      padding: 26px 34px;
+      display: flex;
+      align-items: center;
+      gap: 32px
+    }
+
+    .layer .lb {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 34px;
+      color: var(--cream);
+      width: 370px;
+      flex: none
+    }
+
+    .layer .lt {
+      font-family: var(--font-mono);
+      font-size: 23px;
+      line-height: 1.55;
+      color: var(--cream-dim)
+    }
+
+    .layer.api {
+      background: rgba(34, 197, 94, .1);
+      border-color: rgba(34, 197, 94, .4)
+    }
+
+    .arrow {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--leaf);
+      font-size: 24px
+    }
+
+    /* Pipeline horizontal */
+    .pipe {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      align-items: stretch
+    }
+
+    .pipe .st {
+      border: 1px solid var(--hair);
+      background: rgba(251, 241, 218, .035);
+      padding: 30px 26px;
+      position: relative
+    }
+
+    .pipe .st+.st {
+      border-left: none
+    }
+
+    .pipe .st .n {
+      font-family: var(--font-mono);
+      font-size: 17px;
+      letter-spacing: .2em;
+      color: var(--leaf)
+    }
+
+    .pipe .st h4 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 30px;
+      line-height: 1.2;
+      color: var(--cream);
+      margin-top: 16px
+    }
+
+    .pipe .st p {
+      font-family: var(--font-mono);
+      font-size: 21px;
+      line-height: 1.45;
+      color: var(--cream-faint);
+      margin-top: 12px
+    }
+
+    .pipe .st:last-child {
+      background: rgba(34, 197, 94, .1);
+      border-color: rgba(34, 197, 94, .4)
+    }
+
+    /* Combinação de variáveis que definiam a regra de preenchimento */
+    .combo {
+      display: flex;
+      align-items: stretch;
+      gap: 20px
+    }
+
+    .combo .chip {
+      flex: 1;
+      border: 1px solid var(--hair);
+      background: rgba(251, 241, 218, .035);
+      padding: 30px 28px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 34px;
+      line-height: 1.2;
+      color: var(--cream)
+    }
+
+    .combo .chip span {
+      display: block;
+      font-family: var(--font-mono);
+      font-weight: 400;
+      font-size: 19px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--leaf);
+      margin-top: 14px
+    }
+
+    .combo .x {
+      display: flex;
+      align-items: center;
+      flex: none;
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 34px;
+      color: var(--leaf)
+    }
+
+    .combo-arrow {
+      text-align: center;
+      color: var(--leaf);
+      font-size: 22px;
+      margin: 16px 0
+    }
+
+    .combo-out {
+      border: 1px solid rgba(34, 197, 94, .45);
+      background: rgba(34, 197, 94, .1);
+      padding: 28px 34px;
+      text-align: center;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 35px;
+      color: var(--cream)
+    }
+
+    /* Tira de abas (formulário de protocolo) */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px
+    }
+
+    .tabs span {
+      font-family: var(--font-mono);
+      font-size: 27px;
+      letter-spacing: .04em;
+      padding: 16px 26px;
+      border: 1px solid var(--hair);
+      color: var(--cream-dim)
+    }
+
+    .tabs span.on {
+      background: var(--leaf);
+      border-color: var(--leaf);
+      color: #06231C;
+      font-weight: 600
+    }
+
+    /* Tabela simulada (listagem de protocolos) */
+    .tbl {
+      border: 1px solid var(--hair);
+      background: rgba(251, 241, 218, .035);
+      font-family: var(--font-mono);
+      font-size: 23px
+    }
+
+    .tbl .r {
+      display: grid;
+      grid-template-columns: 1.5fr .8fr 1.2fr 1fr 1fr .9fr;
+      gap: 18px;
+      padding: 19px 28px;
+      border-bottom: 1px solid var(--hair-soft);
+      color: var(--cream-dim)
+    }
+
+    .tbl .r.h {
+      color: var(--leaf);
+      font-weight: 600;
+      font-size: 19px;
+      letter-spacing: .14em;
+      text-transform: uppercase
+    }
+
+    .tbl .r:last-child {
+      border-bottom: none
+    }
+
+    .tbl .tag {
+      color: var(--leaf)
+    }
+
+    /* Números-destaque */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px
+    }
+
+    .stat {
+      border-top: 3px solid var(--leaf);
+      padding-top: 24px
+    }
+
+    .stat .v {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 78px;
+      line-height: 1;
+      letter-spacing: -.03em;
+      color: var(--cream)
+    }
+
+    .stat .l {
+      font-family: var(--font-mono);
+      font-size: 22px;
+      line-height: 1.45;
+      color: var(--cream-faint);
+      margin-top: 14px
+    }
+
+    /* Grade de parcelas (capa) */
+    .plots {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 74px;
+      gap: 12px
+    }
+
+    .plots i {
+      border: 1px solid var(--hair);
+      background: rgba(251, 241, 218, .03)
+    }
+
+    .plots i.on {
+      background: var(--leaf);
+      border-color: var(--leaf)
+    }
+
+    .plots i.mid {
+      background: rgba(34, 197, 94, .42);
+      border-color: transparent
+    }
+
+    .plots i.pap {
+      background: var(--cream);
+      border-color: var(--cream)
+    }
+
+    /* ===========================================
    6. SLIDES ESPECIAIS
    =========================================== */
-/* Capa */
-.s-title .grid2{position:absolute;inset:80px 96px;display:grid;grid-template-columns:1130px 1fr;gap:64px;z-index:2}
-.s-title .col-l{display:flex;flex-direction:column;height:872px}
-.s-title h1{font-family:var(--font-display);font-weight:800;font-size:98px;line-height:.98;letter-spacing:-.03em;color:var(--cream);margin-top:46px}
-.s-title h1 .hl{color:var(--leaf)}
-.s-title .rail{margin-top:auto;border-top:1px solid var(--hair);padding-top:32px;display:flex;gap:78px}
-.s-title .rail span{display:block;font-family:var(--font-mono);font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--leaf);margin-bottom:11px}
-.s-title .rail b{font-family:var(--font-display);font-weight:500;font-size:26px;color:var(--cream);letter-spacing:-.01em}
-.s-title .col-r{display:flex;flex-direction:column;justify-content:center}
-.plotcap{font-family:var(--font-mono);font-size:16px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-faint);margin-top:26px;display:flex;justify-content:space-between}
+    /* Capa */
+    .s-title .grid2 {
+      position: absolute;
+      inset: 80px 96px;
+      display: grid;
+      grid-template-columns: 1130px 1fr;
+      gap: 64px;
+      z-index: 2
+    }
 
-/* Divisores de bloco */
-.s-div .pad{justify-content:center}
-.s-div .num{font-family:var(--font-display);font-weight:800;font-size:300px;line-height:.8;letter-spacing:-.05em;
-  color:transparent;-webkit-text-stroke:4px rgba(12,50,41,.42)}
-.s-div h2{font-size:104px;margin-top:34px;letter-spacing:-.035em}
-.s-div .deck{font-size:32px;max-width:1080px;margin-top:26px}
-.s-div .stripe,.s-end .stripe{position:absolute;right:0;top:0;bottom:0;width:280px;z-index:1;
-  background:repeating-linear-gradient(180deg,rgba(34,197,94,.22) 0 74px,transparent 74px 86px)}
+    .s-title .col-l {
+      display: flex;
+      flex-direction: column;
+      height: 872px
+    }
 
-/* Slide-declaração */
-.s-stmt .pad{justify-content:center}
-.s-stmt .big{font-family:var(--font-display);font-weight:700;font-size:92px;line-height:1.06;letter-spacing:-.035em;color:var(--cream);max-width:1520px}
-.s-stmt .big .hl{color:var(--leaf)}
+    .s-title h1 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 98px;
+      line-height: .98;
+      letter-spacing: -.03em;
+      color: var(--cream);
+      margin-top: 46px
+    }
 
-/* Encerramento */
-.s-end .pad{justify-content:center;align-items:flex-start}
-.s-end .big{font-family:var(--font-display);font-weight:800;font-size:150px;line-height:.96;letter-spacing:-.04em;color:var(--ink)}
+    .s-title h1 .hl {
+      color: var(--leaf)
+    }
 
-/* ===========================================
+    .s-title .rail {
+      margin-top: auto;
+      border-top: 1px solid var(--hair);
+      padding-top: 32px;
+      display: flex;
+      gap: 78px
+    }
+
+    .s-title .rail span {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 15px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--leaf);
+      margin-bottom: 11px
+    }
+
+    .s-title .rail b {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 26px;
+      color: var(--cream);
+      letter-spacing: -.01em
+    }
+
+    .s-title .col-r {
+      display: flex;
+      flex-direction: column;
+      justify-content: center
+    }
+
+    .plotcap {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--cream-faint);
+      margin-top: 26px;
+      display: flex;
+      justify-content: space-between
+    }
+
+    /* Divisores de bloco */
+    .s-div .pad {
+      justify-content: center
+    }
+
+    .s-div .num {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 300px;
+      line-height: .8;
+      letter-spacing: -.05em;
+      color: transparent;
+      -webkit-text-stroke: 4px rgba(12, 50, 41, .42)
+    }
+
+    .s-div h2 {
+      font-size: 104px;
+      margin-top: 34px;
+      letter-spacing: -.035em
+    }
+
+    .s-div .deck {
+      font-size: 32px;
+      max-width: 1080px;
+      margin-top: 26px
+    }
+
+    .s-div .stripe,
+    .s-end .stripe {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 280px;
+      z-index: 1;
+      background: repeating-linear-gradient(180deg, rgba(34, 197, 94, .22) 0 74px, transparent 74px 86px)
+    }
+
+    /* Slide-declaração */
+    .s-stmt .pad {
+      justify-content: center
+    }
+
+    .s-stmt .big {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 100px;
+      line-height: 1.06;
+      letter-spacing: -.035em;
+      color: var(--cream);
+      max-width: 1520px
+    }
+
+    .s-stmt .big .hl {
+      color: var(--leaf)
+    }
+
+    /* Encerramento */
+    .s-end .pad {
+      justify-content: center;
+      align-items: flex-start
+    }
+
+    .s-end .big {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 128px;
+      line-height: .96;
+      letter-spacing: -.04em;
+      color: var(--ink)
+    }
+
+    /* No encerramento a foto é o elemento visual, então a faixa sai */
+    .s-end .stripe {
+      display: none
+    }
+
+    /* Encerramento em duas colunas, com a foto da equipe */
+    .end-grid {
+      display: grid;
+      grid-template-columns: 1fr 760px;
+      gap: 70px;
+      align-items: center;
+      width: 100%
+    }
+
+    .shot.on-paper {
+      border-color: rgba(12, 50, 41, .18);
+      background: #E4DECB;
+      box-shadow: 0 24px 60px rgba(12, 50, 41, .22)
+    }
+
+    .shot-cap.on-paper {
+      color: rgba(12, 50, 41, .5)
+    }
+
+    /* Créditos do encerramento, empilhados */
+    .end-credits {
+      margin-top: 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px
+    }
+
+    .end-credits span {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 17px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: #12796F;
+      margin-bottom: 8px
+    }
+
+    .end-credits b {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 38px;
+      line-height: 1.1;
+      color: var(--ink)
+    }
+
+    /* ===========================================
    7. CROMO DA APRESENTAÇÃO (rodapé dentro do palco)
    Atualizado por JS conforme o slide ativo.
    =========================================== */
-.chrome{position:absolute;left:92px;right:92px;bottom:44px;z-index:30;display:flex;justify-content:space-between;
-  align-items:center;font-family:var(--font-mono);font-size:17px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--cream-faint);transition:color .4s ease}
-.chrome.on-paper{color:rgba(12,50,41,.5)}
-.chrome .r{color:var(--leaf)}
-.progress{position:absolute;left:0;bottom:0;height:4px;background:var(--leaf);z-index:40;transition:width .45s var(--ease)}
+    .chrome {
+      position: absolute;
+      left: 92px;
+      right: 92px;
+      bottom: 44px;
+      z-index: 30;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 17px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--cream-faint);
+      transition: color .4s ease
+    }
 
-/* ===========================================
+    .chrome.on-paper {
+      color: rgba(12, 50, 41, .5)
+    }
+
+    .chrome .r {
+      color: var(--leaf)
+    }
+
+    .progress {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 4px;
+      background: var(--leaf);
+      z-index: 40;
+      transition: width .45s var(--ease)
+    }
+
+    /* ===========================================
    8. ANIMAÇÕES DE ENTRADA
    Aplique .rv e controle o atraso com style="--d:.2s"
    =========================================== */
-.rv{opacity:0;transform:translateY(24px);
-  transition:opacity .72s var(--ease) var(--d,0s),transform .72s var(--ease) var(--d,0s)}
-.slide.visible .rv{opacity:1;transform:none}
-.rvx{opacity:0;transform:translateX(-22px);
-  transition:opacity .72s var(--ease) var(--d,0s),transform .72s var(--ease) var(--d,0s)}
-.slide.visible .rvx{opacity:1;transform:none}
-.plots i{opacity:0;transition:opacity .5s ease var(--d,0s),transform .5s var(--ease) var(--d,0s);transform:scale(.86)}
-.slide.visible .plots i{opacity:1;transform:none}
+    .rv {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .72s var(--ease) var(--d, 0s), transform .72s var(--ease) var(--d, 0s)
+    }
 
-/* ===========================================
+    .slide.visible .rv {
+      opacity: 1;
+      transform: none
+    }
+
+    .rvx {
+      opacity: 0;
+      transform: translateX(-22px);
+      transition: opacity .72s var(--ease) var(--d, 0s), transform .72s var(--ease) var(--d, 0s)
+    }
+
+    .slide.visible .rvx {
+      opacity: 1;
+      transform: none
+    }
+
+    .plots i {
+      opacity: 0;
+      transition: opacity .5s ease var(--d, 0s), transform .5s var(--ease) var(--d, 0s);
+      transform: scale(.86)
+    }
+
+    .slide.visible .plots i {
+      opacity: 1;
+      transform: none
+    }
+
+    /* ===========================================
    9. EDIÇÃO EM LINHA (pressione E ou passe o mouse no canto superior esquerdo)
    =========================================== */
-.edit-hotzone{position:fixed;top:0;left:0;width:80px;height:80px;z-index:10000;cursor:pointer}
-.edit-toggle{position:fixed;top:16px;left:16px;z-index:10001;opacity:0;pointer-events:none;transition:opacity .3s ease;
-  background:var(--leaf);color:#06231C;border:none;width:48px;height:48px;font-size:20px;cursor:pointer}
-.edit-toggle.show,.edit-toggle.active{opacity:1;pointer-events:auto}
-.edit-toggle.active{background:var(--amber)}
-body.editing [contenteditable]{outline:1px dashed rgba(34,197,94,.6);outline-offset:4px}
-.edit-hint{position:fixed;top:16px;left:76px;z-index:10001;background:var(--deep);color:var(--cream);
-  font-family:var(--font-mono);font-size:13px;padding:10px 14px;display:none;border:1px solid var(--hair)}
-body.editing .edit-hint{display:block}
-</style>
+    .edit-hotzone {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 80px;
+      height: 80px;
+      z-index: 10000;
+      cursor: pointer
+    }
+
+    .edit-toggle {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 10001;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+      background: var(--leaf);
+      color: #06231C;
+      border: none;
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
+      cursor: pointer
+    }
+
+    .edit-toggle.show,
+    .edit-toggle.active {
+      opacity: 1;
+      pointer-events: auto
+    }
+
+    .edit-toggle.active {
+      background: var(--amber)
+    }
+
+    body.editing [contenteditable] {
+      outline: 1px dashed rgba(34, 197, 94, .6);
+      outline-offset: 4px
+    }
+
+    .edit-hint {
+      position: fixed;
+      top: 16px;
+      left: 76px;
+      z-index: 10001;
+      background: var(--deep);
+      color: var(--cream);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      padding: 10px 14px;
+      display: none;
+      border: 1px solid var(--hair)
+    }
+
+    body.editing .edit-hint {
+      display: block
+    }
+  </style>
 </head>
+
 <body>
-<div class="deck-viewport">
-<main class="deck-stage" id="deckStage">
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage">
 
-<!-- ======================= 01 · CAPA ======================= -->
-<section class="slide s-title active" data-block="">
-  <div class="grid2">
-    <div class="col-l">
-      <div class="eyebrow rv" style="--d:.08s">Estágio Supervisionado · UFLA 2026</div>
-      <h1 class="rv" style="--d:.2s">Desenvolvimento de <span class="hl">Aplicações Web</span> na Empresa Zeeway</h1>
-      <p class="deck rv" style="--d:.36s">Construção do <b>front-end</b> de uma plataforma de protocolos para uma empresa de pesquisa agrícola, substituindo planilhas por registro centralizado e <b>análise visual automatizada</b>.</p>
-      <div class="rail rv" style="--d:.54s">
-        <div><span>Autor</span><b>Lucas Henrique Lopes Costa</b></div>
-        <div><span>Orientador</span><b>Prof. Paulo Afonso Parreira Júnior</b></div>
-        <div><span>Curso</span><b>Sistemas de Informação</b></div>
-      </div>
-    </div>
-    <div class="col-r rv" style="--d:.3s">
-      <div class="plots" id="plots"></div>
-      <div class="plotcap"><span>Protocolos</span><span>Tratamentos × Repetições</span></div>
-    </div>
-  </div>
-</section>
+      <!-- ======================= 01 · CAPA ======================= -->
+      <section class="slide s-title active" data-block="">
+        <div class="grid2">
+          <div class="col-l">
+            <div class="eyebrow rv" style="--d:.08s">Estágio Supervisionado · UFLA 2026</div>
+            <h1 class="rv" style="--d:.2s">Desenvolvimento de <span class="hl">Aplicações Web</span> na Empresa Zeeway
+            </h1>
+            <p class="deck rv" style="--d:.36s">Construção do <b>front-end</b> de uma plataforma de protocolos para uma
+              empresa de pesquisa agrícola, substituindo planilhas por registro centralizado e <b>análise visual
+                automatizada</b>.</p>
+            <div class="rail rv" style="--d:.54s">
+              <div><span>Autor</span><b>Lucas Henrique Lopes Costa</b></div>
+              <div><span>Orientador</span><b>Prof. Paulo Afonso Parreira Júnior</b></div>
+              <div><span>Curso</span><b>Sistemas de Informação</b></div>
+            </div>
+          </div>
+          <div class="col-r rv" style="--d:.3s">
+            <div class="plots" id="plots"></div>
+            <div class="plotcap"><span>Protocolos</span><span>Tratamentos × Repetições</span></div>
+          </div>
+        </div>
+      </section>
 
-<!-- ======================= 02 · ROTEIRO ======================= -->
-<section class="slide" data-block="Roteiro">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">O caminho de hoje</div>
-    <h2 class="rv" style="--d:.14s">Roteiro da apresentação</h2>
-    <div class="cards c3 rv" style="--d:.26s;margin-top:auto">
-      <div class="card"><div class="n">01</div><h3>Introdução</h3><p>O problema, a empresa, o cliente e o recorte do meu trabalho.</p></div>
-      <div class="card"><div class="n">02</div><h3>Fundamentação Teórica</h3><p>Dados no agronegócio, Scrum e as tecnologias adotadas.</p></div>
-      <div class="card"><div class="n">03</div><h3>Metodologia</h3><p>Como o time trabalhou e como o front-end foi arquitetado.</p></div>
-    </div>
-    <div class="cards c2 rv" style="--d:.4s;margin-top:26px;margin-bottom:auto">
-      <div class="card lit"><div class="n">04</div><h3>Atividades Realizadas</h3><p><b>O foco desta apresentação:</b> os três módulos que construí, com as decisões técnicas e os desafios de cada um.</p></div>
-      <div class="card"><div class="n">05</div><h3>Considerações Finais</h3><p>Avaliação do produto, limitações, trabalhos futuros e impacto na formação.</p></div>
-    </div>
-  </div>
-</section>
+      <!-- ======================= 02 · ROTEIRO ======================= -->
+      <section class="slide" data-block="Roteiro">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">O caminho de hoje</div>
+          <h2 class="rv" style="--d:.14s">Roteiro da apresentação</h2>
+          <div class="cards c3 rv" style="--d:.26s;margin-top:auto">
+            <div class="card">
+              <div class="n">01</div>
+              <h3>Introdução</h3>
+              <p>O problema, a empresa e o recorte do trabalho.</p>
+            </div>
+            <div class="card">
+              <div class="n">02</div>
+              <h3>Fundamentação Teórica</h3>
+              <p>Dados no agronegócio, Scrum e a stack.</p>
+            </div>
+            <div class="card">
+              <div class="n">03</div>
+              <h3>Metodologia</h3>
+              <p>Como o time trabalhou e como arquitetei o front-end.</p>
+            </div>
+          </div>
+          <div class="cards c2 rv" style="--d:.4s;margin-top:26px;margin-bottom:auto">
+            <div class="card lit">
+              <div class="n">04</div>
+              <h3>Atividades Realizadas</h3>
+              <p><b>O foco desta apresentação:</b> os três módulos que construí.</p>
+            </div>
+            <div class="card">
+              <div class="n">05</div>
+              <h3>Considerações Finais</h3>
+              <p>Avaliação, limitações e impacto na formação.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<!-- ======================= 03 · DIVISOR: INTRODUÇÃO ======================= -->
-<section class="slide paper s-div" data-block="01 · Introdução" data-theme="paper">
-  <div class="stripe"></div>
-  <div class="pad">
-    <div class="num rv" style="--d:.06s">01</div>
-    <h2 class="rv" style="--d:.18s">Introdução</h2>
-    <p class="deck rv" style="--d:.3s">Onde o estágio aconteceu, qual problema a plataforma resolve e o que exatamente foi minha responsabilidade.</p>
-  </div>
-</section>
+      <!-- ======================= 03 · DIVISOR: INTRODUÇÃO ======================= -->
+      <section class="slide paper s-div" data-block="01 · Introdução" data-theme="paper">
+        <div class="stripe"></div>
+        <div class="pad">
+          <div class="num rv" style="--d:.06s">01</div>
+          <h2 class="rv" style="--d:.18s">Introdução</h2>
+          <p class="deck rv" style="--d:.3s">Onde o estágio aconteceu, qual problema a plataforma resolve e o que
+            exatamente foi minha responsabilidade.</p>
+        </div>
+      </section>
 
-<!-- ======================= 04 · O PROBLEMA ======================= -->
-<section class="slide" data-block="01 · Introdução">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Contextualização</div>
-    <h2 class="rv" style="--d:.14s">A pesquisa agrícola gera muito dado.<br>E esse dado vivia em <span class="hl">planilhas soltas</span>.</h2>
-    <p class="deck rv" style="--d:.26s">Instituições de análise de solos e sementes coletam composição do solo, tratamentos aplicados, condições de safra e produtividade ao longo de anos. Registrar isso em arquivos avulsos cobra um preço.</p>
-    <div class="cards c3 rv" style="--d:.4s">
-      <div class="card"><div class="n">CONSEQUÊNCIA 01</div><h3>Rastreabilidade frágil</h3><p>Sem um registro único, é difícil saber quem alterou o quê e quando.</p></div>
-      <div class="card"><div class="n">CONSEQUÊNCIA 02</div><h3>Regras não aplicadas</h3><p>A planilha aceita qualquer valor. As regras do domínio ficam na cabeça das pessoas.</p></div>
-      <div class="card"><div class="n">CONSEQUÊNCIA 03</div><h3>Análise manual e lenta</h3><p>Cada gráfico entregue ao cliente final precisava ser montado à mão.</p></div>
-    </div>
-  </div>
-</section>
+      <!-- ======================= 04 · O PROBLEMA ======================= -->
+      <section class="slide" data-block="01 · Introdução">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Contextualização</div>
+          <h2 class="rv" style="--d:.14s">A pesquisa agrícola gera muito dado.<br>E esse dado vivia em <span
+              class="hl">planilhas soltas</span>.</h2>
+          <p class="deck rv" style="--d:.26s">Composição do solo, tratamentos, condições de safra e produtividade, ao
+            longo de anos. Registrar isso em arquivos avulsos cobra um preço.</p>
+          <div class="cards c3 rv" style="--d:.4s">
+            <div class="card">
+              <div class="n">CONSEQUÊNCIA 01</div>
+              <h3>Rastreabilidade frágil</h3>
+              <p>Sem registro único, ninguém sabe quem alterou o quê.</p>
+            </div>
+            <div class="card">
+              <div class="n">CONSEQUÊNCIA 02</div>
+              <h3>Regras não aplicadas</h3>
+              <p>A planilha aceita qualquer valor.</p>
+            </div>
+            <div class="card">
+              <div class="n">CONSEQUÊNCIA 03</div>
+              <h3>Análise manual e lenta</h3>
+              <p>Todo gráfico do relatório era montado à mão.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<!-- ======================= 05 · A EMPRESA ======================= -->
-<section class="slide" data-block="01 · Introdução">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Onde o estágio aconteceu</div>
-    <h2 class="rv" style="--d:.14s">Zeeway</h2>
-    <p class="deck rv" style="--d:.24s">Empresa lavrense de tecnologia, fundada no ecossistema de inovação da <b>UFLA</b>, que desenvolve software e entrega soluções personalizadas para seus clientes.</p>
-    <div class="stats rv" style="--d:.36s;margin-top:64px">
-      <div class="stat"><div class="v">15 a 30</div><div class="l">colaboradores diretos</div></div>
-      <div class="stat"><div class="v">≈ 40</div><div class="l">clientes diretos</div></div>
-      <div class="stat"><div class="v">≈ 500</div><div class="l">clientes indiretos</div></div>
-    </div>
-    <div class="cards c2 rv" style="--d:.5s;margin-top:auto;margin-bottom:0">
-      <div class="card lit"><div class="n">O CLIENTE DO PROJETO</div><h3>Empresa de pesquisa agrícola de Lavras (MG)</h3><p>Atua no agronegócio, especializada em <b>análises de solos e sementes</b>.</p></div>
-      <div class="card"><div class="n">O PEDIDO</div><h3>Uma plataforma própria de protocolos</h3><p>Registro centralizado de safra, componentes do solo e produtividade, com acesso distribuído aos colaboradores.</p></div>
-    </div>
-  </div>
-</section>
+      <!-- ======================= 05 · A EMPRESA ======================= -->
+      <section class="slide" data-block="01 · Introdução">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Onde o estágio aconteceu</div>
+          <h2 class="rv" style="--d:.14s">Zeeway</h2>
+          <p class="deck rv" style="--d:.24s">Empresa lavrense de tecnologia, fundada no ecossistema de inovação da
+            <b>UFLA</b>.
+          </p>
+          <div class="stats rv" style="--d:.36s;margin-top:64px">
+            <div class="stat">
+              <div class="v">15 a 30</div>
+              <div class="l">colaboradores diretos</div>
+            </div>
+            <div class="stat">
+              <div class="v">≈ 40</div>
+              <div class="l">clientes diretos</div>
+            </div>
+            <div class="stat">
+              <div class="v">≈ 500</div>
+              <div class="l">clientes indiretos</div>
+            </div>
+          </div>
+          <div class="cards c2 rv" style="--d:.5s;margin-top:auto;margin-bottom:0">
+            <div class="card lit">
+              <div class="n">O CLIENTE DO PROJETO</div>
+              <h3>Empresa de pesquisa agrícola de Lavras (MG)</h3>
+              <p>Especializada em <b>análises de solos e sementes</b>.</p>
+            </div>
+            <div class="card">
+              <div class="n">O PEDIDO</div>
+              <h3>Uma plataforma própria de protocolos</h3>
+              <p>Registro centralizado, com acesso por perfil.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<!-- ======================= 06 · O QUE É UM PROTOCOLO ======================= -->
-<section class="slide" data-block="01 · Introdução">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">O objeto central do sistema</div>
-    <h2 class="rv" style="--d:.14s">O que é um <span class="hl">protocolo</span></h2>
-    <p class="deck rv" style="--d:.24s">É o registro completo de um experimento agrícola. Tudo na plataforma orbita em torno dele.</p>
-    <div class="cards c4 rv" style="--d:.38s;margin-top:auto;margin-bottom:auto">
-      <div class="card"><div class="n">IDENTIFICAÇÃO</div><h3>Código, tipo e cliente</h3><p>Tipo Ret ou Comercial, classes do experimento e status atual.</p></div>
-      <div class="card"><div class="n">DELINEAMENTO</div><h3>Tratamentos e repetições</h3><p>Quantos tratamentos serão comparados e quantas vezes cada um se repete no campo.</p></div>
-      <div class="card"><div class="n">CAMPO</div><h3>Local, solo e manejo</h3><p>Cultura, variedade, datas de plantio e colheita, adubação, espaçamento e parcela.</p></div>
-      <div class="card"><div class="n">RESULTADO</div><h3>Avaliações por momento</h3><p>Medições coletadas ao longo da safra, com fotografias e campos calculados.</p></div>
-    </div>
-  </div>
-</section>
+      <!-- ======================= 06 · O QUE É UM PROTOCOLO ======================= -->
+      <section class="slide" data-block="01 · Introdução">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">O objeto central do sistema</div>
+          <h2 class="rv" style="--d:.14s">O que é um <span class="hl">protocolo</span></h2>
+          <p class="deck rv" style="--d:.24s">O registro completo de um experimento agrícola.</p>
+          <div class="cards c4 rv" style="--d:.38s;margin-top:auto;margin-bottom:auto">
+            <div class="card">
+              <div class="n">IDENTIFICAÇÃO</div>
+              <h3>Código, tipo e cliente</h3>
+              <p>Tipo, classes e status.</p>
+            </div>
+            <div class="card">
+              <div class="n">DELINEAMENTO</div>
+              <h3>Tratamentos e repetições</h3>
+              <p>Quantos tratamentos comparar e quantas repetições de cada.</p>
+            </div>
+            <div class="card">
+              <div class="n">CAMPO</div>
+              <h3>Local, solo e manejo</h3>
+              <p>Cultura, datas, adubação, espaçamento e parcela.</p>
+            </div>
+            <div class="card">
+              <div class="n">RESULTADO</div>
+              <h3>Avaliações por momento</h3>
+              <p>Medições ao longo da safra, com fotos e fórmulas.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<!-- ======================= 07 · OBJETIVOS ======================= -->
-<section class="slide" data-block="01 · Introdução">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Objetivos</div>
-    <h2 class="rv" style="--d:.14s">O que este trabalho se propôs a fazer</h2>
-    <div class="split half" style="margin-top:56px;align-items:stretch">
-      <div class="rv" style="--d:.28s">
-        <div class="card lit obj" style="height:100%">
-          <div class="objhead"><div class="n">OBJETIVO DO ESTÁGIO</div><div class="objnum">01</div></div>
-          <h3>Aplicar a graduação em ambiente corporativo real</h3>
-          <p style="font-size:25px">Vivenciar a rotina de desenvolvimento de software em equipe e os desafios da engenharia de requisitos fora da sala de aula.</p>
-          <div class="objgrid"><i></i><i class="on"></i><i></i><i class="mid"></i><i></i><i class="pap"></i><i></i><i></i><i class="mid"></i><i></i><i class="on"></i><i></i><i></i><i></i><i class="on"></i><i></i></div>
-          <div class="objrule"></div>
-          <ul class="bul tight">
-            <li>Equipe estruturada, com papéis e cerimônias definidos</li>
-            <li>Cliente externo e regras de negócio que ninguém tinha escrito</li>
-            <li>Entregas incrementais validadas a cada Sprint</li>
+      <!-- ======================= 07 · OBJETIVOS ======================= -->
+      <section class="slide" data-block="01 · Introdução">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Objetivos</div>
+          <h2 class="rv" style="--d:.14s">O que este trabalho se propôs a fazer</h2>
+          <div class="split half" style="margin-top:40px;align-items:stretch">
+            <div class="rv" style="--d:.28s">
+              <div class="card lit obj" style="height:100%">
+                <div class="objhead">
+                  <div class="n">OBJETIVO DO ESTÁGIO</div>
+                  <div class="objnum">01</div>
+                </div>
+                <h3>Aplicar a graduação em ambiente corporativo real</h3>
+                <p style="font-size:29px">A rotina de desenvolvimento em equipe, fora da sala de aula.</p>
+                <div class="objgrid"><i></i><i class="on"></i><i></i><i class="mid"></i><i></i><i
+                    class="pap"></i><i></i><i></i><i class="mid"></i><i></i><i class="on"></i><i></i><i></i><i></i><i
+                    class="on"></i><i></i></div>
+                <div class="objrule"></div>
+                <ul class="bul tight">
+                  <li>Equipe estruturada</li>
+                  <li>Cliente externo e regras não escritas</li>
+                  <li>Entregas validadas a cada Sprint</li>
+                </ul>
+              </div>
+            </div>
+            <div class="rv" style="--d:.42s">
+              <div class="card obj" style="height:100%">
+                <div class="objhead">
+                  <div class="n">OBJETIVO DO RELATÓRIO</div>
+                  <div class="objnum">02</div>
+                </div>
+                <h3>Documentar de forma estruturada o que foi construído</h3>
+                <p style="font-size:29px">Registrar as decisões de projeto e a justificativa de cada uma.</p>
+                <div class="objgrid"><i class="pap"></i><i></i><i></i><i class="mid"></i><i></i><i></i><i
+                    class="on"></i><i></i><i></i><i class="on"></i><i></i><i></i><i class="mid"></i><i></i><i></i><i
+                    class="pap"></i></div>
+                <div class="objrule"></div>
+                <ul class="bul tight">
+                  <li>Arquitetura e tecnologias</li>
+                  <li>Metodologia e coordenação entre equipes</li>
+                  <li>Desafios técnicos e impacto na formação</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 08 · RECORTE ======================= -->
+      <section class="slide" data-block="01 · Introdução">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Delimitação do trabalho</div>
+          <h2 class="rv" style="--d:.14s">Minha responsabilidade foi o <span class="hl">front-end</span></h2>
+          <p class="deck rv" style="--d:.24s">O back-end ficou a cargo de outra equipe da Zeeway.</p>
+          <div class="cards c2 rv" style="--d:.38s;margin-top:auto;margin-bottom:auto">
+            <div class="card lit">
+              <div class="n">SOB MINHA RESPONSABILIDADE</div>
+              <h3>Camada de interface e experiência do usuário</h3>
+              <p style="font-size:28px">Telas, formulários, tabelas, estado, consumo da API e geração de gráficos.</p>
+            </div>
+            <div class="card dim">
+              <div class="n">OUTRA EQUIPE DA ZEEWAY</div>
+              <h3>API REST, banco de dados e regras no servidor</h3>
+              <p style="font-size:28px">Persistência, regras no servidor e emissão dos tokens.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 09 · DIVISOR: FUNDAMENTAÇÃO ======================= -->
+      <section class="slide paper s-div" data-block="02 · Fundamentação" data-theme="paper">
+        <div class="stripe"></div>
+        <div class="pad">
+          <div class="num rv" style="--d:.06s">02</div>
+          <h2 class="rv" style="--d:.18s">Fundamentação Teórica</h2>
+          <p class="deck rv" style="--d:.3s">Os conceitos e as tecnologias que sustentaram as decisões tomadas no
+            projeto.</p>
+        </div>
+      </section>
+
+      <!-- ======================= 10 · AGRICULTURA 4.0 ======================= -->
+      <section class="slide" data-block="02 · Fundamentação">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Gestão de dados no agronegócio</div>
+          <h2 class="rv" style="--d:.14s">Agricultura 4.0: o dado como insumo de decisão</h2>
+          <p class="deck rv" style="--d:.24s">Sensores, IoT, nuvem e análise de dados passam a orientar a decisão no
+            campo.</p>
+          <div class="split half rv" style="--d:.4s;margin-top:44px">
+            <div class="card">
+              <div class="n">ANTES</div>
+              <h3>Planilha eletrônica</h3>
+              <ul class="bul tight" style="margin-top:22px">
+                <li>Um arquivo por pessoa</li>
+                <li>Validação depende das pessoas</li>
+                <li>Gráfico manual a cada relatório</li>
+              </ul>
+            </div>
+            <div class="card lit">
+              <div class="n">DEPOIS</div>
+              <h3>Plataforma web própria</h3>
+              <ul class="bul tight" style="margin-top:22px">
+                <li>Registro único, por perfil</li>
+                <li>Regras aplicadas pelo sistema</li>
+                <li>Gráficos gerados do próprio dado</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 11 · SCRUM ======================= -->
+      <section class="slide" data-block="02 · Fundamentação">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Metodologias ágeis</div>
+          <h2 class="rv" style="--d:.14s">Scrum: iterativo e incremental</h2>
+          <p class="deck rv" style="--d:.24s">A cada <b>Sprint</b>, de duração fixa, uma nova versão é entregue.</p>
+          <div class="cards c3 rv" style="--d:.36s;margin-top:56px;margin-bottom:26px">
+            <div class="card">
+              <div class="n">PAPEL</div>
+              <h3>Product Owner</h3>
+              <p>Prioriza o backlog e define o escopo da Sprint.</p>
+            </div>
+            <div class="card">
+              <div class="n">PAPEL</div>
+              <h3>Scrum Master</h3>
+              <p>Garante o processo e remove impedimentos.</p>
+            </div>
+            <div class="card">
+              <div class="n">PAPEL</div>
+              <h3>Time de desenvolvimento</h3>
+              <p>Executa e entrega o incremento.</p>
+            </div>
+          </div>
+          <div class="pipe rv" style="--d:.5s">
+            <div class="st">
+              <div class="n">CERIMÔNIA</div>
+              <h4>Planning</h4>
+              <p>Escopo da Sprint</p>
+            </div>
+            <div class="st">
+              <div class="n">CERIMÔNIA</div>
+              <h4>Daily</h4>
+              <p>Progresso e impedimentos</p>
+            </div>
+            <div class="st">
+              <div class="n">EXECUÇÃO</div>
+              <h4>Sprint</h4>
+              <p>Duração fixa</p>
+            </div>
+            <div class="st">
+              <div class="n">CERIMÔNIA</div>
+              <h4>Review</h4>
+              <p>Incremento ao cliente</p>
+            </div>
+            <div class="st">
+              <div class="n">CERIMÔNIA</div>
+              <h4>Retrospective</h4>
+              <p>Melhoria do processo</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 12 · A STACK ======================= -->
+      <section class="slide" data-block="02 · Fundamentação">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Tecnologias adotadas</div>
+          <h2 class="rv" style="--d:.14s">A stack, organizada por responsabilidade</h2>
+          <p class="deck rv" style="--d:.22s;max-width:1560px">Toda tela do sistema faz quatro coisas: <b>desenha</b> o
+            que aparece, <b>lembra</b> o que já aconteceu, <b>busca</b> os dados no servidor e precisa ser
+            <b>montada</b>. Cada coluna resolve uma delas.
+          </p>
+          <div class="cards c4 rv" style="--d:.34s;margin-top:44px;margin-bottom:24px">
+            <div class="card">
+              <div class="n">APRESENTAÇÃO &middot; DESENHA</div>
+              <h3>React + TypeScript</h3>
+              <p>Componentização e tipagem. Material UI, TanStack Table e ApexCharts.</p>
+            </div>
+            <div class="card">
+              <div class="n">ESTADO &middot; LEMBRA</div>
+              <h3>Zustand + Immer</h3>
+              <p>Estado global e sessão persistida. Formik e Yup nos formulários.</p>
+            </div>
+            <div class="card">
+              <div class="n">DADOS &middot; BUSCA</div>
+              <h3>Axios + React Query</h3>
+              <p>Token em toda chamada. Cache que evita requisição repetida.</p>
+            </div>
+            <div class="card">
+              <div class="n">BUILD &middot; MONTA</div>
+              <h3>Vite</h3>
+              <p>Build e servidor de desenvolvimento com recarga instantânea.</p>
+            </div>
+          </div>
+          <div class="rv" style="--d:.46s">
+            <div class="code-title">Bibliotecas de apoio</div>
+            <div class="tabs">
+              <span>jwt-decode · token</span>
+              <span>mathjs · fórmulas</span>
+              <span>JSZip · fotos em .zip</span>
+              <span>use-react-screenshot · PNG</span>
+              <span>qrcode · campo</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 13 · DIVISOR: METODOLOGIA ======================= -->
+      <section class="slide paper s-div" data-block="03 · Metodologia" data-theme="paper">
+        <div class="stripe"></div>
+        <div class="pad">
+          <div class="num rv" style="--d:.06s">03</div>
+          <h2 class="rv" style="--d:.18s">Metodologia e Processo</h2>
+          <p class="deck rv" style="--d:.3s">Como o time trabalhou, como os requisitos foram levantados e como o
+            front-end foi arquitetado.</p>
+        </div>
+      </section>
+
+      <!-- ======================= 14 · SCRUM NA PRÁTICA ======================= -->
+      <section class="slide" data-block="03 · Metodologia">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Scrum aplicado ao projeto</div>
+          <h2 class="rv" style="--d:.14s">Sprints de <span class="hl">duas semanas</span></h2>
+          <div class="split half" style="margin-top:52px">
+            <div class="rvx" style="--d:.26s">
+              <ul class="bul">
+                <li><b>Planning:</b> o backlog priorizado vira Sprint Backlog</li>
+                <li>Itens acompanhados no <b>Azure DevOps Boards</b></li>
+                <li><b>Dailies:</b> progresso e impedimentos</li>
+                <li><b>Review</b> com o cliente, <b>retrospective</b> com o time</li>
+              </ul>
+            </div>
+            <div class="rv" style="--d:.42s">
+              <div class="code-title">Quadro de tarefas</div>
+              <div class="tbl">
+                <div class="r h" style="grid-template-columns:1fr 1fr 1fr 1fr">
+                  <div>A fazer</div>
+                  <div>Em andamento</div>
+                  <div>Em revisão</div>
+                  <div>Concluído</div>
+                </div>
+                <div class="r" style="grid-template-columns:1fr 1fr 1fr 1fr">
+                  <div class="tag">#412</div>
+                  <div class="tag">#398</div>
+                  <div class="tag">#377</div>
+                  <div class="tag">#351</div>
+                </div>
+                <div class="r" style="grid-template-columns:1fr 1fr 1fr 1fr">
+                  <div class="tag">#415</div>
+                  <div class="tag">#402</div>
+                  <div>&nbsp;</div>
+                  <div class="tag">#358</div>
+                </div>
+                <div class="r" style="grid-template-columns:1fr 1fr 1fr 1fr">
+                  <div class="tag">#419</div>
+                  <div>&nbsp;</div>
+                  <div>&nbsp;</div>
+                  <div class="tag">#366</div>
+                </div>
+              </div>
+              <p class="body" style="margin-top:28px;font-size:28px"><b>Entregas incrementais</b> e validação contínua,
+                com menos retrabalho.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 15 · REQUISITOS ======================= -->
+      <section class="slide" data-block="03 · Metodologia">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Levantamento de requisitos</div>
+          <h2 class="rv" style="--d:.14s">As regras estavam na prática, não no papel</h2>
+          <p class="deck rv" style="--d:.24s">Boa parte das regras era específica do domínio e vivia na rotina da
+            equipe, não em documento.</p>
+          <div class="rv" style="--d:.38s;margin-top:auto">
+            <div class="combo">
+              <div class="chip">Tipo do protocolo<span>Ret ou Comercial</span></div>
+              <div class="x">&times;</div>
+              <div class="chip">Cultura selecionada<span>definida no protocolo</span></div>
+              <div class="x">&times;</div>
+              <div class="chip">Classe do experimento<span>uma ou mais classes</span></div>
+            </div>
+            <div class="combo-arrow">&#9660;</div>
+            <div class="combo-out">Obrigatoriedade e formato de cada campo do formulário</div>
+          </div>
+          <ul class="bul tight rv" style="--d:.54s;margin-top:40px;margin-bottom:auto">
+            <li>Nada disso estava registrado</li>
+            <li>Cada variação era esclarecida com o cliente</li>
+            <li>A regra acordada virava esquema de validação</li>
           </ul>
         </div>
-      </div>
-      <div class="rv" style="--d:.42s">
-        <div class="card obj" style="height:100%">
-          <div class="objhead"><div class="n">OBJETIVO DO RELATÓRIO</div><div class="objnum">02</div></div>
-          <h3>Documentar de forma estruturada o que foi construído</h3>
-          <p style="font-size:25px">Registrar as decisões de projeto com a justificativa técnica de cada uma e refletir criticamente sobre o processo.</p>
-          <div class="objgrid"><i class="pap"></i><i></i><i></i><i class="mid"></i><i></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i></i><i class="mid"></i><i></i><i></i><i class="pap"></i></div>
-          <div class="objrule"></div>
-          <ul class="bul tight">
-            <li>A arquitetura front-end adotada e as tecnologias</li>
-            <li>A metodologia de trabalho e a coordenação entre as equipes</li>
-            <li>Os desafios técnicos e o impacto na formação</li>
-          </ul>
+      </section>
+
+      <!-- ======================= 16 · ARQUITETURA ======================= -->
+      <section class="slide" data-block="03 · Metodologia">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Arquitetura do front-end</div>
+          <h2 class="rv" style="--d:.14s">Três camadas, três responsabilidades</h2>
+          <div style="margin-top:52px">
+            <div class="layer rv" style="--d:.26s">
+              <div class="lb">Apresentação</div>
+              <div class="lt">React, Material UI, TanStack Table, ApexCharts</div>
+            </div>
+            <div class="arrow rv" style="--d:.32s">▼</div>
+            <div class="layer rv" style="--d:.36s">
+              <div class="lb">Estado</div>
+              <div class="lt">Zustand (estado global) e Formik + Yup (formulários)</div>
+            </div>
+            <div class="arrow rv" style="--d:.42s">▼</div>
+            <div class="layer rv" style="--d:.46s">
+              <div class="lb">Acesso a dados</div>
+              <div class="lt">Serviços sobre Axios, com cache do React Query</div>
+            </div>
+            <div class="arrow rv" style="--d:.52s">▲▼</div>
+            <div class="layer api rv" style="--d:.56s">
+              <div class="lb">API REST</div>
+              <div class="lt">Outra equipe da Zeeway</div>
+            </div>
+          </div>
+          <p class="body rv" style="--d:.66s;margin-top:auto;font-size:29px">Cada camada tem um motivo único para mudar.
+          </p>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
-<!-- ======================= 08 · RECORTE ======================= -->
-<section class="slide" data-block="01 · Introdução">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Delimitação do trabalho</div>
-    <h2 class="rv" style="--d:.14s">Minha responsabilidade foi o <span class="hl">front-end</span></h2>
-    <p class="deck rv" style="--d:.24s">O back-end da plataforma ficou a cargo de outra equipe da Zeeway, dedicada ao servidor, à modelagem do banco e às regras de negócio do lado do servidor.</p>
-    <div class="cards c2 rv" style="--d:.38s;margin-top:auto;margin-bottom:auto">
-      <div class="card lit">
-        <div class="n">SOB MINHA RESPONSABILIDADE</div>
-        <h3>Camada de interface e experiência do usuário</h3>
-        <p style="font-size:24px">Telas, formulários, tabelas, estado da aplicação, consumo da API, autenticação no cliente, controle de acesso por rota e toda a geração de gráficos.</p>
-      </div>
-      <div class="card dim">
-        <div class="n">OUTRA EQUIPE DA ZEEWAY</div>
-        <h3>API REST, banco de dados e regras no servidor</h3>
-        <p style="font-size:24px">Persistência, autenticação no servidor, consolidação dos dados dos dashboards e emissão dos tokens JWT.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 09 · DIVISOR: FUNDAMENTAÇÃO ======================= -->
-<section class="slide paper s-div" data-block="02 · Fundamentação" data-theme="paper">
-  <div class="stripe"></div>
-  <div class="pad">
-    <div class="num rv" style="--d:.06s">02</div>
-    <h2 class="rv" style="--d:.18s">Fundamentação Teórica</h2>
-    <p class="deck rv" style="--d:.3s">Os conceitos e as tecnologias que sustentaram as decisões tomadas no projeto.</p>
-  </div>
-</section>
-
-<!-- ======================= 10 · AGRICULTURA 4.0 ======================= -->
-<section class="slide" data-block="02 · Fundamentação">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Gestão de dados no agronegócio</div>
-    <h2 class="rv" style="--d:.14s">Agricultura 4.0: o dado como insumo de decisão</h2>
-    <p class="deck rv" style="--d:.24s">Sensores, IoT, computação em nuvem e análise de dados passam a orientar a decisão no campo. Plataformas web que centralizam registro e análise são a evolução natural do uso descentralizado de planilhas.</p>
-    <div class="split half rv" style="--d:.4s;margin-top:44px">
-      <div class="card">
-        <div class="n">ANTES</div><h3>Planilha eletrônica</h3>
-        <ul class="bul tight" style="margin-top:22px">
-          <li>Arquivo por pessoa, versão por e-mail</li>
-          <li>Validação depende de disciplina humana</li>
-          <li>Gráfico montado manualmente a cada relatório</li>
-        </ul>
-      </div>
-      <div class="card lit">
-        <div class="n">DEPOIS</div><h3>Plataforma web própria</h3>
-        <ul class="bul tight" style="margin-top:22px">
-          <li>Registro único, acessível por perfil</li>
-          <li>Regras do domínio aplicadas pelo sistema</li>
-          <li>Gráficos gerados automaticamente a partir do dado</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 11 · SCRUM ======================= -->
-<section class="slide" data-block="02 · Fundamentação">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Metodologias ágeis</div>
-    <h2 class="rv" style="--d:.14s">Scrum: iterativo e incremental</h2>
-    <p class="deck rv" style="--d:.24s">A cada <b>Sprint</b>, de duração fixa, uma nova versão do sistema com novas funcionalidades é entregue.</p>
-    <div class="cards c3 rv" style="--d:.36s;margin-top:56px;margin-bottom:26px">
-      <div class="card"><div class="n">PAPEL</div><h3>Product Owner</h3><p>Prioriza o Product Backlog e define o que entra em cada Sprint.</p></div>
-      <div class="card"><div class="n">PAPEL</div><h3>Scrum Master</h3><p>Garante a aplicação correta do framework e remove impedimentos.</p></div>
-      <div class="card"><div class="n">PAPEL</div><h3>Time de desenvolvimento</h3><p>Executa as tarefas planejadas e entrega o incremento.</p></div>
-    </div>
-    <div class="pipe rv" style="--d:.5s">
-      <div class="st"><div class="n">CERIMÔNIA</div><h4>Planning</h4><p>Escopo da Sprint</p></div>
-      <div class="st"><div class="n">CERIMÔNIA</div><h4>Daily</h4><p>Progresso e impedimentos</p></div>
-      <div class="st"><div class="n">EXECUÇÃO</div><h4>Sprint</h4><p>Duração fixa</p></div>
-      <div class="st"><div class="n">CERIMÔNIA</div><h4>Review</h4><p>Incremento ao cliente</p></div>
-      <div class="st"><div class="n">CERIMÔNIA</div><h4>Retrospective</h4><p>Melhoria do processo</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 12 · A STACK ======================= -->
-<section class="slide" data-block="02 · Fundamentação">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Tecnologias adotadas</div>
-    <h2 class="rv" style="--d:.14s">A stack, organizada por responsabilidade</h2>
-    <p class="deck rv" style="--d:.22s;max-width:1560px">Toda tela do sistema faz quatro coisas: <b>desenha</b> o que aparece, <b>lembra</b> o que já aconteceu, <b>busca</b> os dados no servidor e precisa ser <b>montada</b>. Cada coluna resolve uma delas.</p>
-    <div class="cards c4 rv" style="--d:.34s;margin-top:44px;margin-bottom:24px">
-      <div class="card"><div class="n">APRESENTAÇÃO &middot; DESENHA</div><h3>React + TypeScript</h3><p>Componentização e tipagem estática. Material UI com tema próprio do cliente, TanStack Table para tabelas e ApexCharts para gráficos.</p></div>
-      <div class="card"><div class="n">ESTADO &middot; LEMBRA</div><h3>Zustand + Immer</h3><p>Estado global leve, com middleware de persistência para manter a sessão. Formik e Yup para o estado e a validação dos formulários.</p></div>
-      <div class="card"><div class="n">DADOS &middot; BUSCA</div><h3>Axios + React Query</h3><p>Cliente HTTP com injeção de token e camada de cache e sincronização que evita requisições desnecessárias.</p></div>
-      <div class="card"><div class="n">BUILD &middot; MONTA</div><h3>Vite</h3><p>Servidor de desenvolvimento com Hot Module Replacement, refletindo alterações no navegador instantaneamente.</p></div>
-    </div>
-    <div class="rv" style="--d:.46s">
-      <div class="code-title">Bibliotecas de apoio, cada uma resolvendo um problema específico</div>
-      <div class="tabs">
-        <span>jwt-decode · leitura do token</span>
-        <span>mathjs · campos calculados por fórmula</span>
-        <span>JSZip · fotos de campo em arquivo único</span>
-        <span>use-react-screenshot · exportação em PNG</span>
-        <span>qrcode · identificação em campo</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 13 · DIVISOR: METODOLOGIA ======================= -->
-<section class="slide paper s-div" data-block="03 · Metodologia" data-theme="paper">
-  <div class="stripe"></div>
-  <div class="pad">
-    <div class="num rv" style="--d:.06s">03</div>
-    <h2 class="rv" style="--d:.18s">Metodologia e Processo</h2>
-    <p class="deck rv" style="--d:.3s">Como o time trabalhou, como os requisitos foram levantados e como o front-end foi arquitetado.</p>
-  </div>
-</section>
-
-<!-- ======================= 14 · SCRUM NA PRÁTICA ======================= -->
-<section class="slide" data-block="03 · Metodologia">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Scrum aplicado ao projeto</div>
-    <h2 class="rv" style="--d:.14s">Sprints de <span class="hl">duas semanas</span></h2>
-    <div class="split half" style="margin-top:52px">
-      <div class="rvx" style="--d:.26s">
-        <ul class="bul">
-          <li>Na <b>planning</b>, as tarefas priorizadas do Product Backlog eram detalhadas no Sprint Backlog</li>
-          <li>Cada item tinha identificador, estado, título, área de produto e marcadores no <b>Azure DevOps Boards</b></li>
-          <li>Nas <b>dailies</b>, cada um relatava progresso, plano do dia e impedimentos</li>
-          <li>Na <b>review</b>, o incremento era apresentado ao cliente. Na <b>retrospective</b>, o time revia o processo</li>
-        </ul>
-      </div>
-      <div class="rv" style="--d:.42s">
-        <div class="code-title">Quadro de tarefas</div>
-        <div class="tbl">
-          <div class="r h" style="grid-template-columns:1fr 1fr 1fr 1fr"><div>A fazer</div><div>Em andamento</div><div>Em revisão</div><div>Concluído</div></div>
-          <div class="r" style="grid-template-columns:1fr 1fr 1fr 1fr"><div class="tag">#412</div><div class="tag">#398</div><div class="tag">#377</div><div class="tag">#351</div></div>
-          <div class="r" style="grid-template-columns:1fr 1fr 1fr 1fr"><div class="tag">#415</div><div class="tag">#402</div><div>&nbsp;</div><div class="tag">#358</div></div>
-          <div class="r" style="grid-template-columns:1fr 1fr 1fr 1fr"><div class="tag">#419</div><div>&nbsp;</div><div>&nbsp;</div><div class="tag">#366</div></div>
-        </div>
-        <p class="body" style="margin-top:28px;font-size:24px">O fluxo permitiu <b>entregas incrementais</b> e validação contínua das funcionalidades, reduzindo o risco de retrabalho.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 15 · REQUISITOS ======================= -->
-<section class="slide" data-block="03 · Metodologia">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Levantamento de requisitos</div>
-    <h2 class="rv" style="--d:.14s">As regras estavam na prática, não no papel</h2>
-    <p class="deck rv" style="--d:.24s">Como o cliente atua em pesquisa agrícola, boa parte das regras era específica do domínio e vivia na rotina de trabalho da equipe. Esclarecer o comportamento esperado exigiu reuniões frequentes.</p>
-    <div class="rv" style="--d:.38s;margin-top:auto">
-      <div class="combo">
-        <div class="chip">Tipo do protocolo<span>Ret ou Comercial</span></div>
-        <div class="x">&times;</div>
-        <div class="chip">Cultura selecionada<span>definida no protocolo</span></div>
-        <div class="x">&times;</div>
-        <div class="chip">Classe do experimento<span>uma ou mais classes</span></div>
-      </div>
-      <div class="combo-arrow">&#9660;</div>
-      <div class="combo-out">Obrigatoriedade e formato de cada campo do formulário</div>
-    </div>
-    <ul class="bul tight rv" style="--d:.54s;margin-top:40px;margin-bottom:auto">
-      <li>Nenhuma dessas combinações estava registrada em documento</li>
-      <li>Cada variação precisava ser esclarecida diretamente com a equipe do cliente</li>
-      <li>A regra acordada virava esquema de validação, refinado a cada <b>Sprint</b></li>
-    </ul>
-  </div>
-</section>
-
-<!-- ======================= 16 · ARQUITETURA ======================= -->
-<section class="slide" data-block="03 · Metodologia">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Arquitetura do front-end</div>
-    <h2 class="rv" style="--d:.14s">Três camadas, três responsabilidades</h2>
-    <div style="margin-top:52px">
-      <div class="layer rv" style="--d:.26s"><div class="lb">Apresentação</div><div class="lt">Componentes React, Material UI, TanStack Table e ApexCharts</div></div>
-      <div class="arrow rv" style="--d:.32s">▼</div>
-      <div class="layer rv" style="--d:.36s"><div class="lb">Estado</div><div class="lt">Zustand (estado global) e Formik + Yup (formulários)</div></div>
-      <div class="arrow rv" style="--d:.42s">▼</div>
-      <div class="layer rv" style="--d:.46s"><div class="lb">Acesso a dados</div><div class="lt">Camada de serviços sobre o Axios (injeção de token e refresh token) e React Query (cache e sincronização)</div></div>
-      <div class="arrow rv" style="--d:.52s">▲▼</div>
-      <div class="layer api rv" style="--d:.56s"><div class="lb">API REST</div><div class="lt">Back-end, desenvolvido por outra equipe da Zeeway</div></div>
-    </div>
-    <p class="body rv" style="--d:.66s;margin-top:auto;font-size:25px">A separação acomodou o volume de telas e a complexidade do domínio: cada camada tem um motivo único para mudar.</p>
-  </div>
-</section>
-
-<!-- ======================= 17 · ESTRUTURA DE DIRETÓRIOS ======================= -->
-<section class="slide" data-block="03 · Metodologia">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Organização do código</div>
-    <h2 class="rv" style="--d:.14s">A estrutura de diretórios reflete as camadas</h2>
-    <div class="split half" style="margin-top:48px">
-      <div class="rvx" style="--d:.26s">
-<div class="code" style="font-size:22px;line-height:1.62">src<span class="p">/</span>
+      <!-- ======================= 17 · ESTRUTURA DE DIRETÓRIOS ======================= -->
+      <section class="slide" data-block="03 · Metodologia">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Organização do código</div>
+          <h2 class="rv" style="--d:.14s">A estrutura de diretórios reflete as camadas</h2>
+          <div class="split half" style="margin-top:48px">
+            <div class="rvx" style="--d:.26s">
+              <pre class="code" style="font-size:22px;line-height:1.62">src<span class="p">/</span>
   <span class="k">components/</span>  <span class="c">tabelas, modais, graficos</span>
   <span class="k">config/</span>      <span class="c">constantes globais</span>
   <span class="k">contexts/</span>    <span class="c">contextos de React</span>
@@ -656,108 +1744,135 @@ body.editing .edit-hint{display:block}
   <span class="k">store/</span>       <span class="c">estado global (Zustand)</span>
   <span class="k">theme/</span>       <span class="c">tema do Material UI</span>
   <span class="k">types/</span>       <span class="c">tipos compartilhados</span>
-  <span class="k">utils/</span>       <span class="c">axios, arquivos, debounce</span></div>
-      </div>
-      <div class="rv" style="--d:.42s">
-        <ul class="bul">
-          <li><b>components, pages e layouts</b> concentram a parte visual da aplicação</li>
-          <li><b>store, services e routes</b> tratam do estado global, da comunicação com a API e da definição das rotas</li>
-          <li><b>hooks</b> centraliza os hooks customizados, como <span style="font-family:var(--font-mono);font-size:24px;color:var(--leaf)">useForm</span> e <span style="font-family:var(--font-mono);font-size:24px;color:var(--leaf)">useRoles</span></li>
-          <li><b>utils</b> reúne funções auxiliares reutilizadas em contextos diferentes</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 18 · CONTRATO DE API ======================= -->
-<section class="slide" data-block="03 · Metodologia">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Coordenação entre as equipes</div>
-    <h2 class="rv" style="--d:.14s">Como front e back andaram <span class="hl">em paralelo</span></h2>
-    <p class="deck rv" style="--d:.24s">A estratégia foi paralelizar o trabalho a partir de uma interface comum, acordada antes de qualquer código.</p>
-    <div class="pipe rv" style="--d:.4s;margin-top:auto;grid-template-columns:repeat(4,1fr)">
-      <div class="st"><div class="n">ETAPA 01</div><h4>Contrato acordado</h4><p>Caminho do endpoint, método HTTP e estrutura dos dados de entrada e saída</p></div>
-      <div class="st"><div class="n">ETAPA 02</div><h4>Trabalho simultâneo</h4><p>Back implementa o endpoint. Front constrói a tela consumindo dados mascarados (mock)</p></div>
-      <div class="st"><div class="n">ETAPA 03</div><h4>Integração</h4><p>Com o endpoint disponível, troca-se a fonte dos dados pela API real</p></div>
-      <div class="st"><div class="n">ETAPA 04</div><h4>Ajuste</h4><p>Mudanças pontuais no contrato negociadas na daily ou na planning seguinte</p></div>
-    </div>
-    <p class="body rv" style="--d:.56s;margin-top:44px;margin-bottom:auto;font-size:25px">Nenhuma das equipes ficava permanentemente em ritmo diferente da outra.</p>
-  </div>
-</section>
-
-<!-- ======================= 19 · DIVISOR: ATIVIDADES ======================= -->
-<section class="slide paper s-div" data-block="04 · Atividades Realizadas" data-theme="paper">
-  <div class="stripe"></div>
-  <div class="pad">
-    <div class="num rv" style="--d:.06s">04</div>
-    <h2 class="rv" style="--d:.18s">Atividades Realizadas</h2>
-    <p class="deck rv" style="--d:.3s">A plataforma de protocolos, módulo a módulo: o que foi construído, as decisões técnicas por trás e os desafios enfrentados em cada etapa.</p>
-  </div>
-</section>
-
-<!-- ======================= 20 · OS TRÊS MÓDULOS ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Visão geral</div>
-    <h2 class="rv" style="--d:.14s">Três módulos, selecionados por relevância e complexidade técnica</h2>
-    <div class="cards c3 rv" style="--d:.3s;margin-top:auto;margin-bottom:auto">
-      <div class="card lit" style="padding:44px 40px">
-        <div class="n">MÓDULO 01</div><h3 style="font-size:38px">Autenticação e Controle de Acesso</h3>
-        <p style="font-size:24px;margin-top:20px">Ponto de entrada da plataforma. Sessão com JWT, renovação transparente do token e restrição de funcionalidades por perfil de usuário.</p>
-      </div>
-      <div class="card lit" style="padding:44px 40px">
-        <div class="n">MÓDULO 02</div><h3 style="font-size:38px">Registros Agrícolas</h3>
-        <p style="font-size:24px;margin-top:20px">O núcleo do sistema. Listagem, cadastro e edição dos protocolos, com formulários extensos, estruturas dinâmicas e validação declarativa.</p>
-      </div>
-      <div class="card lit" style="padding:44px 40px">
-        <div class="n">MÓDULO 03</div><h3 style="font-size:38px">Análise e Dashboards</h3>
-        <p style="font-size:24px;margin-top:20px">O diferencial em relação às planilhas. Geração automatizada de gráficos e exportação com a identidade visual da empresa.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 21 · MÓDULO 1: LOGIN ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="split tx-im">
-      <div>
-        <div class="eyebrow rvx" style="--d:.05s">Módulo 01 · Autenticação</div>
-        <h2 class="rvx" style="--d:.14s;font-size:56px">O ponto de entrada de todos os usuários</h2>
-        <ul class="bul rvx" style="--d:.26s;margin-top:38px">
-          <li>Tela construída seguindo a <b>identidade visual</b> da empresa cliente</li>
-          <li>Campos de e-mail e senha, com recuperação de senha</li>
-          <li>Após o login, a API devolve um par de <b>tokens JWT</b>: access token e refresh token</li>
-          <li>A sessão é persistida no armazenamento local, mantendo o usuário conectado entre acessos</li>
-        </ul>
-      </div>
-      <div class="rv" style="--d:.34s">
-        <div class="shot" style="width:880px;height:575px">
-          <img src="imgs/tela-login.png" alt="Tela de login da plataforma" style="width:1218px;left:-169px;top:-144px">
+  <span class="k">utils/</span>       <span class="c">axios, arquivos, debounce</span></pre>
+            </div>
+            <div class="rv" style="--d:.42s">
+              <ul class="bul">
+                <li><b>components, pages, layouts:</b> o visual</li>
+                <li><b>store, services, routes:</b> estado, API e rotas</li>
+                <li><b>hooks</b> centraliza os hooks customizados, como <span
+                    style="font-family:var(--font-mono);font-size:28px;color:var(--leaf)">useForm</span> e <span
+                    style="font-family:var(--font-mono);font-size:28px;color:var(--leaf)">useRoles</span></li>
+                <li><b>utils:</b> funções auxiliares</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="shot-cap">Tela de login da plataforma</div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
-<!-- ======================= 22 · CÓDIGO: STORE DE AUTENTICAÇÃO ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Módulo 01 · Autenticação</div>
-    <h2 class="rv" style="--d:.14s;font-size:54px">Do token à sessão: Zustand, Immer e jwt-decode</h2>
-    <div class="split wide-l" style="margin-top:38px">
-      <div class="rvx" style="--d:.28s">
-        <ul class="bul tight">
-          <li>O store é criado com <b>persist</b>, que salva o conteúdo em armazenamento local sob o nome <span style="font-family:var(--font-mono);color:var(--leaf)">UserData</span></li>
-          <li><b>produce</b>, do Immer, expõe um rascunho mutável do estado e permite escrever as alterações de forma direta</li>
-          <li>O access token é decodificado e nome, identificador, e-mail e perfil são extraídos das suas claims</li>
-          <li>O perfil extraído aqui é o que governa todo o controle de acesso da aplicação</li>
-        </ul>
-      </div>
-      <div class="rv" style="--d:.42s">
-<div class="code"><span class="k">export const</span> loginStorePersist = <span class="f">create</span>(
+      <!-- ======================= 18 · CONTRATO DE API ======================= -->
+      <section class="slide" data-block="03 · Metodologia">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Coordenação entre as equipes</div>
+          <h2 class="rv" style="--d:.14s">Como front e back andaram <span class="hl">em paralelo</span></h2>
+          <p class="deck rv" style="--d:.24s">Paralelizar o trabalho a partir de uma interface comum, acordada antes do
+            código.</p>
+          <div class="pipe rv" style="--d:.4s;margin-top:auto;grid-template-columns:repeat(4,1fr)">
+            <div class="st">
+              <div class="n">ETAPA 01</div>
+              <h4>Contrato acordado</h4>
+              <p>Endpoint, método e formato dos dados</p>
+            </div>
+            <div class="st">
+              <div class="n">ETAPA 02</div>
+              <h4>Trabalho simultâneo</h4>
+              <p>Back faz o endpoint. Front constrói a tela com mock</p>
+            </div>
+            <div class="st">
+              <div class="n">ETAPA 03</div>
+              <h4>Integração</h4>
+              <p>Troca o mock pela API real</p>
+            </div>
+            <div class="st">
+              <div class="n">ETAPA 04</div>
+              <h4>Ajuste</h4>
+              <p>Ajustes na daily ou na planning</p>
+            </div>
+          </div>
+          <p class="body rv" style="--d:.56s;margin-top:44px;margin-bottom:auto;font-size:29px">Nenhuma das equipes
+            ficava permanentemente em ritmo diferente da outra.</p>
+        </div>
+      </section>
+
+      <!-- ======================= 19 · DIVISOR: ATIVIDADES ======================= -->
+      <section class="slide paper s-div" data-block="04 · Atividades Realizadas" data-theme="paper">
+        <div class="stripe"></div>
+        <div class="pad">
+          <div class="num rv" style="--d:.06s">04</div>
+          <h2 class="rv" style="--d:.18s">Atividades Realizadas</h2>
+          <p class="deck rv" style="--d:.3s">A plataforma de protocolos, módulo a módulo: o que foi construído, as
+            decisões técnicas por trás e os desafios enfrentados em cada etapa.</p>
+        </div>
+      </section>
+
+      <!-- ======================= 20 · OS TRÊS MÓDULOS ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Visão geral</div>
+          <h2 class="rv" style="--d:.14s">Três módulos, selecionados por relevância e complexidade técnica</h2>
+          <div class="cards c3 rv" style="--d:.3s;margin-top:auto;margin-bottom:auto">
+            <div class="card lit" style="padding:44px 40px">
+              <div class="n">MÓDULO 01</div>
+              <h3 style="font-size:44px">Autenticação e Controle de Acesso</h3>
+              <p style="font-size:28px;margin-top:20px">Sessão com JWT, renovação transparente e acesso por perfil.</p>
+            </div>
+            <div class="card lit" style="padding:44px 40px">
+              <div class="n">MÓDULO 02</div>
+              <h3 style="font-size:44px">Registros Agrícolas</h3>
+              <p style="font-size:28px;margin-top:20px">O núcleo. Listagem, cadastro e edição dos protocolos.</p>
+            </div>
+            <div class="card lit" style="padding:44px 40px">
+              <div class="n">MÓDULO 03</div>
+              <h3 style="font-size:44px">Análise e Dashboards</h3>
+              <p style="font-size:28px;margin-top:20px">O diferencial. Gráficos automáticos e exportação com a marca do
+                cliente.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 21 · MÓDULO 1: LOGIN ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="split tx-im">
+            <div>
+              <div class="eyebrow rvx" style="--d:.05s">Módulo 01 · Autenticação</div>
+              <h2 class="rvx" style="--d:.14s;font-size:65px">O ponto de entrada de todos os usuários</h2>
+              <ul class="bul rvx" style="--d:.26s;margin-top:38px">
+                <li><b>Identidade visual</b> do cliente</li>
+                <li>E-mail, senha e recuperação</li>
+                <li>A API devolve um par de <b>tokens JWT</b></li>
+                <li>Sessão persistida entre acessos</li>
+              </ul>
+            </div>
+            <div class="rv" style="--d:.34s">
+              <div class="shot" style="width:880px;height:575px">
+                <img src="imgs/tela-login.png" alt="Tela de login da plataforma"
+                  style="width:1218px;left:-169px;top:-144px">
+              </div>
+              <div class="shot-cap">Tela de login da plataforma</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 22 · CÓDIGO: STORE DE AUTENTICAÇÃO ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Módulo 01 · Autenticação</div>
+          <h2 class="rv" style="--d:.14s;font-size:63px">Do token à sessão: Zustand, Immer e jwt-decode</h2>
+          <div class="split wide-l" style="margin-top:38px">
+            <div class="rvx" style="--d:.28s">
+              <ul class="bul tight">
+                <li><b>persist</b> salva a sessão no armazenamento local</li>
+                <li><b>produce</b>, do Immer, deixa escrever como se alterasse direto</li>
+                <li>O token é decodificado e as claims viram <b>userData</b>
+                </li>
+                <li>O perfil daqui governa todo o controle de acesso</li>
+              </ul>
+            </div>
+            <div class="rv" style="--d:.42s">
+              <pre class="code" style="font-size:18px;line-height:1.6"><span class="k">export const</span> loginStorePersist = <span class="f">create</span>(
   <span class="f">persist</span>((set, get) <span class="k">=&gt;</span> ({
     <span class="c">// ...estado inicial omitido</span>
     <span class="f">setLoginInfo</span>: ({ data }) <span class="k">=&gt;</span>
@@ -776,28 +1891,29 @@ body.editing .edit-hint{display:block}
         };
       })),
   }), { name: <span class="s">"UserData"</span> })
-);</div>
-      </div>
-    </div>
-  </div>
-</section>
+);</pre>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<!-- ======================= 23 · CÓDIGO: REFRESH TOKEN ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Módulo 01 · Autenticação</div>
-    <h2 class="rv" style="--d:.14s;font-size:54px">Renovação de sessão <span class="hl">transparente</span> para o usuário</h2>
-    <div class="split wide-l" style="margin-top:38px">
-      <div class="rvx" style="--d:.28s">
-        <ul class="bul tight">
-          <li>Todas as chamadas passam por uma função de serviço que anexa o token ao cabeçalho de autorização, sem repetir essa lógica em cada requisição</li>
-          <li>Um interceptador de resposta age apenas quando o código é <b>401</b> e a requisição ainda não foi reexecutada</li>
-          <li>Nesse caso, o refresh token é usado para obter um novo access token e a requisição original é <b>reenviada</b></li>
-          <li>O usuário não vê nada: não há logout inesperado no meio do preenchimento de um protocolo</li>
-        </ul>
-      </div>
-      <div class="rv" style="--d:.42s">
-<div class="code" style="font-size:19px;line-height:1.58">axiosInstance.interceptors.response.<span class="f">use</span>(
+      <!-- ======================= 23 · CÓDIGO: REFRESH TOKEN ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Módulo 01 · Autenticação</div>
+          <h2 class="rv" style="--d:.14s;font-size:63px">Renovação de sessão <span class="hl">transparente</span> para o
+            usuário</h2>
+          <div class="split wide-l" style="margin-top:38px">
+            <div class="rvx" style="--d:.28s">
+              <ul class="bul tight">
+                <li>O token é anexado uma vez, para todas as chamadas</li>
+                <li>O interceptador só age no <b>401</b></li>
+                <li>Renova o token e <b>reenvia</b> a requisição</li>
+                <li>Sem logout no meio de um formulário longo</li>
+              </ul>
+            </div>
+            <div class="rv" style="--d:.42s">
+              <pre class="code" style="font-size:19px;line-height:1.58">axiosInstance.interceptors.response.<span class="f">use</span>(
   (response) <span class="k">=&gt;</span> response,
   <span class="k">async</span> (error) <span class="k">=&gt;</span> {
     <span class="k">const</span> originalRequest = error.config;
@@ -818,30 +1934,39 @@ body.editing .edit-hint{display:block}
     }
     <span class="k">return</span> Promise.<span class="f">reject</span>(error);
   }
-);</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 24 · CÓDIGO: GUARDA DE ROTAS ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Módulo 01 · Autenticação</div>
-    <h2 class="rv" style="--d:.14s;font-size:54px">Controle de acesso por perfil, no nível da rota</h2>
-    <div class="split wide-l" style="margin-top:38px">
-      <div class="rvx" style="--d:.28s">
-        <div class="cards c2" style="margin:0 0 30px">
-          <div class="card lit" style="padding:26px 24px"><div class="n">PERFIL</div><h3 style="font-size:27px">Administrador</h3><p style="font-size:21px">Acesso completo, incluindo a gestão de usuários.</p></div>
-          <div class="card" style="padding:26px 24px"><div class="n">PERFIL</div><h3 style="font-size:27px">Técnico</h3><p style="font-size:21px">Acesso restrito ao registro e à consulta de protocolos.</p></div>
+);</pre>
+            </div>
+          </div>
         </div>
-        <ul class="bul tight">
-          <li>Um componente guardião envolve as rotas e decide, antes de renderizar, se o usuário pode estar ali</li>
-          <li>Sem autenticação, redireciona para o login. Sem permissão de administrador em rota restrita, redireciona para a raiz</li>
-        </ul>
-      </div>
-      <div class="rv" style="--d:.42s">
-<div class="code"><span class="k">const</span> <span class="f">ProtectedRouteGuard</span> = ({ children, adminRoute }) <span class="k">=&gt;</span> {
+      </section>
+
+      <!-- ======================= 24 · CÓDIGO: GUARDA DE ROTAS ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Módulo 01 · Autenticação</div>
+          <h2 class="rv" style="--d:.14s;font-size:63px">Controle de acesso por perfil, no nível da rota</h2>
+          <div class="split wide-l" style="margin-top:38px">
+            <div class="rvx" style="--d:.28s">
+              <div class="cards c2" style="margin:0 0 30px">
+                <div class="card lit" style="padding:26px 24px">
+                  <div class="n">PERFIL</div>
+                  <h3 style="font-size:31px">Administrador</h3>
+                  <p style="font-size:24px">Acesso completo.</p>
+                </div>
+                <div class="card" style="padding:26px 24px">
+                  <div class="n">PERFIL</div>
+                  <h3 style="font-size:31px">Técnico</h3>
+                  <p style="font-size:24px">Registro e consulta de protocolos.</p>
+                </div>
+              </div>
+              <ul class="bul tight">
+                <li>Um guardião decide antes de renderizar
+                </li>
+                <li>Sem permissão, redireciona</li>
+              </ul>
+            </div>
+            <div class="rv" style="--d:.42s">
+              <pre class="code"><span class="k">const</span> <span class="f">ProtectedRouteGuard</span> = ({ children, adminRoute }) <span class="k">=&gt;</span> {
   <span class="k">const</span> { isAuthenticated, userData: { roleId } } =
     <span class="f">loginStorePersist</span>((state) <span class="k">=&gt;</span> state);
   <span class="k">const</span> { isUserRole } = <span class="f">useRoles</span>();
@@ -853,115 +1978,173 @@ body.editing .edit-hint{display:block}
     <span class="k">return</span> &lt;<span class="f">Navigate</span> to=<span class="s">"/"</span> replace /&gt;;
   }
   <span class="k">return</span> children;
-};</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 25 · GESTÃO DE USUÁRIOS ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="split im-tx">
-      <div class="rv" style="--d:.3s">
-        <div class="shot" style="width:900px;height:651px">
-          <img src="imgs/tela-gestao-usuarios.png" alt="Tela de gestão de usuários" style="width:1193px;left:-122px;top:-73px">
+};</pre>
+            </div>
+          </div>
         </div>
-        <div class="shot-cap">Gestão de usuários, acessível apenas pelo Administrador</div>
-      </div>
-      <div>
-        <div class="eyebrow rv" style="--d:.05s">Módulo 01 · Autenticação</div>
-        <h2 class="rv" style="--d:.14s;font-size:52px">Gestão de usuários</h2>
-        <ul class="bul rv" style="--d:.24s;margin-top:34px">
-          <li>Visualizar, adicionar, editar e excluir os colaboradores cadastrados</li>
-          <li>Listagem com nome, perfil, e-mail e contato, com <b>busca textual</b> e filtro por tipo de perfil</li>
-          <li>Criação e exclusão em <b>modais</b>, para agir sem perder o contexto da página</li>
-          <li>Formulários com <b>Formik</b> para o estado dos campos e <b>Yup</b> para a validação antes do envio</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
-<!-- ======================= 26 · LISTAGEM DE PROTOCOLOS ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Módulo 02 · Registros Agrícolas</div>
-    <h2 class="rv" style="--d:.14s;font-size:56px">Listagem de protocolos com TanStack React Table</h2>
-    <div class="rv" style="--d:.3s;margin-top:auto">
-      <div class="tbl">
-        <div class="r h"><div>Código</div><div>Tipo</div><div>Cliente</div><div>Classe</div><div>Cultura</div><div>Status</div></div>
-        <div class="r"><div>ADAMT_V1_SAFRA23/24</div><div>Ret</div><div>Cliente 01</div><div>Fertilizantes</div><div>Milho</div><div class="tag">Concluído</div></div>
-        <div class="r"><div>BXQRT_V2_SAFRA23/24</div><div>Comercial</div><div>Cliente 02</div><div>Nutrição</div><div>Soja</div><div class="tag">Em andamento</div></div>
-        <div class="r"><div>CLMPT_V1_SAFRA24/25</div><div>Ret</div><div>Cliente 03</div><div>Milharal</div><div>Café</div><div class="tag">Não iniciado</div></div>
-      </div>
-    </div>
-    <div class="cards c4 rv" style="--d:.44s;margin-top:40px;margin-bottom:auto">
-      <div class="card" style="padding:26px 24px"><div class="n">RECURSO</div><h3 style="font-size:26px">Ordenação e paginação</h3><p style="font-size:20px">Recursos avançados de tabela sobre um volume crescente de protocolos.</p></div>
-      <div class="card" style="padding:26px 24px"><div class="n">RECURSO</div><h3 style="font-size:26px">Filtragem</h3><p style="font-size:20px">Busca por código, tipo, cliente, classe, cultura e status.</p></div>
-      <div class="card lit" style="padding:26px 24px"><div class="n">RECURSO</div><h3 style="font-size:26px">QR Code</h3><p style="font-size:20px">Identificador único que, escaneado <b>em campo</b>, abre direto a página do protocolo.</p></div>
-      <div class="card" style="padding:26px 24px"><div class="n">RECURSO</div><h3 style="font-size:26px">Exportação</h3><p style="font-size:20px">Saída para planilha, preservando o fluxo já conhecido pelo cliente.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 27 · O FORMULÁRIO E SUAS ABAS ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Módulo 02 · Registros Agrícolas</div>
-    <h2 class="rv" style="--d:.14s;font-size:56px">O maior desafio técnico do projeto</h2>
-    <p class="deck rv" style="--d:.24s">Um único protocolo reúne dezenas de campos. Para não transformar isso em um formulário infinito, ele foi organizado em <b>oito abas</b>.</p>
-    <div class="tabs rv" style="--d:.38s;margin-top:auto">
-      <span class="on">Informações</span><span>Avaliações</span><span>Tratamentos</span><span>Local</span>
-      <span>Solo</span><span>Aplicações</span><span>Manejo</span><span>Dashboard</span>
-    </div>
-    <div class="cards c2 rv" style="--d:.5s;margin-top:52px;margin-bottom:auto">
-      <div class="card lit"><div class="n">CAMPOS OBRIGATÓRIOS</div><h3 style="font-size:29px">O mínimo para um protocolo existir</h3><p style="font-size:23px">Tipo (Ret ou Comercial), código, cliente, classes do experimento, status, número de tratamentos e número de repetições.</p></div>
-      <div class="card"><div class="n">CAMPOS OPCIONAIS</div><h3 style="font-size:29px">Preenchidos conforme a pesquisa avança</h3><p style="font-size:23px">Cultura, variedade, cultura anterior, tipo de plantio, datas de plantio, colheita e emergência, adubação, espaçamento, delineamento e parcela útil.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 28 · ABA DE AVALIAÇÕES ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="split im-tx">
-      <div class="rv" style="--d:.3s">
-        <div class="shot" style="width:880px;height:630px">
-          <img src="imgs/tela-protocolo-avaliacoes.png" alt="Aba de Avaliações do formulário de protocolo" style="width:880px;left:0;top:-12px">
+      <!-- ======================= 25 · GESTÃO DE USUÁRIOS ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="split im-tx">
+            <div class="rv" style="--d:.3s">
+              <div class="shot" style="width:900px;height:651px">
+                <img src="imgs/tela-gestao-usuarios.png" alt="Tela de gestão de usuários"
+                  style="width:1193px;left:-122px;top:-73px">
+              </div>
+              <div class="shot-cap">Gestão de usuários, acessível apenas pelo Administrador</div>
+            </div>
+            <div>
+              <div class="eyebrow rv" style="--d:.05s">Módulo 01 · Autenticação</div>
+              <h2 class="rv" style="--d:.14s;font-size:60px">Gestão de usuários</h2>
+              <ul class="bul rv" style="--d:.24s;margin-top:34px">
+                <li>Visualizar, adicionar, editar e excluir</li>
+                <li><b>Busca textual</b> e filtro por perfil
+                </li>
+                <li><b>Modais</b>, para não perder o contexto</li>
+                <li><b>Formik</b> no estado, <b>Yup</b> na validação
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="shot-cap">Aba de Avaliações, com tabelas por momento e fotografias de campo</div>
-      </div>
-      <div>
-        <div class="eyebrow rv" style="--d:.05s">Módulo 02 · Registros Agrícolas</div>
-        <h2 class="rv" style="--d:.14s;font-size:52px">Uma estrutura que muda de forma</h2>
-        <ul class="bul rv" style="--d:.24s;margin-top:34px">
-          <li>O número de <b>colunas</b> da tabela varia conforme o número de repetições configurado na aba Informações</li>
-          <li>Novas linhas podem ser adicionadas conforme a necessidade da avaliação</li>
-          <li>Alguns campos são <b>fórmulas</b>, expressões calculadas a partir de outros campos, avaliadas em tempo de execução com <b>mathjs</b></li>
-          <li>Cada momento de avaliação aceita <b>fotografias de campo</b> vinculadas ao registro</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
-<!-- ======================= 29 · CÓDIGO: JSZIP ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Módulo 02 · Registros Agrícolas</div>
-    <h2 class="rv" style="--d:.14s;font-size:54px">Todas as fotos de uma avaliação em <span class="hl">um único arquivo</span></h2>
-    <div class="split wide-l" style="margin-top:38px">
-      <div class="rvx" style="--d:.28s">
-        <ul class="bul tight">
-          <li>O problema: baixar dezenas de fotografias uma a uma inviabilizava o trabalho posterior do pesquisador</li>
-          <li>As imagens são buscadas na API por uma <b>mutation do React Query</b> e convertidas em blobs</li>
-          <li>As promessas são aguardadas <b>em paralelo</b> com <span style="font-family:var(--font-mono);color:var(--leaf)">Promise.all</span></li>
-          <li>O <b>JSZip</b> agrupa tudo em memória e o arquivo .zip é entregue ao usuário</li>
-        </ul>
-      </div>
-      <div class="rv" style="--d:.42s">
-<div class="code" style="font-size:20px"><span class="k">const</span> <span class="f">handleDownloadImages</span> = <span class="k">async</span> (evaluation) <span class="k">=&gt;</span> {
+      <!-- ======================= 26 · LISTAGEM DE PROTOCOLOS ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Módulo 02 · Registros Agrícolas</div>
+          <h2 class="rv" style="--d:.14s;font-size:65px">Listagem de protocolos com TanStack React Table</h2>
+          <div class="rv" style="--d:.3s;margin-top:auto">
+            <div class="tbl">
+              <div class="r h">
+                <div>Código</div>
+                <div>Tipo</div>
+                <div>Cliente</div>
+                <div>Classe</div>
+                <div>Cultura</div>
+                <div>Status</div>
+              </div>
+              <div class="r">
+                <div>ADAMT_V1_SAFRA23/24</div>
+                <div>Ret</div>
+                <div>Cliente 01</div>
+                <div>Fertilizantes</div>
+                <div>Milho</div>
+                <div class="tag">Concluído</div>
+              </div>
+              <div class="r">
+                <div>BXQRT_V2_SAFRA23/24</div>
+                <div>Comercial</div>
+                <div>Cliente 02</div>
+                <div>Nutrição</div>
+                <div>Soja</div>
+                <div class="tag">Em andamento</div>
+              </div>
+              <div class="r">
+                <div>CLMPT_V1_SAFRA24/25</div>
+                <div>Ret</div>
+                <div>Cliente 03</div>
+                <div>Milharal</div>
+                <div>Café</div>
+                <div class="tag">Não iniciado</div>
+              </div>
+            </div>
+          </div>
+          <div class="cards c4 rv" style="--d:.44s;margin-top:40px;margin-bottom:auto">
+            <div class="card" style="padding:26px 24px">
+              <div class="n">RECURSO</div>
+              <h3 style="font-size:30px">Ordenação e paginação</h3>
+              <p style="font-size:23px">Sobre um volume crescente de protocolos.</p>
+            </div>
+            <div class="card" style="padding:26px 24px">
+              <div class="n">RECURSO</div>
+              <h3 style="font-size:30px">Filtragem</h3>
+              <p style="font-size:23px">Código, tipo, cliente, classe, cultura, status.</p>
+            </div>
+            <div class="card lit" style="padding:26px 24px">
+              <div class="n">RECURSO</div>
+              <h3 style="font-size:30px">QR Code</h3>
+              <p style="font-size:23px">Escaneado <b>em campo</b>, abre o protocolo.</p>
+            </div>
+            <div class="card" style="padding:26px 24px">
+              <div class="n">RECURSO</div>
+              <h3 style="font-size:30px">Exportação</h3>
+              <p style="font-size:23px">Saída para planilha.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 27 · O FORMULÁRIO E SUAS ABAS ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Módulo 02 · Registros Agrícolas</div>
+          <h2 class="rv" style="--d:.14s;font-size:65px">O maior desafio técnico do projeto</h2>
+          <p class="deck rv" style="--d:.24s">Dezenas de campos em um único protocolo, organizados em <b>oito abas</b>.
+          </p>
+          <div class="tabs rv" style="--d:.38s;margin-top:auto">
+            <span class="on">Informações</span><span>Avaliações</span><span>Tratamentos</span><span>Local</span>
+            <span>Solo</span><span>Aplicações</span><span>Manejo</span><span>Dashboard</span>
+          </div>
+          <div class="cards c2 rv" style="--d:.5s;margin-top:52px;margin-bottom:auto">
+            <div class="card lit">
+              <div class="n">CAMPOS OBRIGATÓRIOS</div>
+              <h3 style="font-size:34px">O mínimo para um protocolo existir</h3>
+              <p style="font-size:27px">Tipo, código, cliente, classes, status, tratamentos e repetições.</p>
+            </div>
+            <div class="card">
+              <div class="n">CAMPOS OPCIONAIS</div>
+              <h3 style="font-size:34px">Preenchidos conforme a pesquisa avança</h3>
+              <p style="font-size:27px">Cultura, variedade, datas, adubação, espaçamento e delineamento.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 28 · ABA DE AVALIAÇÕES ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="split im-tx">
+            <div class="rv" style="--d:.3s">
+              <div class="shot" style="width:880px;height:630px">
+                <img src="imgs/tela-protocolo-avaliacoes.png" alt="Aba de Avaliações do formulário de protocolo"
+                  style="width:880px;left:0;top:-12px">
+              </div>
+              <div class="shot-cap">Aba de Avaliações, com tabelas por momento e fotografias de campo</div>
+            </div>
+            <div>
+              <div class="eyebrow rv" style="--d:.05s">Módulo 02 · Registros Agrícolas</div>
+              <h2 class="rv" style="--d:.14s;font-size:60px">Uma estrutura que muda de forma</h2>
+              <ul class="bul rv" style="--d:.24s;margin-top:34px">
+                <li>As <b>colunas</b> variam conforme o número de repetições</li>
+                <li>Linhas adicionadas conforme a necessidade</li>
+                <li>Campos-<b>fórmula</b> calculados em execução com <b>mathjs</b></li>
+                <li><b>Fotografias de campo</b> por momento de avaliação</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 29 · CÓDIGO: JSZIP ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Módulo 02 · Registros Agrícolas</div>
+          <h2 class="rv" style="--d:.14s;font-size:63px">Todas as fotos de uma avaliação em <span class="hl">um único
+              arquivo</span></h2>
+          <div class="split wide-l" style="margin-top:38px">
+            <div class="rvx" style="--d:.28s">
+              <ul class="bul tight">
+                <li>Baixar dezenas de fotos uma a uma inviabilizava o trabalho</li>
+                <li>As imagens são buscadas na API e viram blobs</li>
+                <li>Baixadas <b>em paralelo</b> com Promise.all</li>
+                <li>O <b>JSZip</b> agrupa e entrega um .zip</li>
+              </ul>
+            </div>
+            <div class="rv" style="--d:.42s">
+              <pre class="code" style="font-size:18px;line-height:1.6"><span class="k">const</span> <span class="f">handleDownloadImages</span> = <span class="k">async</span> (evaluation) <span class="k">=&gt;</span> {
   <span class="f">getImages</span>(evaluation.id, {
     <span class="f">onSuccess</span>: <span class="k">async</span> ({ data }) <span class="k">=&gt;</span> {
       <span class="k">const</span> images = data.data;
@@ -980,28 +2163,30 @@ body.editing .edit-hint{display:block}
       <span class="f">saveFile</span>(zipFile, evaluation.name);
     },
   });
-};</div>
-      </div>
-    </div>
-  </div>
-</section>
+};</pre>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<!-- ======================= 30 · CÓDIGO: YUP ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Módulo 02 · Registros Agrícolas</div>
-    <h2 class="rv" style="--d:.14s;font-size:54px">Traduzir a regra do agrônomo em <span class="hl">esquema de validação</span></h2>
-    <div class="split wide-l" style="margin-top:38px">
-      <div class="rvx" style="--d:.28s">
-        <ul class="bul tight">
-          <li>A maior dificuldade do módulo foi traduzir as regras do cliente para a lógica do formulário, exigindo validação contínua a cada Sprint</li>
-          <li>Campos numéricos combinam <b>required</b> com <b>nullable</b>: podem ficar nulos durante o preenchimento parcial, mas são exigidos no envio</li>
-          <li><span style="font-family:var(--font-mono);color:var(--leaf)">array().min(1)</span> garante ao menos uma classe selecionada</li>
-          <li>A mensagem de cada regra é o texto exibido ao usuário quando ela é violada</li>
-        </ul>
-      </div>
-      <div class="rv" style="--d:.42s">
-<div class="code" style="font-size:20px"><span class="k">const</span> validationSchema = Yup.<span class="f">object</span>().<span class="f">shape</span>({
+      <!-- ======================= 30 · CÓDIGO: YUP ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Módulo 02 · Registros Agrícolas</div>
+          <h2 class="rv" style="--d:.14s;font-size:63px">Traduzir a regra do agrônomo em <span class="hl">esquema de
+              validação</span></h2>
+          <div class="split wide-l" style="margin-top:38px">
+            <div class="rvx" style="--d:.28s">
+              <ul class="bul tight">
+                <li>Traduzir a regra do cliente foi o mais difícil</li>
+                <li><b>required</b> com <b>nullable</b>: nulo enquanto preenche, exigido no envio</li>
+                <li><span style="font-family:var(--font-mono);color:var(--leaf)">array().min(1)</span> garante ao menos
+                  uma classe selecionada</li>
+                <li>A mensagem da regra é o que o usuário lê</li>
+              </ul>
+            </div>
+            <div class="rv" style="--d:.42s">
+              <pre class="code" style="font-size:20px"><span class="k">const</span> validationSchema = Yup.<span class="f">object</span>().<span class="f">shape</span>({
   isRET: Yup.<span class="f">bool</span>().<span class="f">required</span>(<span class="s">"O campo e obrigatorio"</span>),
   code: Yup.<span class="f">string</span>().<span class="f">required</span>(<span class="s">"O campo e obrigatorio"</span>),
   culture: Yup.<span class="f">string</span>(),
@@ -1014,58 +2199,80 @@ body.editing .edit-hint{display:block}
   harvestDate: Yup.<span class="f">string</span>().<span class="f">nullable</span>(),
   classes: Yup.<span class="f">array</span>().<span class="f">min</span>(<span class="s">1</span>, <span class="s">"O campo e obrigatorio"</span>),
   clientId: Yup.<span class="f">string</span>().<span class="f">required</span>(<span class="s">"O campo e obrigatorio"</span>),
-});</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 31 · REUSO DO PADRÃO ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="split im-tx">
-      <div class="rv" style="--d:.3s">
-        <div class="shot" style="width:820px;height:700px">
-          <img src="imgs/tela-orcamento-formulario.png" alt="Tela de informações do módulo de orçamentos" style="width:1989px;left:-28px;top:-78px">
+});</pre>
+            </div>
+          </div>
         </div>
-        <div class="shot-cap">Módulo de orçamentos, com o mesmo padrão de formulário</div>
-      </div>
-      <div>
-        <div class="eyebrow rv" style="--d:.05s">Módulo 02 · Registros Agrícolas</div>
-        <h2 class="rv" style="--d:.14s;font-size:52px">O padrão se pagou em outros módulos</h2>
-        <ul class="bul rv" style="--d:.24s;margin-top:34px">
-          <li>A mesma organização foi reaproveitada no módulo de <b>orçamentos</b>: estrutura em abas, agrupamento por área e separação visual entre seções</li>
-          <li>Os componentes de seleção, campos de data e modais foram reutilizados em contextos diferentes</li>
-          <li>O hook customizado <span style="font-family:var(--font-mono);color:var(--leaf)">useForm</span> padronizou o controle de valores e a orquestração das validações em todas as telas</li>
-          <li>Isso importava porque um protocolo podia conter dezenas de tratamentos, cada um com múltiplas repetições e avaliações</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
-<!-- ======================= 32 · MÓDULO 3: DECLARAÇÃO ======================= -->
-<section class="slide s-stmt" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Módulo 03 · Análise e Dashboards</div>
-    <p class="big rv" style="--d:.2s;margin-top:36px">Aqui está o que a planilha <span class="hl">não fazia</span>: transformar dado bruto em gráfico, sem ninguém montar nada.</p>
-  </div>
-</section>
+      <!-- ======================= 31 · REUSO DO PADRÃO ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="split im-tx">
+            <div class="rv" style="--d:.3s">
+              <div class="shot" style="width:1000px;height:795px">
+                <img src="imgs/tela-orcamento-formulario.png" alt="Tela de informações do módulo de orçamentos"
+                  style="width:2424px;left:-34px;top:-95px">
+              </div>
+              <div class="shot-cap">Módulo de orçamentos, com o mesmo padrão de formulário</div>
+            </div>
+            <div>
+              <div class="eyebrow rv" style="--d:.05s">Módulo 02 · Registros Agrícolas</div>
+              <h2 class="rv" style="--d:.14s;font-size:60px">O padrão se pagou em outros módulos</h2>
+              <ul class="bul rv" style="--d:.24s;margin-top:34px">
+                <li>O mesmo padrão foi reaproveitado em <b>orçamentos</b></li>
+                <li>Selects, campos de data e modais reutilizados</li>
+                <li><b>useForm</b> padronizou valores e validação em todas as telas</li>
+                <li>Um protocolo tem dezenas de tratamentos, cada um com repetições</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<!-- ======================= 33 · PIPELINE DE GRÁFICOS ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Módulo 03 · Análise e Dashboards</div>
-    <h2 class="rv" style="--d:.14s;font-size:56px">Do dado de avaliação à imagem exportada</h2>
-    <div class="pipe rv" style="--d:.3s;margin-top:auto">
-      <div class="st"><div class="n">ETAPA 01</div><h4>Dados do back-end</h4><p>Valores já consolidados pelo servidor</p></div>
-      <div class="st"><div class="n">ETAPA 02</div><h4>Mapeamento para séries</h4><p>Vetores de rótulos (xAxis) e valores (yAxis)</p></div>
-      <div class="st"><div class="n">ETAPA 03</div><h4>Opções do ApexCharts</h4><p>Tipo, cores por categoria e rótulos de dados</p></div>
-      <div class="st"><div class="n">ETAPA 04</div><h4>Renderização</h4><p>react-apexcharts, um gráfico por card</p></div>
-      <div class="st"><div class="n">ETAPA 05</div><h4>Exportação PNG</h4><p>use-react-screenshot, com identidade visual</p></div>
-    </div>
-    <div class="rv" style="--d:.46s;margin-top:auto">
-<div class="code" style="font-size:22px"><span class="k">const</span> series = [{ name: xAxisTitle, data: yAxis }];
+      <!-- ======================= 32 · MÓDULO 3: DECLARAÇÃO ======================= -->
+      <section class="slide s-stmt" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Módulo 03 · Análise e Dashboards</div>
+          <p class="big rv" style="--d:.2s;margin-top:36px">Aqui está o que a planilha <span class="hl">não
+              fazia</span>: transformar dado bruto em gráfico, sem ninguém montar nada.</p>
+        </div>
+      </section>
+
+      <!-- ======================= 33 · PIPELINE DE GRÁFICOS ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Módulo 03 · Análise e Dashboards</div>
+          <h2 class="rv" style="--d:.14s;font-size:65px">Do dado de avaliação à imagem exportada</h2>
+          <div class="pipe rv" style="--d:.3s;margin-top:auto">
+            <div class="st">
+              <div class="n">ETAPA 01</div>
+              <h4>Dados do back-end</h4>
+              <p>Já consolidados pelo servidor</p>
+            </div>
+            <div class="st">
+              <div class="n">ETAPA 02</div>
+              <h4>Mapeamento para séries</h4>
+              <p>Rótulos e valores</p>
+            </div>
+            <div class="st">
+              <div class="n">ETAPA 03</div>
+              <h4>Opções do ApexCharts</h4>
+              <p>Tipo, cores e rótulos</p>
+            </div>
+            <div class="st">
+              <div class="n">ETAPA 04</div>
+              <h4>Renderização</h4>
+              <p>Um gráfico por card</p>
+            </div>
+            <div class="st">
+              <div class="n">ETAPA 05</div>
+              <h4>Exportação PNG</h4>
+              <p>Com a identidade visual</p>
+            </div>
+          </div>
+          <div class="rv" style="--d:.46s;margin-top:auto">
+            <pre class="code" style="font-size:22px"><span class="k">const</span> series = [{ name: xAxisTitle, data: yAxis }];
 
 <span class="k">const</span> options: ApexOptions = {
   chart: { type: <span class="s">"bar"</span>, toolbar: { show: <span class="k">false</span> } },
@@ -1073,49 +2280,52 @@ body.editing .edit-hint{display:block}
   dataLabels: { enabled: <span class="k">true</span> },
   xaxis: { categories: xAxis },
   yaxis: { max: maxValue + <span class="s">1</span> },
-};</div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 34 · GRÁFICOS POR AVALIAÇÃO ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="split im-tx">
-      <div class="rv" style="--d:.3s">
-        <div class="shot" style="width:830px;height:749px">
-          <img src="imgs/tela-graficos-avaliacao.png" alt="Gráficos gerados automaticamente para uma avaliação" style="width:830px;left:0;top:0">
+};</pre>
+          </div>
         </div>
-        <div class="shot-cap">Gráficos gerados automaticamente para uma avaliação</div>
-      </div>
-      <div>
-        <div class="eyebrow rv" style="--d:.05s">Módulo 03 · Análise e Dashboards</div>
-        <h2 class="rv" style="--d:.14s;font-size:52px">Nenhum ajuste manual</h2>
-        <ul class="bul rv" style="--d:.24s;margin-top:34px">
-          <li>Os componentes recebem os dados já consolidados e montam <b>sozinhos</b> as séries e as opções do ApexCharts</li>
-          <li>Barras verticais e horizontais comparam resultados entre tratamentos, categorias e momentos de avaliação</li>
-          <li>Cada gráfico ocupa um <b>card próprio</b>, com opção de download individual</li>
-          <li>Colunas coloridas por tratamento e valores numéricos sobre elas, para comparação imediata</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
-<!-- ======================= 35 · EXPORTAÇÃO PNG ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="split half">
-      <div>
-        <div class="eyebrow rvx" style="--d:.05s">Módulo 03 · Análise e Dashboards</div>
-        <h2 class="rvx" style="--d:.14s;font-size:50px">Pronto para o relatório do cliente</h2>
-        <ul class="bul rvx" style="--d:.24s;margin-top:30px">
-          <li>Um elemento oculto na tela mantém o gráfico acompanhado do <b>logotipo</b> e do título dos dados</li>
-          <li>A captura desse elemento é feita com <b>use-react-screenshot</b>, que devolve a imagem em base64</li>
-          <li>Um link é criado dinamicamente e o clique programático força o download</li>
-        </ul>
-        <div class="rvx" style="--d:.4s;margin-top:30px">
-<div class="code" style="font-size:18px;line-height:1.6"><span class="k">const</span> [_, takeScreenshot] = <span class="f">useScreenshot</span>();
+      <!-- ======================= 34 · GRÁFICOS POR AVALIAÇÃO ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="split im-tx">
+            <div class="rv" style="--d:.3s">
+              <div class="shot" style="width:830px;height:749px">
+                <img src="imgs/tela-graficos-avaliacao.png" alt="Gráficos gerados automaticamente para uma avaliação"
+                  style="width:830px;left:0;top:0">
+              </div>
+              <div class="shot-cap">Gráficos gerados automaticamente para uma avaliação</div>
+            </div>
+            <div>
+              <div class="eyebrow rv" style="--d:.05s">Módulo 03 · Análise e Dashboards</div>
+              <h2 class="rv" style="--d:.14s;font-size:60px">Nenhum ajuste manual</h2>
+              <ul class="bul rv" style="--d:.24s;margin-top:34px">
+                <li>O componente monta <b>sozinho</b> séries e opções</li>
+                <li>Barras comparam tratamentos e momentos de avaliação</li>
+                <li>Um <b>card por gráfico</b>, com download individual</li>
+                <li>Valores sobre as colunas, para comparar de imediato</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 35 · EXPORTAÇÃO PNG ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="split half">
+            <div>
+              <div class="eyebrow rvx" style="--d:.05s">Módulo 03 · Análise e Dashboards</div>
+              <h2 class="rvx" style="--d:.14s;font-size:58px">Pronto para o relatório do cliente</h2>
+              <ul class="bul rvx" style="--d:.24s;margin-top:30px">
+                <li>Um elemento oculto reúne gráfico, <b>logotipo</b> e título
+                </li>
+                <li><b>use-react-screenshot</b> devolve a imagem em base64
+                </li>
+                <li>Um link criado na hora força o download</li>
+              </ul>
+              <div class="rvx" style="--d:.4s;margin-top:30px">
+                <pre class="code" style="font-size:18px;line-height:1.6"><span class="k">const</span> [_, takeScreenshot] = <span class="f">useScreenshot</span>();
 
 <span class="k">const</span> <span class="f">downloadChart</span> = <span class="k">async</span> (format) <span class="k">=&gt;</span> {
   <span class="k">const</span> imageBase64 =
@@ -1125,326 +2335,416 @@ body.editing .edit-hint{display:block}
   link.download =
     <span class="s">`${imageTitle} - ${chartTitle}.${format}`</span>;
   link.<span class="f">click</span>();
-};</div>
+};</pre>
+              </div>
+            </div>
+            <div class="rv" style="--d:.34s">
+              <div class="shot" style="width:820px;height:547px">
+                <img src="imgs/tela-graficos-exportacao.png"
+                  alt="Imagem PNG exportada com a identidade visual da empresa"
+                  style="width:879px;left:-29px;top:-34px">
+              </div>
+              <div class="shot-cap">PNG exportado, com logotipo e título dos dados</div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="rv" style="--d:.34s">
-        <div class="shot" style="width:820px;height:547px">
-          <img src="imgs/tela-graficos-exportacao.png" alt="Imagem PNG exportada com a identidade visual da empresa" style="width:879px;left:-29px;top:-34px">
+      </section>
+
+      <!-- ======================= 36 · DASHBOARD GERAL ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="split im-tx">
+            <div class="rv" style="--d:.3s">
+              <div class="shot" style="width:820px;height:762px">
+                <img src="imgs/tela-dashboard-geral.png" alt="Dashboard geral consolidado"
+                  style="width:980px;left:-87px;top:-76px">
+              </div>
+              <div class="shot-cap">Dashboard geral, com a visão consolidada dos protocolos</div>
+            </div>
+            <div>
+              <div class="eyebrow rv" style="--d:.05s">Módulo 03 · Análise e Dashboards</div>
+              <h2 class="rv" style="--d:.14s;font-size:60px">A visão de todos os protocolos</h2>
+              <ul class="bul rv" style="--d:.24s;margin-top:34px">
+                <li>Protocolos por <b>classe</b>, <b>cultura</b>, <b>cliente</b> e <b>status</b></li>
+                <li>Dados consolidados pelo back-end, buscados com <b>React Query</b>
+                </li>
+                <li>O cache mantém tudo atualizado sem recarregar</li>
+                <li>Mesmos vetores de rótulos e valores dos gráficos individuais</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="shot-cap">PNG exportado, com logotipo e título dos dados</div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
-<!-- ======================= 36 · DASHBOARD GERAL ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="split im-tx">
-      <div class="rv" style="--d:.3s">
-        <div class="shot" style="width:820px;height:762px">
-          <img src="imgs/tela-dashboard-geral.png" alt="Dashboard geral consolidado" style="width:980px;left:-87px;top:-76px">
+      <!-- ======================= 37 · DESAFIO DE PERFORMANCE ======================= -->
+      <section class="slide" data-block="04 · Atividades Realizadas">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Módulo 03 · O desafio técnico</div>
+          <h2 class="rv" style="--d:.14s;font-size:65px">Muitos gráficos na mesma tela custam caro</h2>
+          <div class="cards c3 rv" style="--d:.3s;margin-top:auto;margin-bottom:auto">
+            <div class="card" style="padding:44px 38px">
+              <div class="n">SINTOMA</div>
+              <h3 style="font-size:39px">Lentidão perceptível</h3>
+              <p style="font-size:28px;margin-top:18px">Renderizar vários gráficos ao mesmo tempo travava a interface.
+              </p>
+            </div>
+            <div class="card" style="padding:44px 38px">
+              <div class="n">CAUSA</div>
+              <h3 style="font-size:39px">Tudo renderizado de uma vez</h3>
+              <p style="font-size:28px;margin-top:18px">Gráficos fora da tela eram montados junto com os visíveis.</p>
+            </div>
+            <div class="card lit" style="padding:44px 38px">
+              <div class="n">SOLUÇÃO</div>
+              <h3 style="font-size:39px">Carregamento sob demanda</h3>
+              <p style="font-size:28px;margin-top:18px">Com <b>lazy loading</b>, o gráfico só é montado quando aparece.
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="shot-cap">Dashboard geral, com a visão consolidada dos protocolos</div>
-      </div>
-      <div>
-        <div class="eyebrow rv" style="--d:.05s">Módulo 03 · Análise e Dashboards</div>
-        <h2 class="rv" style="--d:.14s;font-size:52px">A visão de todos os protocolos</h2>
-        <ul class="bul rv" style="--d:.24s;margin-top:34px">
-          <li>Distribuição de protocolos por <b>classe</b>, por <b>cultura</b>, por <b>cliente</b> e por <b>status</b></li>
-          <li>Contagens e percentuais vêm de um endpoint específico do back-end, buscados com <b>React Query</b></li>
-          <li>O cache mantém as visualizações atualizadas sem recarregamento manual da página</li>
-          <li>No front-end, esses dados são mapeados para os mesmos vetores de rótulos e valores dos gráficos individuais</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
-<!-- ======================= 37 · DESAFIO DE PERFORMANCE ======================= -->
-<section class="slide" data-block="04 · Atividades Realizadas">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Módulo 03 · O desafio técnico</div>
-    <h2 class="rv" style="--d:.14s;font-size:56px">Muitos gráficos na mesma tela custam caro</h2>
-    <div class="cards c3 rv" style="--d:.3s;margin-top:auto;margin-bottom:auto">
-      <div class="card" style="padding:44px 38px"><div class="n">SINTOMA</div><h3 style="font-size:34px">Lentidão perceptível</h3><p style="font-size:24px;margin-top:18px">A renderização simultânea de múltiplos gráficos com grandes conjuntos de dados travava a interface.</p></div>
-      <div class="card" style="padding:44px 38px"><div class="n">CAUSA</div><h3 style="font-size:34px">Tudo renderizado de uma vez</h3><p style="font-size:24px;margin-top:18px">Gráficos fora da área visível eram montados junto com os que o usuário estava efetivamente olhando.</p></div>
-      <div class="card lit" style="padding:44px 38px"><div class="n">SOLUÇÃO</div><h3 style="font-size:34px">Carregamento sob demanda</h3><p style="font-size:24px;margin-top:18px">Com <b>lazy loading</b>, os gráficos passaram a ser renderizados apenas quando o usuário navega até a seção correspondente.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 38 · DIVISOR: CONSIDERAÇÕES FINAIS ======================= -->
-<section class="slide paper s-div" data-block="05 · Considerações Finais" data-theme="paper">
-  <div class="stripe"></div>
-  <div class="pad">
-    <div class="num rv" style="--d:.06s">05</div>
-    <h2 class="rv" style="--d:.18s">Considerações Finais</h2>
-    <p class="deck rv" style="--d:.3s">Avaliação do que foi entregue, limitações honestas, trabalhos futuros e o que o estágio deixou na formação.</p>
-  </div>
-</section>
-
-<!-- ======================= 39 · OBJETIVO ATENDIDO ======================= -->
-<section class="slide" data-block="05 · Considerações Finais">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Avaliação do produto</div>
-    <h2 class="rv" style="--d:.14s;font-size:56px">O objetivo central foi atendido no plano técnico</h2>
-    <p class="deck rv" style="--d:.24s">Substituir o registro descentralizado em planilhas por uma plataforma própria, com acesso controlado e análise automatizada.</p>
-    <div class="cards c3 rv" style="--d:.38s;margin-top:auto;margin-bottom:auto">
-      <div class="card lit"><div class="n">ENTREGA 01</div><h3>Centralização</h3><p style="font-size:23px">O cadastro completo dos protocolos, com formulários extensos, validação declarativa e estruturas dinâmicas para as avaliações de campo.</p></div>
-      <div class="card lit"><div class="n">ENTREGA 02</div><h3>Controle de acesso</h3><p style="font-size:23px">Cada colaborador interage apenas com as funcionalidades do seu papel, com restrição no nível das rotas e renovação transparente de sessão.</p></div>
-      <div class="card lit"><div class="n">ENTREGA 03</div><h3>Análise automatizada</h3><p style="font-size:23px">Gráficos e dashboards gerados a partir dos dados consolidados e exportáveis como imagens padronizadas pela identidade visual da empresa.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 40 · DIFICULDADES, LIMITAÇÃO E FUTURO ======================= -->
-<section class="slide" data-block="05 · Considerações Finais">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">O que é preciso dizer com honestidade</div>
-    <h2 class="rv" style="--d:.14s;font-size:56px">Dificuldades, limitação e trabalhos futuros</h2>
-    <div class="cards c3 rv" style="--d:.3s;margin-top:auto;margin-bottom:auto">
-      <div class="card" style="padding:40px 34px">
-        <div class="n">DIFICULDADES SUPERADAS</div><h3 style="font-size:30px">Regras de negócio e performance</h3>
-        <ul class="bul tight" style="margin-top:22px">
-          <li>Traduzir o domínio agronômico para a lógica dos formulários, com validação contínua junto ao cliente</li>
-          <li>Manter desempenho adequado na renderização de múltiplos gráficos, mitigada com carregamento sob demanda</li>
-        </ul>
-      </div>
-      <div class="card" style="padding:40px 34px">
-        <div class="n">LIMITAÇÃO OBSERVADA</div><h3 style="font-size:30px">Adoção inicial reduzida</h3>
-        <ul class="bul tight" style="margin-top:22px">
-          <li>A adoção pelo cliente foi inicialmente baixa</li>
-          <li>Isso é atribuível à <b>mudança de cultura</b> exigida pela transição das planilhas para um sistema estruturado, e não a uma deficiência técnica da solução</li>
-        </ul>
-      </div>
-      <div class="card lit" style="padding:40px 34px">
-        <div class="n">TRABALHOS FUTUROS</div><h3 style="font-size:30px">O que viria em seguida</h3>
-        <ul class="bul tight" style="margin-top:22px">
-          <li>Acompanhar a adoção ao longo do tempo</li>
-          <li>Realizar testes de usabilidade com os colaboradores</li>
-          <li>Evoluir os dashboards com novos tipos de análise</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 41 · IMPACTO NA FORMAÇÃO ======================= -->
-<section class="slide" data-block="05 · Considerações Finais">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">Impacto do estágio na formação</div>
-    <h2 class="rv" style="--d:.14s;font-size:56px">A primeira experiência com software de verdade</h2>
-    <p class="deck rv" style="--d:.24s">Produto real, equipe estruturada, cliente externo e regras de negócio que ninguém tinha escrito.</p>
-    <div class="cards c3 rv" style="--d:.38s;margin-top:auto;margin-bottom:auto">
-      <div class="card"><div class="n">PLANO TÉCNICO</div><h3 style="font-size:30px">Competências consolidadas</h3><p style="font-size:23px">React e TypeScript, estado global com Zustand e Immer, formulários com Formik e Yup, integração com Axios e React Query e, sobretudo, <b>visualização de dados</b> com ApexCharts.</p></div>
-      <div class="card"><div class="n">PLANO INTERPESSOAL</div><h3 style="font-size:30px">Comunicação e trabalho em equipe</h3><p style="font-size:23px">Levantar requisitos e traduzir necessidades de negócio em solução técnica exigiu diálogo constante com o cliente e com os demais membros do time.</p></div>
-      <div class="card lit"><div class="n">DIREÇÃO DE CARREIRA</div><h3 style="font-size:30px">Interfaces orientadas a dados</h3><p style="font-size:23px">A área de visualização de dados passou a orientar os interesses profissionais, integrando construção de aplicações web com análise de informação.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= 42 · MÃO DUPLA ======================= -->
-<section class="slide" data-block="05 · Considerações Finais">
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.05s">O caminho inverso</div>
-    <h2 class="rv" style="--d:.14s;font-size:56px">O que a graduação deu, e o que faltou</h2>
-    <div class="split half" style="margin-top:52px">
-      <div class="rvx" style="--d:.28s">
-        <div class="card lit" style="height:100%">
-          <div class="n">DISCIPLINAS QUE SUSTENTARAM O TRABALHO</div>
-          <ul class="bul tight" style="margin-top:24px">
-            <li><b>Engenharia de Software:</b> ciclo de desenvolvimento, requisitos e métodos ágeis</li>
-            <li><b>Programação Orientada a Objetos:</b> modularidade e responsabilidade única traduzidas na componentização do React</li>
-            <li><b>Banco de Dados:</b> entender as estruturas devolvidas pela API</li>
-            <li><b>Interação Humano-Computador:</b> decisões de usabilidade e organização das telas</li>
-            <li><b>Algoritmos e Estruturas de Dados:</b> manipulação de vetores e estruturas aninhadas</li>
-          </ul>
+      <!-- ======================= 38 · DIVISOR: CONSIDERAÇÕES FINAIS ======================= -->
+      <section class="slide paper s-div" data-block="05 · Considerações Finais" data-theme="paper">
+        <div class="stripe"></div>
+        <div class="pad">
+          <div class="num rv" style="--d:.06s">05</div>
+          <h2 class="rv" style="--d:.18s">Considerações Finais</h2>
+          <p class="deck rv" style="--d:.3s">Avaliação do que foi entregue, limitações honestas, trabalhos futuros e o
+            que o estágio deixou na formação.</p>
         </div>
-      </div>
-      <div class="rvx" style="--d:.42s">
-        <div class="card" style="height:100%">
-          <div class="n">LACUNAS PERCEBIDAS</div>
-          <ul class="bul tight" style="margin-top:24px">
-            <li><b>Frameworks modernos de front-end</b>, como React e o ecossistema em torno do TypeScript, vistos de forma superficial nas obrigatórias</li>
-            <li><b>Testes automatizados de interface</b>, pouco trabalhados no curso e cada vez mais valorizados no mercado</li>
-            <li><b>Integração contínua, versionamento em equipe</b> (com pull requests e revisão de código) e deploy em nuvem</li>
-            <li>No mesmo grupo, noções de <b>conteinerização e infraestrutura</b>, como Docker e configuração de ambientes</li>
-          </ul>
-          <p style="font-size:23px;margin-top:24px">Cobrir essas lacunas teria reduzido a curva de aprendizado dos primeiros dias de estágio.</p>
+      </section>
+
+      <!-- ======================= 39 · OBJETIVO ATENDIDO ======================= -->
+      <section class="slide" data-block="05 · Considerações Finais">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Avaliação do produto</div>
+          <h2 class="rv" style="--d:.14s;font-size:65px">O objetivo central foi atendido no plano técnico</h2>
+          <p class="deck rv" style="--d:.24s">Sair da planilha para uma plataforma própria, com acesso controlado e
+            análise automatizada.</p>
+          <div class="cards c3 rv" style="--d:.38s;margin-top:auto;margin-bottom:auto">
+            <div class="card lit">
+              <div class="n">ENTREGA 01</div>
+              <h3>Centralização</h3>
+              <p style="font-size:27px">Cadastro completo dos protocolos, com validação declarativa.</p>
+            </div>
+            <div class="card lit">
+              <div class="n">ENTREGA 02</div>
+              <h3>Controle de acesso</h3>
+              <p style="font-size:27px">Cada colaborador vê apenas o que é do seu papel.</p>
+            </div>
+            <div class="card lit">
+              <div class="n">ENTREGA 03</div>
+              <h3>Análise automatizada</h3>
+              <p style="font-size:27px">Gráficos gerados do próprio dado, exportáveis com a marca do cliente.</p>
+            </div>
+          </div>
         </div>
+      </section>
+
+      <!-- ======================= 40 · DIFICULDADES, LIMITAÇÃO E FUTURO ======================= -->
+      <section class="slide" data-block="05 · Considerações Finais">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">O que é preciso dizer com honestidade</div>
+          <h2 class="rv" style="--d:.14s;font-size:65px">Dificuldades, limitação e trabalhos futuros</h2>
+          <div class="cards c3 rv" style="--d:.3s;margin-top:auto;margin-bottom:auto">
+            <div class="card" style="padding:40px 34px">
+              <div class="n">DIFICULDADES SUPERADAS</div>
+              <h3 style="font-size:35px">Regras de negócio e performance</h3>
+              <ul class="bul tight" style="margin-top:22px">
+                <li>Traduzir o domínio agronômico para a lógica dos formulários
+                </li>
+                <li>Desempenho na renderização de múltiplos gráficos</li>
+              </ul>
+            </div>
+            <div class="card" style="padding:40px 34px">
+              <div class="n">LIMITAÇÃO OBSERVADA</div>
+              <h3 style="font-size:35px">Adoção inicial reduzida</h3>
+              <ul class="bul tight" style="margin-top:22px">
+                <li>A adoção inicial foi baixa</li>
+                <li>Atribuível à <b>mudança de cultura</b>, não a falha técnica</li>
+              </ul>
+            </div>
+            <div class="card lit" style="padding:40px 34px">
+              <div class="n">TRABALHOS FUTUROS</div>
+              <h3 style="font-size:35px">O que viria em seguida</h3>
+              <ul class="bul tight" style="margin-top:22px">
+                <li>Acompanhar a adoção no tempo</li>
+                <li>Testes de usabilidade com os colaboradores</li>
+                <li>Novos tipos de análise nos dashboards</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 41 · IMPACTO NA FORMAÇÃO ======================= -->
+      <section class="slide" data-block="05 · Considerações Finais">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">Impacto do estágio na formação</div>
+          <h2 class="rv" style="--d:.14s;font-size:65px">A primeira experiência com software de verdade</h2>
+          <p class="deck rv" style="--d:.24s">Produto real, equipe estruturada e cliente externo.</p>
+          <div class="cards c3 rv" style="--d:.38s;margin-top:auto;margin-bottom:auto">
+            <div class="card">
+              <div class="n">PLANO TÉCNICO</div>
+              <h3 style="font-size:35px">Competências consolidadas</h3>
+              <p style="font-size:27px">React e TypeScript, estado global, formulários, integração com API e, sobretudo,
+                <b>visualização de dados</b>.</p>
+            </div>
+            <div class="card">
+              <div class="n">PLANO INTERPESSOAL</div>
+              <h3 style="font-size:35px">Comunicação e trabalho em equipe</h3>
+              <p style="font-size:27px">Traduzir necessidade de negócio em solução técnica exigiu diálogo constante.</p>
+            </div>
+            <div class="card lit">
+              <div class="n">DIREÇÃO DE CARREIRA</div>
+              <h3 style="font-size:35px">Interfaces orientadas a dados</h3>
+              <p style="font-size:27px">Visualização de dados passou a orientar meu interesse profissional.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 42 · MÃO DUPLA ======================= -->
+      <section class="slide" data-block="05 · Considerações Finais">
+        <div class="pad">
+          <div class="eyebrow rv" style="--d:.05s">O caminho inverso</div>
+          <h2 class="rv" style="--d:.14s;font-size:65px">O que a graduação deu, e o que faltou</h2>
+          <div class="split half" style="margin-top:52px">
+            <div class="rvx" style="--d:.28s">
+              <div class="card lit" style="height:100%">
+                <div class="n">DISCIPLINAS QUE SUSTENTARAM O TRABALHO</div>
+                <ul class="bul tight" style="margin-top:24px">
+                  <li><b>Engenharia de Software:</b> requisitos e métodos ágeis</li>
+                  <li><b>POO:</b> modularidade virou componentização</li>
+                  <li><b>Banco de Dados:</b> as estruturas da API</li>
+                  <li><b>IHC:</b> usabilidade e organização das telas</li>
+                  <li><b>AED:</b> vetores e estruturas aninhadas</li>
+                </ul>
+              </div>
+            </div>
+            <div class="rvx" style="--d:.42s">
+              <div class="card" style="height:100%">
+                <div class="n">LACUNAS PERCEBIDAS</div>
+                <ul class="bul tight" style="margin-top:24px">
+                  <li><b>Frameworks modernos de front-end</b>, vistos de forma superficial</li>
+                  <li><b>Testes automatizados de interface</b>, pouco trabalhados no curso</li>
+                  <li><b>Integração contínua e versionamento em equipe</b>, com pull requests</li>
+                  <li>No mesmo grupo, <b>conteinerização e infraestrutura</b></li>
+                </ul>
+                <p style="font-size:27px;margin-top:24px">Cobrir isso teria reduzido a curva dos primeiros dias.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================= 43 · ENCERRAMENTO ======================= -->
+      <section class="slide paper s-end" data-block="" data-theme="paper">
+        <div class="stripe"></div>
+        <div class="pad">
+          <div class="end-grid">
+            <div>
+              <div class="eyebrow rv" style="--d:.06s">Obrigado pela atenção</div>
+              <p class="big rv" style="--d:.18s;margin-top:26px">Perguntas?</p>
+              <div class="rv end-credits" style="--d:.34s">
+                <div><span>Autor</span><b>Lucas Henrique Lopes Costa</b></div>
+                <div><span>Orientador</span><b>Prof. Paulo Afonso Parreira Júnior</b></div>
+                <div><span>Instituição</span><b>UFLA · Sistemas de Informação · 2026</b></div>
+              </div>
+            </div>
+            <div class="rv" style="--d:.46s">
+              <div class="shot on-paper" style="width:760px;height:570px">
+                <img src="imgs/equipe-zeeway.jpg" alt="Equipe da Zeeway" style="width:760px;left:0;top:0">
+              </div>
+              <div class="shot-cap on-paper">Equipe Zeeway</div>
+            </div></div>
+        </div>
+      </section>
+
+      <!-- ======================= CROMO (rodapé + progresso) ======================= -->
+      <div class="chrome" id="chrome">
+        <div class="l" id="chromeBlock"></div>
+        <div class="r" id="chromeNum"></div>
       </div>
-    </div>
+      <div class="progress" id="progress" style="width:0"></div>
+
+    </main>
   </div>
-</section>
 
-<!-- ======================= 43 · ENCERRAMENTO ======================= -->
-<section class="slide paper s-end" data-block="" data-theme="paper">
-  <div class="stripe"></div>
-  <div class="pad">
-    <div class="eyebrow rv" style="--d:.06s">Obrigado pela atenção</div>
-    <p class="big rv" style="--d:.18s;margin-top:30px">Perguntas?</p>
-    <div class="rv" style="--d:.34s;margin-top:56px;display:flex;gap:80px">
-      <div><span style="display:block;font-family:var(--font-mono);font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:#12796F;margin-bottom:11px">Autor</span><b style="font-family:var(--font-display);font-weight:600;font-size:29px;color:var(--ink)">Lucas Henrique Lopes Costa</b></div>
-      <div><span style="display:block;font-family:var(--font-mono);font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:#12796F;margin-bottom:11px">Orientador</span><b style="font-family:var(--font-display);font-weight:600;font-size:29px;color:var(--ink)">Prof. Paulo Afonso Parreira Júnior</b></div>
-      <div><span style="display:block;font-family:var(--font-mono);font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:#12796F;margin-bottom:11px">Instituição</span><b style="font-family:var(--font-display);font-weight:600;font-size:29px;color:var(--ink)">UFLA · Sistemas de Informação · 2026</b></div>
-    </div>
-  </div>
-</section>
+  <!-- Edição em linha -->
+  <div class="edit-hotzone" id="editHotzone"></div>
+  <button class="edit-toggle" id="editToggle" title="Modo de edição (E)">✎</button>
+  <div class="edit-hint">Modo de edição ativo. Clique em qualquer texto para editar. Ctrl+S salva no navegador.</div>
 
-<!-- ======================= CROMO (rodapé + progresso) ======================= -->
-<div class="chrome" id="chrome"><div class="l" id="chromeBlock"></div><div class="r" id="chromeNum"></div></div>
-<div class="progress" id="progress" style="width:0"></div>
+  <script>
+    /* ===========================================
+       GRADE DE PARCELAS DA CAPA
+       Padrão fixo de células destacadas, gerado uma vez.
+       =========================================== */
+    (function () {
+      var host = document.getElementById('plots');
+      var pattern = ['', 'on', '', 'mid', 'pap', '', 'on', '', '', 'mid', '', 'on', 'on', '', 'pap', '', '', 'on', 'mid', ''];
+      pattern.forEach(function (cls, i) {
+        var el = document.createElement('i');
+        if (cls) el.className = cls;
+        el.style.setProperty('--d', (0.42 + i * 0.032) + 's');
+        host.appendChild(el);
+      });
+    })();
 
-</main>
-</div>
-
-<!-- Edição em linha -->
-<div class="edit-hotzone" id="editHotzone"></div>
-<button class="edit-toggle" id="editToggle" title="Modo de edição (E)">✎</button>
-<div class="edit-hint">Modo de edição ativo. Clique em qualquer texto para editar. Ctrl+S salva no navegador.</div>
-
-<script>
-/* ===========================================
-   GRADE DE PARCELAS DA CAPA
-   Padrão fixo de células destacadas, gerado uma vez.
-   =========================================== */
-(function(){
-  var host=document.getElementById('plots');
-  var pattern=['','on','','mid','pap','','on','','','mid','','on','on','','pap','','','on','mid',''];
-  pattern.forEach(function(cls,i){
-    var el=document.createElement('i');
-    if(cls) el.className=cls;
-    el.style.setProperty('--d',(0.42+i*0.032)+'s');
-    host.appendChild(el);
-  });
-})();
-
-/* ===========================================
-   CONTROLADOR DA APRESENTAÇÃO
-   Teclado, roda do mouse, toque e escala do palco.
-   =========================================== */
-class SlidePresentation {
-  constructor(){
-    this.slides=Array.from(document.querySelectorAll('.slide'));
-    this.stage=document.getElementById('deckStage');
-    this.chrome=document.getElementById('chrome');
-    this.chromeBlock=document.getElementById('chromeBlock');
-    this.chromeNum=document.getElementById('chromeNum');
-    this.progress=document.getElementById('progress');
-    this.current=0;
-    this.setupStageScale();
-    this.setupKeyboardNav();
-    this.setupTouchNav();
-    this.setupWheelNav();
-    this.show(0);
-  }
-
-  /* Escala o palco 1920×1080 inteiro para caber na janela (letterbox/pillarbox) */
-  setupStageScale(){
-    const scale=()=>{
-      const f=Math.min(window.innerWidth/1920,window.innerHeight/1080);
-      const x=(window.innerWidth-1920*f)/2;
-      const y=(window.innerHeight-1080*f)/2;
-      this.stage.style.transform=`translate(${x}px, ${y}px) scale(${f})`;
-    };
-    scale();
-    window.addEventListener('resize',scale);
-  }
-
-  setupKeyboardNav(){
-    document.addEventListener('keydown',(e)=>{
-      if(document.body.classList.contains('editing')&&e.target.isContentEditable) return;
-      switch(e.key){
-        case 'ArrowRight': case 'ArrowDown': case ' ': case 'PageDown':
-          e.preventDefault(); this.next(); break;
-        case 'ArrowLeft': case 'ArrowUp': case 'PageUp':
-          e.preventDefault(); this.prev(); break;
-        case 'Home': e.preventDefault(); this.show(0); break;
-        case 'End': e.preventDefault(); this.show(this.slides.length-1); break;
+    /* ===========================================
+       CONTROLADOR DA APRESENTAÇÃO
+       Teclado, roda do mouse, toque e escala do palco.
+       =========================================== */
+    class SlidePresentation {
+      constructor() {
+        this.slides = Array.from(document.querySelectorAll('.slide'));
+        this.stage = document.getElementById('deckStage');
+        this.chrome = document.getElementById('chrome');
+        this.chromeBlock = document.getElementById('chromeBlock');
+        this.chromeNum = document.getElementById('chromeNum');
+        this.progress = document.getElementById('progress');
+        this.current = 0;
+        this.setupStageScale();
+        this.setupKeyboardNav();
+        this.setupTouchNav();
+        this.setupWheelNav();
+        this.show(0);
       }
+
+      /* Escala o palco 1920×1080 inteiro para caber na janela (letterbox/pillarbox) */
+      setupStageScale() {
+        const scale = () => {
+          const f = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+          const x = (window.innerWidth - 1920 * f) / 2;
+          const y = (window.innerHeight - 1080 * f) / 2;
+          this.stage.style.transform = `translate(${x}px, ${y}px) scale(${f})`;
+        };
+        scale();
+        window.addEventListener('resize', scale);
+      }
+
+      setupKeyboardNav() {
+        document.addEventListener('keydown', (e) => {
+          if (document.body.classList.contains('editing') && e.target.isContentEditable) return;
+          switch (e.key) {
+            case 'ArrowRight': case 'ArrowDown': case ' ': case 'PageDown':
+              e.preventDefault(); this.next(); break;
+            case 'ArrowLeft': case 'ArrowUp': case 'PageUp':
+              e.preventDefault(); this.prev(); break;
+            case 'Home': e.preventDefault(); this.show(0); break;
+            case 'End': e.preventDefault(); this.show(this.slides.length - 1); break;
+            case 'f': case 'F': e.preventDefault(); this.toggleFullscreen(); break;
+          }
+        });
+      }
+
+      /* Tela cheia com a tecla F. Esc sai, pelo comportamento padrão do navegador.
+
+         O palco reescala sozinho porque o resize dispara na troca. */
+
+      toggleFullscreen() {
+
+        const el = document.documentElement;
+
+        const isFull = document.fullscreenElement || document.webkitFullscreenElement;
+
+        if (!isFull) {
+
+          const enter = el.requestFullscreen || el.webkitRequestFullscreen;
+
+          if (enter) enter.call(el).catch(() => { });
+
+        } else {
+
+          const exit = document.exitFullscreen || document.webkitExitFullscreen;
+
+          if (exit) exit.call(document).catch(() => { });
+
+        }
+
+      }
+
+
+      setupTouchNav() {
+        let x0 = null;
+        document.addEventListener('touchstart', (e) => { x0 = e.changedTouches[0].clientX; }, { passive: true });
+        document.addEventListener('touchend', (e) => {
+          if (x0 === null) return;
+          const dx = e.changedTouches[0].clientX - x0;
+          if (Math.abs(dx) > 60) { dx < 0 ? this.next() : this.prev(); }
+          x0 = null;
+        }, { passive: true });
+      }
+
+      setupWheelNav() {
+        let lock = false;
+        document.addEventListener('wheel', (e) => {
+          if (lock || Math.abs(e.deltaY) < 24) return;
+          lock = true; e.deltaY > 0 ? this.next() : this.prev();
+          setTimeout(() => { lock = false; }, 650);
+        }, { passive: true });
+      }
+
+      next() { this.show(this.current + 1); }
+      prev() { this.show(this.current - 1); }
+
+      show(i) {
+        this.current = Math.max(0, Math.min(i, this.slides.length - 1));
+        this.slides.forEach((s, n) => {
+          s.classList.toggle('active', n === this.current);
+          s.classList.toggle('visible', n === this.current);
+        });
+        const s = this.slides[this.current];
+        /* O cromo do rodapé acompanha o tema do slide ativo */
+        this.chrome.classList.toggle('on-paper', s.dataset.theme === 'paper');
+        this.chromeBlock.textContent = s.dataset.block || '';
+        this.chromeNum.textContent = String(this.current + 1).padStart(2, '0') + ' / ' + String(this.slides.length).padStart(2, '0');
+        this.progress.style.width = ((this.current + 1) / this.slides.length * 100) + '%';
+      }
+    }
+    const deck = new SlidePresentation();
+
+    /* ===========================================
+       EDIÇÃO EM LINHA
+       Tecla E ou canto superior esquerdo. Ctrl+S salva no navegador.
+       =========================================== */
+    const editor = {
+      isActive: false,
+      key: 'tcc-deck-edits',
+      selector: 'h1,h2,h3,h4,p,li,span,b,div.n,div.lb,div.lt',
+      toggle() {
+        this.isActive = !this.isActive;
+        document.body.classList.toggle('editing', this.isActive);
+        document.getElementById('editToggle').classList.toggle('active', this.isActive);
+        document.querySelectorAll('.slide ' + this.selector).forEach((el) => {
+          if (el.children.length === 0) el.contentEditable = this.isActive ? 'true' : 'false';
+        });
+      },
+      save() {
+        localStorage.setItem(this.key, document.getElementById('deckStage').innerHTML);
+      },
+      restore() {
+        const html = localStorage.getItem(this.key);
+        if (html) document.getElementById('deckStage').innerHTML = html;
+      }
+    };
+
+    const hotzone = document.getElementById('editHotzone');
+    const editToggle = document.getElementById('editToggle');
+    let hideTimeout = null;
+    const showToggle = () => { clearTimeout(hideTimeout); editToggle.classList.add('show'); };
+    const hideToggle = () => { hideTimeout = setTimeout(() => { if (!editor.isActive) editToggle.classList.remove('show'); }, 400); };
+    hotzone.addEventListener('mouseenter', showToggle);
+    hotzone.addEventListener('mouseleave', hideToggle);
+    editToggle.addEventListener('mouseenter', showToggle);
+    editToggle.addEventListener('mouseleave', hideToggle);
+    editToggle.addEventListener('click', () => editor.toggle());
+    document.addEventListener('keydown', (e) => {
+      if ((e.key === 'e' || e.key === 'E') && !e.target.isContentEditable) { editor.toggle(); }
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); editor.save(); }
     });
-  }
-
-  setupTouchNav(){
-    let x0=null;
-    document.addEventListener('touchstart',(e)=>{x0=e.changedTouches[0].clientX;},{passive:true});
-    document.addEventListener('touchend',(e)=>{
-      if(x0===null) return;
-      const dx=e.changedTouches[0].clientX-x0;
-      if(Math.abs(dx)>60){ dx<0?this.next():this.prev(); }
-      x0=null;
-    },{passive:true});
-  }
-
-  setupWheelNav(){
-    let lock=false;
-    document.addEventListener('wheel',(e)=>{
-      if(lock||Math.abs(e.deltaY)<24) return;
-      lock=true; e.deltaY>0?this.next():this.prev();
-      setTimeout(()=>{lock=false;},650);
-    },{passive:true});
-  }
-
-  next(){ this.show(this.current+1); }
-  prev(){ this.show(this.current-1); }
-
-  show(i){
-    this.current=Math.max(0,Math.min(i,this.slides.length-1));
-    this.slides.forEach((s,n)=>{
-      s.classList.toggle('active',n===this.current);
-      s.classList.toggle('visible',n===this.current);
-    });
-    const s=this.slides[this.current];
-    /* O cromo do rodapé acompanha o tema do slide ativo */
-    this.chrome.classList.toggle('on-paper',s.dataset.theme==='paper');
-    this.chromeBlock.textContent=s.dataset.block||'';
-    this.chromeNum.textContent=String(this.current+1).padStart(2,'0')+' / '+String(this.slides.length).padStart(2,'0');
-    this.progress.style.width=((this.current+1)/this.slides.length*100)+'%';
-  }
-}
-const deck=new SlidePresentation();
-
-/* ===========================================
-   EDIÇÃO EM LINHA
-   Tecla E ou canto superior esquerdo. Ctrl+S salva no navegador.
-   =========================================== */
-const editor={
-  isActive:false,
-  key:'tcc-deck-edits',
-  selector:'h1,h2,h3,h4,p,li,span,b,div.n,div.lb,div.lt',
-  toggle(){
-    this.isActive=!this.isActive;
-    document.body.classList.toggle('editing',this.isActive);
-    document.getElementById('editToggle').classList.toggle('active',this.isActive);
-    document.querySelectorAll('.slide '+this.selector).forEach((el)=>{
-      if(el.children.length===0) el.contentEditable=this.isActive?'true':'false';
-    });
-  },
-  save(){
-    localStorage.setItem(this.key,document.getElementById('deckStage').innerHTML);
-  },
-  restore(){
-    const html=localStorage.getItem(this.key);
-    if(html) document.getElementById('deckStage').innerHTML=html;
-  }
-};
-
-const hotzone=document.getElementById('editHotzone');
-const editToggle=document.getElementById('editToggle');
-let hideTimeout=null;
-const showToggle=()=>{clearTimeout(hideTimeout);editToggle.classList.add('show');};
-const hideToggle=()=>{hideTimeout=setTimeout(()=>{if(!editor.isActive) editToggle.classList.remove('show');},400);};
-hotzone.addEventListener('mouseenter',showToggle);
-hotzone.addEventListener('mouseleave',hideToggle);
-editToggle.addEventListener('mouseenter',showToggle);
-editToggle.addEventListener('mouseleave',hideToggle);
-editToggle.addEventListener('click',()=>editor.toggle());
-document.addEventListener('keydown',(e)=>{
-  if((e.key==='e'||e.key==='E')&&!e.target.isContentEditable){ editor.toggle(); }
-  if((e.ctrlKey||e.metaKey)&&e.key==='s'){ e.preventDefault(); editor.save(); }
-});
-</script>
+  </script>
 </body>
+
 </html>

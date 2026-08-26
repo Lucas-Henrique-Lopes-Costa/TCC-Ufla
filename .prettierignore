@@ -1,0 +1,3 @@
+# O deck usa <pre> com white-space:pre, onde a indentação é conteúdo visível.
+# Reformatar este arquivo quebra os blocos de código dos slides.
+apresentacao/index.html

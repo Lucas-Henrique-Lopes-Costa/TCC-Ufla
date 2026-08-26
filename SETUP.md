@@ -98,7 +98,7 @@ O repositório guarda as duas prontas: `..._principal.pdf` e `..._destacado.pdf`
 sem servidor e sem build.
 
 - Navegação: setas, barra de espaço ou roda do mouse. `Home` e `End` vão para os extremos.
-- Tela cheia: `F11`.
+- Tela cheia: tecla `F`. `Esc` sai.
 - Edição de texto no próprio slide: tecla `E`, clique no texto, `Ctrl+S` para salvar no navegador.
 - As imagens ficam em `apresentacao/imgs/` e precisam viajar junto com o HTML.
 - `apresentacao/Apresentacao_TCC_Lucas_Henrique.pdf` é o plano B para o projetor.
