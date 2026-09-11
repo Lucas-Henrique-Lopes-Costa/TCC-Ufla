@@ -99,7 +99,10 @@ sem servidor e sem build.
 
 - Navegação: setas, barra de espaço ou roda do mouse. `Home` e `End` vão para os extremos.
 - Tela cheia: tecla `F`. `Esc` sai.
-- Edição de texto no próprio slide: tecla `E`, clique no texto, `Ctrl+S` para salvar no navegador.
+- Tamanho da fonte: `+` aumenta, `-` diminui, `0` volta ao padrão. Fica salvo no navegador.
+- Cronômetro de ensaio: `T` liga e desliga, `R` zera.
+- Edição de texto no próprio slide: tecla `E`, clique no texto. Uma barrinha aparece para mudar o tamanho só daquele bloco (`Alt+↑` / `Alt+↓` pelo teclado). `Ctrl+S` baixa um `index.html` com as edições dentro: mova o arquivo para `apresentacao/`, substituindo o atual.
+- Todos os atalhos: tecla `H`.
 - As imagens ficam em `apresentacao/imgs/` e precisam viajar junto com o HTML.
 - `apresentacao/Apresentacao_TCC_Lucas_Henrique.pdf` é o plano B para o projetor.
 - `apresentacao/ROTEIRO-E-PERGUNTAS.md` tem o roteiro de fala e as perguntas prováveis da banca.

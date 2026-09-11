@@ -1,7 +1,7 @@
 # Roteiro de Apresentação e Preparação para a Banca
 
 **Defesa de TCC · Lucas Henrique Lopes Costa · UFLA, Sistemas de Informação, 2026**
-Deck: `apresentacao/index.html` (43 slides)
+Deck: `apresentacao/index.html` (39 slides)
 
 ---
 
@@ -18,18 +18,28 @@ Ensaie duas vezes cronometrado. Na primeira você vai estourar o tempo, é norma
 | Bloco | Slides | Tempo alvo | Acumulado |
 |---|---|---|---|
 | Abertura e roteiro | 1 a 2 | 1 min | 1 min |
-| 01 Introdução | 3 a 8 | 3 min 30 s | 4 min 30 s |
-| 02 Fundamentação Teórica | 9 a 12 | 3 min | 7 min 30 s |
-| 03 Metodologia e Processo | 13 a 18 | 4 min | 11 min 30 s |
-| **04 Atividades Realizadas** | **19 a 37** | **11 min** | **22 min 30 s** |
-| 05 Considerações Finais | 38 a 42 | 3 min | 25 min 30 s |
-| Encerramento | 43 | 30 s | 26 min |
+| 01 Introdução | 3 a 7 | 3 min | 4 min |
+| 02 Fundamentação Teórica | 8 a 11 | 3 min | 7 min |
+| 03 Metodologia e Processo | 12 a 16 | 3 min 30 s | 10 min 30 s |
+| **04 Atividades Realizadas** | **17 a 33** | **11 min** | **21 min 30 s** |
+| 05 Considerações Finais | 34 a 38 | 3 min | 24 min 30 s |
+| Encerramento | 39 | 30 s | 25 min |
 
-**Se estiver atrasado**, corte nesta ordem: slide 6 (o que é um protocolo), slide 10 (Agricultura 4.0), slide 17 (estrutura de diretórios), slide 31 (reuso em orçamentos). Nenhum deles é essencial para a linha de raciocínio.
+São **39 slides em 25 minutos**, o que dá cerca de **38 segundos por slide**. Os divisores de bloco (3, 8, 12, 17, 34) levam 5 segundos cada, o que compra folga para os slides de código.
 
-**Se estiver adiantado**, expanda os slides 23, 29 e 30 (os de código), explicando linha a linha. Eles têm material de sobra.
+**Se estiver atrasado**, passe rápido nesta ordem: slide 9 (Agricultura 4.0), slide 10 (Scrum), slide 23 (listagem de protocolos) e slide 32 (dashboard geral). São de contexto, e a linha de raciocínio se mantém sem eles.
+
+**Se estiver adiantado**, expanda os slides 20, 26 e 27 (os de código), explicando linha a linha. Eles têm material de sobra.
 
 **Navegação:** setas, espaço ou roda do mouse. `Home` volta ao início, `End` vai ao último slide. **`F` entra e sai de tela cheia.** O número do slide e o bloco atual aparecem no rodapé.
+
+**Tamanho da fonte ao vivo:** `+` aumenta, `-` diminui e `0` volta ao padrão, em passos de 5%. O ajuste vale para o deck inteiro, aparece na hora e fica salvo no navegador. Se a escala escolhida fizer o conteúdo passar da área do slide, o aviso mostra `⚠ conteúdo saindo do slide`. Use na sala de seminários, com o projetor ligado, para calibrar olhando do fundo da sala.
+
+**Todos os atalhos:** tecla `H` abre um painel com a lista completa.
+
+**Editar texto no slide:** tecla `E` liga o modo de edição, clique em qualquer texto e digite. Ao focar um texto aparece uma barrinha com `−` e `+` que muda o tamanho **só daquele bloco**, e `Alt+↑` / `Alt+↓` fazem o mesmo pelo teclado (`Alt+0` devolve ao original). **`Esc` sai do modo de edição**, mesmo com o cursor dentro de um texto. `Ctrl+S` **baixa um `index.html` novo com as edições dentro**: mova o arquivo baixado para a pasta `apresentacao/`, substituindo o atual. O navegador não escreve por cima do arquivo aberto, por isso o download. Se você só editar e não salvar, as alterações se perdem ao recarregar a página.
+
+**Cronômetro de ensaio:** `T` liga e desliga (desligar pausa), `R` zera. Ele mostra o tempo decorrido, o alvo de 25 minutos e um selo de ritmo: fica **âmbar** quando você está atrasado em relação ao slide esperado. Ele vive fora do palco, então não aparece na projeção nem no PDF. Use no ensaio e desligue na defesa.
 
 ---
 
@@ -49,7 +59,7 @@ Ensaie duas vezes cronometrado. Na primeira você vai estourar o tempo, é norma
 
 ---
 
-### Bloco 01 · Introdução (slides 3 a 8)
+### Bloco 01 · Introdução (slides 3 a 7)
 
 **Slide 3 · Divisor**
 
@@ -70,17 +80,15 @@ Depois percorra os três cartões, um por vez, sem ler:
 
 "O estágio foi na Zeeway, empresa lavrense fundada dentro do ecossistema de inovação da UFLA. Ela tem entre quinze e trinta colaboradores diretos, cerca de quarenta clientes diretos e quinhentos indiretos. O projeto em que eu trabalhei foi encomendado por uma empresa de pesquisa agrícola, também de Lavras, especializada em análises de solos e sementes. Ela queria abandonar o uso descentralizado de planilhas e ter uma plataforma própria."
 
+*Emende aqui a definição do termo central, que antes tinha slide próprio:* "E vale definir o que é um protocolo, porque tudo na plataforma gira em torno dele. É o registro completo de um experimento agrícola: a identificação, o delineamento experimental com tratamentos e repetições, os dados de campo e os resultados das avaliações ao longo da safra."
+
 *Se perguntarem o nome do cliente, veja a pergunta 26 na seção 6.*
 
-**Slide 6 · O que é um protocolo** *(cortável se estiver atrasado)*
-
-"Vale definir o termo central, porque tudo na plataforma gira em torno dele. Um protocolo é o registro completo de um experimento agrícola: identificação, delineamento experimental, dados de campo e os resultados das avaliações ao longo da safra."
-
-**Slide 7 · Objetivos**
+**Slide 6 · Objetivos**
 
 "O objetivo do estágio era aplicar em ambiente corporativo real o que eu aprendi na graduação. O objetivo deste relatório é documentar de forma estruturada o que foi construído: a arquitetura, as tecnologias, a metodologia e os desafios técnicos."
 
-**Slide 8 · Delimitação**
+**Slide 7 · Delimitação**
 
 ▶ "Aqui é importante eu ser explícito sobre o recorte. Minha responsabilidade foi a camada de front-end. O back-end da plataforma, incluindo a API REST, o banco de dados e as regras de negócio do lado do servidor, ficou a cargo de outra equipe da Zeeway. Tudo que eu apresento daqui em diante é trabalho da camada de interface."
 
@@ -88,23 +96,23 @@ Depois percorra os três cartões, um por vez, sem ler:
 
 ---
 
-### Bloco 02 · Fundamentação Teórica (slides 9 a 12)
+### Bloco 02 · Fundamentação Teórica (slides 8 a 11)
 
-**Slide 9 · Divisor**
+**Slide 8 · Divisor**
 
 "Passando para a fundamentação."
 
-**Slide 10 · Agricultura 4.0** *(cortável)*
+**Slide 9 · Agricultura 4.0** *(passe rápido se atrasar)*
 
 "O contexto teórico é o da Agricultura 4.0, que é a adoção de tecnologias digitais, sensores, IoT, nuvem e análise de dados, para otimizar a decisão no campo. Nesse cenário, uma plataforma web que centraliza registro e análise é a evolução natural em relação à planilha, nos três pontos que eu mostrei no começo."
 
-**Slide 11 · Scrum**
+**Slide 10 · Scrum**
 
 "O desenvolvimento seguiu Scrum, que é um framework ágil iterativo e incremental. Cada ciclo é uma Sprint de duração fixa e, ao final dela, uma nova versão do sistema é entregue. Os papéis são Product Owner, que prioriza o backlog, Scrum Master, que garante a aplicação do framework e remove impedimentos, e o time de desenvolvimento. As cerimônias são planning, daily, review e retrospective."
 
-*Fale rápido. A banca conhece Scrum. O que interessa é o slide 14, onde eu mostro como isso foi aplicado de fato.*
+*Fale rápido. A banca conhece Scrum. O que interessa é o slide 13, onde eu mostro como isso foi aplicado de fato.*
 
-**Slide 12 · A stack**
+**Slide 11 · A stack**
 
 *Este slide é o mais difícil de falar bem, porque duas das quatro colunas são abstratas. Use a frase de abertura como muleta: ela transforma tecnologia em verbo, e verbo qualquer pessoa entende.*
 
@@ -142,97 +150,93 @@ Depois percorra os três cartões, um por vez, sem ler:
 
 ---
 
-### Bloco 03 · Metodologia e Processo (slides 13 a 18)
+### Bloco 03 · Metodologia e Processo (slides 12 a 16)
 
-**Slide 13 · Divisor**
+**Slide 12 · Divisor**
 
 "Como o time trabalhou."
 
-**Slide 14 · Scrum na prática**
+**Slide 13 · Scrum na prática**
 
 "Na prática, as Sprints eram de duas semanas. Na planning, as tarefas priorizadas do Product Backlog eram detalhadas no Sprint Backlog. O gerenciamento era feito no Azure DevOps Boards, onde cada item tinha identificador, estado, título, área de produto e marcadores. O quadro tinha quatro colunas: a fazer, em andamento, em revisão e concluído. Nas dailies cada um relatava progresso e impedimentos, e ao final da Sprint o incremento era apresentado ao cliente na review."
 
-**Slide 15 · Requisitos**
+**Slide 14 · Requisitos**
 
 ▶ "Este foi um aprendizado que eu não esperava. Como o cliente atua em pesquisa agrícola, boa parte das regras de negócio era específica do domínio e vivia na rotina de trabalho da equipe, não em um documento de requisitos que eu pudesse consultar. Faz sentido: são regras que a empresa pratica há anos e que nunca precisaram estar escritas para funcionar. Só que, para virar software, elas precisavam estar."
 
 "O que concentrou a maior complexidade foram as regras de preenchimento dos protocolos. A obrigatoriedade e o formato de cada campo dependiam da combinação de três coisas: o tipo do protocolo, se Ret ou Comercial, a cultura selecionada e a classe do experimento. Como nenhuma dessas combinações estava descrita em documento, cada variação precisava ser esclarecida diretamente com a equipe do cliente antes de virar esquema de validação no formulário."
 
-**Slide 16 · Arquitetura**
+**Slide 15 · Arquitetura**
 
 "O front-end foi organizado em três camadas. A de apresentação, com os componentes React. A de estado, que mantém os dados em memória durante a navegação. E a de acesso a dados, que fala com a API. Cada camada tem um motivo único para mudar, o que foi importante para acomodar o volume de telas do sistema."
 
-**Slide 17 · Estrutura de diretórios** *(cortável)*
+*Emende a estrutura de pastas, que antes tinha slide próprio:* "E essa separação não ficou só no diagrama, ela virou a estrutura de diretórios do projeto: components, pages e layouts para o visual, store, services e routes para estado, API e rotas, mais um diretório de hooks customizados. Quem chega no código consegue localizar as coisas pela camada."
 
-"A estrutura de diretórios reflete essa separação. Os diretórios visuais de um lado, os de estado, serviços e rotas de outro."
-
-**Slide 18 · Contrato de API**
+**Slide 16 · Contrato de API**
 
 ▶ "Como havia duas equipes trabalhando em paralelo, a coordenação foi feita a partir de um contrato acordado antes do código. No início de cada funcionalidade, definíamos juntos o caminho do endpoint, o método HTTP e a estrutura dos dados de entrada e de saída. A partir daí as duas equipes trabalhavam ao mesmo tempo: o back-end implementava o endpoint e eu construía a tela consumindo uma versão mascarada dos dados, um mock, que respeitava o contrato. Quando o endpoint ficava pronto, eu trocava a fonte dos dados pela API real. Ajustes pontuais eram negociados na daily ou na planning seguinte."
 
 ---
 
-### Bloco 04 · Atividades Realizadas (slides 19 a 37) — o coração da apresentação
+### Bloco 04 · Atividades Realizadas (slides 17 a 33) — o coração da apresentação
 
-**Slide 19 · Divisor**
+**Slide 17 · Divisor**
 
 ▶ "Agora entramos na parte principal: o que eu efetivamente construí."
 
-**Slide 20 · Os três módulos**
+**Slide 18 · Os três módulos**
 
 "O relatório está organizado em três módulos, selecionados por relevância no escopo do projeto e por complexidade técnica: autenticação e controle de acesso, registros agrícolas e análise com dashboards."
 
 #### Módulo 01 · Autenticação
 
-**Slide 21 · Tela de login**
+**Slide 19 · Tela de login**
 
 "O primeiro módulo foi o de autenticação, que é o ponto de entrada de todos os usuários. A tela seguiu a identidade visual da empresa cliente. Depois do login, a API devolve um par de tokens JWT, um de acesso e um de renovação, e a sessão fica persistida no armazenamento local."
 
-**Slide 22 · Store de autenticação**
+**Slide 20 · Refresh token**
 
-"O estado da sessão é gerenciado com Zustand, usando o middleware de persistência, que salva o conteúdo localmente sob o nome UserData. A função central é o setLoginInfo. Ela roda depois do login e usa o produce, do Immer, que expõe um rascunho mutável do estado e permite escrever as alterações de forma direta, mantendo a imutabilidade por baixo. Dentro dela o usuário é marcado como autenticado, os tokens são gravados, o access token é decodificado com jwt-decode e nome, identificador, e-mail e perfil são extraídos das claims."
-
-*Aponte a linha do `jwtDecode` com o cursor ou o dedo.* "Esse `roleId` que sai daqui é o que governa todo o controle de acesso da aplicação."
-
-**Slide 23 · Refresh token**
+*Antes do código, situe a sessão em uma frase, já que o slide do store saiu:* "Depois do login, os tokens e os dados do usuário ficam guardados no estado global, com Zustand e persistência local, e o perfil extraído do token é o que governa todo o controle de acesso."
 
 ▶ "Este trecho resolve um problema de experiência de uso. O token de acesso expira. Sem tratamento, o usuário seria deslogado no meio do preenchimento de um protocolo, que é um formulário longo, e perderia o trabalho."
 
 "Configurei um interceptador de resposta do Axios. A primeira função devolve as respostas bem-sucedidas sem alteração. A segunda trata os erros: ela só age quando o código é 401 e quando a requisição ainda não foi reexecutada, controle feito pela marcação `_retry`, que evita laço infinito. Nesse caso, o refresh token é usado para pedir um token novo, o cabeçalho de autorização da requisição original é atualizado e ela é reenviada. Para o usuário, nada acontece."
 
-**Slide 24 · Controle de acesso**
+**Slide 21 · Controle de acesso**
 
 "A plataforma tem dois perfis: Administrador, com acesso completo incluindo gestão de usuários, e Técnico, restrito ao registro e à consulta de protocolos. O controle foi implementado no nível das rotas, com um componente guardião que envolve as rotas e decide antes de renderizar. Ele faz duas verificações: se não está autenticado, redireciona para o login. Se a rota é marcada como restrita ao administrador e o perfil não é esse, redireciona para a raiz."
 
 *Se você tiver tempo, já emende a ressalva da pergunta 11, antes que perguntem:* "Vale dizer que essa é a restrição de interface. A garantia de segurança de fato está no back-end, que valida o token e o perfil em cada requisição."
 
-**Slide 25 · Gestão de usuários**
+**Slide 22 · Gestão de usuários**
 
 "A gestão de usuários é acessível só pelo Administrador. Permite visualizar, adicionar, editar e excluir colaboradores, com busca textual e filtro por perfil. As operações de criação e exclusão são feitas em modais, para o usuário agir sem perder o contexto da página. Todos os formulários usam Formik para o estado dos campos e Yup para a validação antes do envio."
 
 #### Módulo 02 · Registros Agrícolas
 
-**Slide 26 · Listagem de protocolos**
+**Slide 23 · Listagem de protocolos**
 
 "O segundo módulo é o núcleo do sistema. A listagem foi construída com TanStack React Table, que dá ordenação, paginação e filtragem. Cada protocolo aparece com código, tipo, cliente, classe, cultura e status."
 
 *Destaque o QR Code:* "A funcionalidade que eu acho mais interessante aqui é a geração de QR Code. Cada protocolo gera um código com um identificador único que, escaneado em campo pelo técnico, abre direto a página daquele protocolo na plataforma. Foi uma demanda que veio do uso real, do pessoal que está no campo com o celular."
 
-**Slide 27 · O formulário e suas abas**
+**Slide 24 · O formulário e suas abas**
 
 ▶ "O formulário de cadastro de protocolos foi o maior desafio técnico do projeto, pelo volume de campos e pela complexidade das regras."
 
 "Um protocolo reúne dezenas de campos. Para não virar um formulário infinito, ele foi organizado em oito abas. Alguns campos são obrigatórios, o mínimo para o protocolo existir, e o resto é preenchido conforme a pesquisa avança ao longo da safra."
 
-**Slide 28 · Aba de Avaliações**
+*Emende o reuso, que antes tinha slide próprio:* "Esse padrão se pagou depois: a mesma estrutura em abas, os componentes de seleção, os campos de data e os modais foram reaproveitados em outros módulos da plataforma, como o de orçamentos. E um hook customizado, o useForm, padronizou o controle de valores e a validação em todas as telas."
+
+**Slide 25 · Aba de Avaliações**
 
 "A aba de Avaliações é a que muda de forma. O número de colunas da tabela varia de acordo com o número de repetições configurado lá na aba de Informações, e novas linhas podem ser adicionadas. Alguns campos são fórmulas, ou seja, expressões matemáticas calculadas a partir dos valores de outros campos, avaliadas em tempo de execução com a biblioteca mathjs. E cada momento de avaliação aceita fotografias de campo vinculadas ao registro."
 
-**Slide 29 · Fotos em .zip**
+**Slide 26 · Fotos em .zip**
 
 "Daí veio um problema prático: baixar dezenas de fotografias uma a uma inviabilizava o trabalho posterior do pesquisador. A solução foi agrupar tudo em um arquivo compactado. As imagens são buscadas na API por uma mutation do React Query, cada uma é convertida em blob pelo fetch nativo do navegador, e todas as promessas são aguardadas em paralelo com Promise.all. O JSZip monta o arquivo em memória e entrega para download."
 
-**Slide 30 · Validação com Yup**
+**Slide 27 · Validação com Yup**
 
 ▶ "Aqui está o ponto onde a regra do agrônomo vira código."
 
@@ -240,37 +244,31 @@ Depois percorra os três cartões, um por vez, sem ler:
 
 "A maior dificuldade do módulo não foi escrever isso, foi descobrir qual era a regra. Isso exigiu validação contínua com o cliente a cada Sprint."
 
-**Slide 31 · Reuso do padrão** *(cortável)*
-
-"O mesmo padrão de organização foi reaproveitado em outros módulos, como o de orçamentos. Os componentes de seleção, campos de data e modais foram reutilizados em contextos diferentes, e um hook customizado, o useForm, padronizou o controle de valores e a orquestração das validações em todas as telas."
-
-#### Módulo 03 · Análise e Dashboards
-
-**Slide 32 · Declaração**
+**Slide 28 · Declaração**
 
 ▶ *Pause aqui. Deixe o slide respirar um segundo antes de falar.*
 
 "Este módulo é o principal diferencial da plataforma em relação à planilha. É onde o dado bruto vira gráfico sem ninguém precisar montar nada."
 
-**Slide 33 · Pipeline**
+**Slide 29 · Pipeline**
 
 "O fluxo tem cinco etapas. Os dados chegam já consolidados pelo back-end. O front-end mapeia esses dados para dois vetores, os rótulos do eixo horizontal e os valores. Com eles, monta as séries e as opções do ApexCharts. O componente renderiza. E, se o usuário quiser, exporta como imagem."
 
 "No código embaixo, `series` tem uma única série com o rótulo e os valores. O objeto `options` concentra a configuração visual: o tipo barra, cores distribuídas por categoria, os valores numéricos exibidos sobre as colunas, as categorias do eixo horizontal e o máximo do eixo vertical calculado a partir dos próprios dados."
 
-**Slide 34 · Gráficos gerados**
+**Slide 30 · Gráficos gerados**
 
 "Este é o resultado. Os componentes recebem os dados consolidados e montam sozinhos as séries e as opções, sem nenhum ajuste manual do usuário. Cada gráfico ocupa um card próprio, com opção de download individual, e as colunas são coloridas por tratamento com os valores exibidos em cima, para o pesquisador comparar os tratamentos de imediato."
 
-**Slide 35 · Exportação em PNG**
+**Slide 31 · Exportação em PNG**
 
 "E aqui está uma funcionalidade que veio direto de uma necessidade de negócio. A empresa cliente entrega relatórios aos clientes dela, e esses relatórios precisam sair com a identidade visual da empresa. Então mantive um elemento oculto na tela contendo o gráfico junto com o logotipo e o título dos dados. A captura desse elemento é feita com use-react-screenshot, que devolve a imagem em base64, e um link é criado dinamicamente para forçar o download. O resultado é um PNG pronto para ir para o relatório."
 
-**Slide 36 · Dashboard geral**
+**Slide 32 · Dashboard geral**
 
 "Além dos gráficos por protocolo, há um dashboard geral com a visão consolidada: distribuição por classe, por cultura, por cliente e por status. Esses números vêm de um endpoint específico do back-end, buscados com React Query, que gerencia o cache e garante que as visualizações fiquem atualizadas sem recarregamento manual da página."
 
-**Slide 37 · Desafio de performance**
+**Slide 33 · Desafio de performance**
 
 ▶ "Fecho o bloco com o desafio técnico deste módulo."
 
@@ -278,19 +276,19 @@ Depois percorra os três cartões, um por vez, sem ler:
 
 ---
 
-### Bloco 05 · Considerações Finais (slides 38 a 42)
+### Bloco 05 · Considerações Finais (slides 34 a 38)
 
-**Slide 38 · Divisor**
+**Slide 34 · Divisor**
 
 "Para encerrar, a avaliação do que foi feito."
 
-**Slide 39 · Objetivo atendido**
+**Slide 35 · Objetivo atendido**
 
 "O objetivo central era substituir o registro descentralizado em planilhas por uma plataforma própria, com acesso controlado e análise automatizada. Diante das funcionalidades entregues, considero que ele foi atendido no plano técnico, nas três frentes que eu apresentei lá no início."
 
 *Note o cuidado da frase "no plano técnico". Ela prepara o slide seguinte.*
 
-**Slide 40 · Dificuldades, limitação e futuro**
+**Slide 36 · Dificuldades, limitação e futuro**
 
 ▶ "E aqui eu preciso ser honesto sobre uma limitação."
 
@@ -298,17 +296,17 @@ Depois percorra os três cartões, um por vez, sem ler:
 
 "A limitação é que a adoção da plataforma pelo cliente foi inicialmente reduzida. Eu atribuo isso à mudança de cultura exigida pela transição da planilha para um sistema estruturado, e não a uma deficiência técnica da solução. Mas é uma limitação real e ela aponta para os trabalhos futuros: acompanhar essa adoção ao longo do tempo, fazer testes de usabilidade com os colaboradores e evoluir os dashboards com novos tipos de análise."
 
-**Slide 41 · Impacto na formação**
+**Slide 37 · Impacto na formação**
 
 "Foi minha primeira experiência com desenvolvimento de software em produto real, com equipe estruturada e cliente externo. No plano técnico, consolidou competências em React, TypeScript, gerenciamento de estado, formulários e integração com API. E, sobretudo, em visualização de dados, que é a área que passou a orientar meu interesse profissional. No plano interpessoal, desenvolveu comunicação e trabalho em equipe, principalmente no levantamento de requisitos e na tradução de necessidade de negócio em solução técnica."
 
-**Slide 42 · O caminho inverso**
+**Slide 38 · O caminho inverso**
 
 "Também vale registrar o caminho inverso, o que a graduação deu para o estágio. Engenharia de Software me deu a base do ciclo de desenvolvimento e dos métodos ágeis. Programação Orientada a Objetos, os conceitos de modularidade e responsabilidade única, que se traduzem naturalmente na componentização do React. Banco de Dados ajudou a entender as estruturas devolvidas pela API. E Interação Humano-Computador orientou as decisões de usabilidade."
 
 "Do outro lado, percebi três lacunas: pouco contato com frameworks modernos de front-end nas disciplinas obrigatórias, pouca prática de testes automatizados de interface e pouca exposição a integração contínua, versionamento em equipe com pull requests e deploy em nuvem. Nesse último grupo entram também noções de conteinerização e infraestrutura, como Docker e configuração de ambientes, que apareceram tanto neste projeto quanto em outros que acompanhei no estágio. Cobrir essas lacunas teria reduzido bastante minha curva de aprendizado nos primeiros dias."
 
-**Slide 43 · Encerramento**
+**Slide 39 · Encerramento**
 
 ▶ "Era isso. Obrigado pela atenção e fico à disposição da banca."
 
@@ -468,8 +466,9 @@ Se você decorar só cinco frases, decore estas:
 ## 8. Checklist do dia
 
 - [ ] Abrir `apresentacao/index.html` no navegador e testar em tela cheia (tecla `F`) no projetor da sala
+- [ ] Sentar na última fileira e calibrar a fonte com `+` e `-` até ler tudo confortavelmente
 - [ ] Conferir que as imagens em `apresentacao/imgs/` estão junto do arquivo
 - [ ] Levar o deck também em PDF, como plano B, caso o navegador falhe
 - [ ] Preencher os **[preencher]** deste documento
-- [ ] Ensaiar duas vezes com cronômetro
+- [ ] Ensaiar duas vezes com o cronômetro embutido (tecla `T`, `R` zera) e desligá-lo antes da defesa
 - [ ] Levar água
